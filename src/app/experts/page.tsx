@@ -70,7 +70,7 @@ export default function ExpertPage() {
           <Experts
             initState={state}
             systemPrompts={systemPrompts}
-            maxTokens={256}
+            maxTokens={512}
             handleResponse={handleResponse}
           />
         </div>
