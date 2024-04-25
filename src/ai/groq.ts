@@ -56,3 +56,38 @@ export async function getGroqChat(max_tokens: number, messages: Message[]) {
     completion.choices[0]?.message?.content || "Oops, something went wrong."
   );
 }
+
+export async function getGroqCompletionParallel(
+  userPrompts: string[],
+  max_tokens: number,
+  systemPrompts: string[],
+  jsonOnly: boolean = false
+) {
+  //Iterate over the longer of the two arrays
+  const iterator =
+    systemPrompts.length > userPrompts.length ? systemPrompts : userPrompts;
+  const completions = await Promise.all(
+    iterator.map(async (p, i) => {
+      const userPrompt = userPrompts[Math.min(i, userPrompts.length - 1)];
+      const systemPrompt = systemPrompts[Math.min(i, systemPrompts.length - 1)];
+
+      const body = {
+        messages: [
+          { role: "system", content: systemPrompt },
+          {
+            role: "user",
+            content: userPrompt,
+          },
+        ],
+        model: "llama3-70b-8192",
+        max_tokens: max_tokens,
+      } as GroqRequest;
+      if (jsonOnly) body.response_format = { type: "json_object" };
+      return groq.chat.completions.create(body);
+    })
+  );
+
+  return completions.map(
+    (c) => c.choices[0]?.message?.content || "No response."
+  );
+}

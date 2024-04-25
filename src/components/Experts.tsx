@@ -1,4 +1,4 @@
-import { getGroqCompletion } from "@/ai/groq";
+import { getGroqCompletion, getGroqCompletionParallel } from "@/ai/groq";
 import { useEffect, useState } from "react";
 
 //function that runs multiple prompts for expert analysis and updates a given state object
@@ -20,15 +20,11 @@ export default function Experts({
   const runPrompts = async () => {
     setGenerating(true);
 
-    //this makes a groq request for each system prompt
-    const responses = await Promise.all(
-      systemPrompts.map(async (systemPrompt) => {
-        return getGroqCompletion(
-          JSON.stringify(state),
-          maxTokens,
-          systemPrompt
-        );
-      })
+    //this makes a groq request for each system prompt in parallel so it is fast
+    const responses = await getGroqCompletionParallel(
+      [JSON.stringify(state)],
+      maxTokens,
+      systemPrompts
     );
 
     //then we have another function that updates our state based on all of the responses
@@ -41,11 +37,18 @@ export default function Experts({
 
   const updateAnalysis = async (analysis: string[]) => {
     //Dumb system prompt to try to incorporate all of the analysis into the updated state
-    const stateString = JSON.stringify(state);
+    //remove the previous annual report from the state to prevent it from being included in the analysis
+    const { annualReport, ...currentState } = state;
+    const stateString = JSON.stringify(currentState);
     const newState = await getGroqCompletion(
-      `State JSON: ${stateString}, Analysis: ${analysis.join(",")}`,
+      `State JSON: ${stateString}, SWOT analysis from stakeholders: ${analysis.join(
+        ","
+      )}`,
       maxTokens,
-      "Use the analysis to update the values in the state JSON object. Only return the JSON object with no other text or explanation.",
+      `You will be provided with the current state of a forestry project as well as 
+      A series of SWOT analysis of the project from the point of view of different stakeholder groups. 
+      Use the analysis to predict changes in the project state JSON object. 
+      Include a summary of your reasoning in the annualReport field. Only return the JSON object with no other text or explanation.`,
       true
     );
     return JSON.parse(newState);
@@ -60,15 +63,13 @@ export default function Experts({
         {generating ? "Generating..." : "Analyze"}
       </button>
       <div className="flex justify-between w-full flex-wrap">
-        {analysis.map((t, i) => (
+        {systemPrompts.map((t, i) => (
           <div
             key={i}
             className="flex flex-col rounded-lg bg-white p-2 hover:shadow m-2"
           >
-            <span className="font-semibold my-2">
-              Prompt: {systemPrompts[i]}
-            </span>
-            <span>{t}</span>
+            <span className="font-semibold my-2">{systemPrompts[i]}</span>
+            <span>{generating ? "Generating..." : analysis[i]}</span>
           </div>
         ))}
       </div>
