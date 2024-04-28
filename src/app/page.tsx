@@ -7,6 +7,7 @@ export default function Home() {
         <Link href="/timelapse">Timelapse Demo </Link>
         <Link href="/artcritic">Art Critic Demo </Link>
         <Link href="/map">Map Demo </Link>
+        <Link href="/experts">Experts Demo </Link>
       </div>
     </main>
   );

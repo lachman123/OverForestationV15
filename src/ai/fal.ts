@@ -65,9 +65,7 @@ export async function generateVoice(
 }
 
 //Speech to text with Whisper
-export async function speechToText(
-  audio_url: string = "https://storage.googleapis.com/falserverless/model_tests/whisper/dinner_conversation.mp3"
-) {
+export async function speechToText(audio_url: string = "") {
   console.log("generating audio");
   const response = await fetch(`https://fal.run/fal-ai/whisper`, {
     method: "POST",
