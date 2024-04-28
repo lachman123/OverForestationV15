@@ -8,8 +8,8 @@ const initState = {
   location: "Oregon, USA",
   year: 2024,
   planatationArea: "2000 acres",
-  species: "Douglas Fir",
-  processingCapacity: "1000 acres",
+  productionCapacity: "1M Linear Board Feet",
+  environmentalImpact: "Low",
   annualReport: "",
 };
 
