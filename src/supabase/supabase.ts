@@ -25,6 +25,15 @@ export async function saveArtwork(
     .select();
 }
 
+export async function saveMapCoordinates(locations: any) {
+  const { data, error } = await supabase.from("map").insert(locations).select();
+}
+
+export async function getMapCoordinates() {
+  let { data: map, error } = await supabase.from("map").select("*");
+  return map;
+}
+
 function mimeTypeToExtension(mimeType: string) {
   switch (mimeType) {
     case "image/jpeg":
