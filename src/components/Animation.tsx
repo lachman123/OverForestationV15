@@ -12,6 +12,8 @@ type AnimationProps = {
   onChange?: (url: string) => void;
 };
 
+//Component that uses groq to generate image descriptions from prompts, then uses fal to generates the image and blends them together.
+//All runs on an animation timer
 export default function Animation({
   prompt,
   systemPrompt,

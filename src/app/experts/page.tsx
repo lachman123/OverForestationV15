@@ -2,6 +2,8 @@
 import Experts from "@/components/Experts";
 import { useState } from "react";
 
+//Anything you want in your scenario to track over time goes here
+//This should really be things like current challenges, disasters, successes, design issues etc
 const initState = {
   project:
     "A timber consortium has a vision to develop a forestry plantation of sufficient scale to entirely replace the world's dependence on concrete with renewable timber.",
@@ -10,7 +12,10 @@ const initState = {
   planatationArea: "2000 acres",
   productionCapacity: "1M Linear Board Feet",
   environmentalImpact: "Low",
-  annualReport: "",
+  projectSetbacks: "",
+  unintendedConsequences: "",
+  designPriorities: "",
+  environmentalPropaganda: "",
 };
 
 //Examples of macroeconomic experts
