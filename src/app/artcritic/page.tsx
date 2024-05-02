@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { describeImagePrompt } from "@/ai/prompts";
-import TagCloud from "@/components/TagCloud";
 import ImageGallery from "@/components/ImageGallery";
 import { getGroqCompletion } from "@/ai/groq";
 import { generateImageFal, generateVoice } from "@/ai/fal";
+import { getGeminiCompletion } from "@/ai/gemini";
+import GenerativeTagCloud from "@/components/TagCloud";
+import { saveArtwork } from "@/supabase/supabase";
 
 type Artwork = {
   description: string;
@@ -44,12 +46,20 @@ export default function ArtcriticPage() {
     );
 
     setMessage("Scoring artwork...");
-    //generate a score
-    const score = await getGroqCompletion(
-      `The player made an artpiece described as follows: ${description}. It was critiqued as follows: ${critique}`,
-      4,
-      "Give the artwork a score out of 10. Do not output any other text or explanation."
+
+    const score = await getGeminiCompletion(
+      "How much is this artwork valued at in dollars? Do not output a range, output a single figure.",
+      imageUrl
     );
+
+    const valueNumber = await getGroqCompletion(
+      `The description of the value is ${score}, return the numerical value of the artwork.`,
+      8,
+      "Return the numerical value of the artwork with no other text or explanation. Do not output a range. Output a best guess single number. Do not output dollar signs. The response must cast to a number format. "
+    );
+
+    //lets save this into our database!
+    saveArtwork(Number(valueNumber), imageUrl, description, keywords);
 
     //update the artwork object and add to our state to display it
     const newArtwork = {
@@ -63,14 +73,14 @@ export default function ArtcriticPage() {
     setMessage("Create Artwork");
 
     //read the critique - do this asynchronously as it takes forever
-    generateVoice(critique).then((audio) => setCritiqueAudio(audio));
+    generateVoice(score).then((audio) => setCritiqueAudio(audio));
   }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <div className="flex flex-col">
-          <TagCloud
+          <GenerativeTagCloud
             prompt="A description of an artpiece"
             totalTags={60}
             handleSelect={(tags) => setKeywords(tags.join(", "))}

@@ -35,6 +35,7 @@ export default function GenerativeTagCloud({
     generateTags();
   }, [prompt, totalTags]);
 
+  if (!tags.length) return <div>Loading...</div>;
   //render the tags
   return <TagCloud tags={tags} handleSelect={handleSelect} />;
 }
