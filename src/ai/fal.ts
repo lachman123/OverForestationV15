@@ -40,7 +40,7 @@ export async function generateImageFal(
 //speaker_url should be a link to a 30 second clip of audio
 export async function generateVoice(
   text: string,
-  speaker_url: string = "https://cdn.themetavoice.xyz/speakers/bria.mp3"
+  speaker_url: string = "https://fsqgenrxuhqhffkevrbp.supabase.co/storage/v1/object/public/audio/werner_long.mp3"
 ) {
   console.log("generating audio");
   const response = await fetch(`https://fal.run/fal-ai/metavoice-v1`, {

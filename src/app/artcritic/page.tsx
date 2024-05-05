@@ -8,6 +8,8 @@ import { generateImageFal, generateVoice } from "@/ai/fal";
 import { getGeminiCompletion } from "@/ai/gemini";
 import GenerativeTagCloud from "@/components/TagCloud";
 import { saveArtwork } from "@/supabase/supabase";
+import TextToSpeech from "@/components/TextToSpeech";
+import BlendImage from "@/components/BlendImage";
 
 type Artwork = {
   description: string;
@@ -21,9 +23,11 @@ type Artwork = {
 export default function ArtcriticPage() {
   const [keywords, setKeywords] = useState<string>("Selected Keywords...");
   const [artworks, setArtworks] = useState<Artwork[]>([]);
-  const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
+  const [description, setDescription] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [valuation, setValuation] = useState<string>("");
+  const [score, setScore] = useState<string>("0.00");
   const [message, setMessage] = useState<string>("Create Artwork");
-  const [critiqueAudio, setCritiqueAudio] = useState<string>("");
 
   async function handleCreate() {
     setMessage("Generating artwork...");
@@ -34,29 +38,29 @@ export default function ArtcriticPage() {
       describeImagePrompt
     );
 
+    setDescription(description);
     //create the image
     const imageUrl = await generateImageFal(description, "landscape_16_9");
+    setImageUrl(imageUrl);
 
-    setMessage("Generating critique...");
-    //generate a critique
-    const critique = await getGroqCompletion(
-      `The player made an artpiece described as follows: ${description}`,
-      64,
-      "Critique the merit of the artwork"
-    );
+    setMessage("Valuing artwork...");
 
-    setMessage("Scoring artwork...");
-
-    const score = await getGeminiCompletion(
-      "How much is this artwork valued at in dollars? Do not output a range, output a single figure.",
+    const critique = await getGeminiCompletion(
+      "Briefly describe the artwork. Be very opinionated about its merits or failings and estimate an auction value in dollars.",
       imageUrl
     );
 
+    setValuation(critique);
+
     const valueNumber = await getGroqCompletion(
-      `The description of the value is ${score}, return the numerical value of the artwork.`,
+      `A description of an artwork and estimate of its value at auction is: ${critique}. `,
       8,
       "Return the numerical value of the artwork with no other text or explanation. Do not output a range. Output a best guess single number. Do not output dollar signs. The response must cast to a number format. "
     );
+
+    console.log(valueNumber);
+
+    setScore(`$${valueNumber}`);
 
     //lets save this into our database!
     saveArtwork(Number(valueNumber), imageUrl, description, keywords);
@@ -66,46 +70,49 @@ export default function ArtcriticPage() {
       description,
       imageUrl,
       critique,
-      score,
+      score: `$${valueNumber}`,
     };
+
     setArtworks([...artworks, newArtwork]);
-    setSelectedArtwork(newArtwork);
     setMessage("Create Artwork");
 
-    //read the critique - do this asynchronously as it takes forever
-    generateVoice(score).then((audio) => setCritiqueAudio(audio));
+    console.log(artworks);
   }
+
+  const setSelectedArtwork = (selectedArtwork: Artwork) => {
+    setDescription(selectedArtwork.description);
+    setImageUrl(selectedArtwork.imageUrl);
+    setValuation(selectedArtwork.critique);
+    setScore(selectedArtwork.score);
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <div className="flex flex-col">
           <GenerativeTagCloud
-            prompt="A description of an artpiece"
-            totalTags={60}
+            prompt="Art styles, art aesthetics, vivid descriptive adjectives"
+            totalTags={100}
             handleSelect={(tags) => setKeywords(tags.join(", "))}
           />
           <button className="p-4" onClick={handleCreate}>
             {message}
           </button>
-          {selectedArtwork && (
-            <div className="flex flex-col pb-4">
-              <span>{selectedArtwork.description}</span>
-              <span>Score: {selectedArtwork.score}</span>
-              {critiqueAudio !== "" && (
-                <audio
-                  className="w-full my-4"
-                  src={critiqueAudio}
-                  controls
-                  autoPlay
-                />
-              )}
-              <img src={selectedArtwork.imageUrl} />
-            </div>
-          )}
 
+          <div className="flex flex-col pb-4">
+            <span>{valuation}</span>
+            {valuation != "" && (
+              <TextToSpeech
+                text={valuation}
+                showControls={false}
+                autoPlay={true}
+              />
+            )}
+
+            {imageUrl && <BlendImage src={imageUrl} fullscreen />}
+          </div>
           <ImageGallery
-            images={artworks.map((a) => a.imageUrl)}
+            images={artworks.map((a) => ({ src: a.imageUrl, title: a.score }))}
             handleClickImage={(id) => setSelectedArtwork(artworks[id])}
           />
         </div>

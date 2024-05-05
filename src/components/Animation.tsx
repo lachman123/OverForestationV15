@@ -48,5 +48,5 @@ export default function Animation({
     }
   }, [prompt, animate, systemPrompt, imageSize, onChange]);
 
-  return <BlendImage image={image} fullscreen={fullscreen} />;
+  return <BlendImage src={image} fullscreen={fullscreen} />;
 }
