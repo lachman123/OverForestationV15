@@ -37,33 +37,6 @@ export async function generateImageFal(
   return result.images[0].url;
 }
 
-//speaker_url should be a link to a 30 second clip of audio
-export async function generateVoice(
-  text: string,
-  speaker_url: string = "https://fsqgenrxuhqhffkevrbp.supabase.co/storage/v1/object/public/audio/werner_long.mp3"
-) {
-  console.log("generating audio");
-  const response = await fetch(`https://fal.run/fal-ai/metavoice-v1`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Key ${fal_key}`,
-    },
-    body: JSON.stringify({
-      text: text,
-      audio_url: speaker_url,
-      speech_stability: 10,
-      speaker_similarity: 4,
-    }),
-  });
-
-  const responseJSON = await response.json();
-  console.log(responseJSON);
-
-  return responseJSON?.audio_url.url;
-}
-
 //Speech to text with Whisper
 export async function speechToText(audio_url: string = "") {
   console.log("generating audio");

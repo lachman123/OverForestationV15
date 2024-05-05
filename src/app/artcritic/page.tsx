@@ -4,7 +4,7 @@ import { useState } from "react";
 import { describeImagePrompt } from "@/ai/prompts";
 import ImageGallery from "@/components/ImageGallery";
 import { getGroqCompletion } from "@/ai/groq";
-import { generateImageFal, generateVoice } from "@/ai/fal";
+import { generateImageFal } from "@/ai/fal";
 import { getGeminiCompletion } from "@/ai/gemini";
 import GenerativeTagCloud from "@/components/TagCloud";
 import { saveArtwork } from "@/supabase/supabase";

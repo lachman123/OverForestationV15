@@ -75,6 +75,10 @@ export default function ExpertPage() {
           <Experts
             initState={state}
             systemPrompts={systemPrompts}
+            analysisPrompt={`You will be provided with the current state of a forestry project as well as 
+            A series of SWOT analysis of the project from the point of view of different stakeholder groups. 
+            Use the analysis to predict changes in the project state JSON object. 
+             Only return the JSON object with no other text or explanation.`}
             maxTokens={512}
             handleResponse={handleResponse}
           />

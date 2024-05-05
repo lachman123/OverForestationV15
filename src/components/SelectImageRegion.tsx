@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useRef } from "react";
 
 interface SelectionArea {
@@ -17,7 +18,6 @@ export default function SelectImageRegion({ img }: { img: string }) {
   });
   const imgRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
   const startSelection = (event: React.MouseEvent) => {
     event.preventDefault();
     const rect = imgRef.current!.getBoundingClientRect();
@@ -72,7 +72,7 @@ export default function SelectImageRegion({ img }: { img: string }) {
   };
 
   return (
-    <div>
+    <div className="relative flex flex-col gap-4">
       <img
         ref={imgRef}
         src={img}
@@ -82,7 +82,24 @@ export default function SelectImageRegion({ img }: { img: string }) {
         onMouseUp={endSelection}
         style={{ cursor: isSelecting ? "crosshair" : "default" }}
       />
-      <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
+      <canvas ref={canvasRef} className="w-full h-full"></canvas>
+      {isSelecting && (
+        <div
+          className="absolute border-2 border-white border-dashed pointer-events-none"
+          style={{
+            left:
+              selectionArea.width > 0
+                ? selectionArea.startX + "px"
+                : selectionArea.startX + selectionArea.width + "px",
+            top:
+              selectionArea.height > 0
+                ? selectionArea.startY + "px"
+                : selectionArea.startY + selectionArea.height + "px",
+            width: Math.abs(selectionArea.width) + "px",
+            height: Math.abs(selectionArea.height) + "px",
+          }}
+        ></div>
+      )}
       <button onClick={downloadImage}>Download PNG</button>
     </div>
   );
