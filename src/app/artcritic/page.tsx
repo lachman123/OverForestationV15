@@ -6,8 +6,8 @@ import ImageGallery from "@/components/ImageGallery";
 import { getGroqCompletion } from "@/ai/groq";
 import { generateImageFal } from "@/ai/fal";
 import { getGeminiCompletion } from "@/ai/gemini";
-import GenerativeTagCloud from "@/components/TagCloud";
-import { saveArtwork } from "@/supabase/supabase";
+import GenerateTagCloud from "@/components/TagCloud";
+import { saveArtwork } from "./supabaseArt";
 import TextToSpeech from "@/components/TextToSpeech";
 import BlendImage from "@/components/BlendImage";
 
@@ -90,7 +90,7 @@ export default function ArtcriticPage() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <div className="flex flex-col">
-          <GenerativeTagCloud
+          <GenerateTagCloud
             prompt="Art styles, art aesthetics, vivid descriptive adjectives"
             totalTags={100}
             handleSelect={(tags) => setKeywords(tags.join(", "))}

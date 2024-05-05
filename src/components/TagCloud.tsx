@@ -9,7 +9,7 @@ type Tag = {
 
 //Generates a tag cloud (list of strings) using a prompt and total number of tags
 //The handleSelect callback is called whenever a tag is selected
-export default function GenerativeTagCloud({
+export default function GenerateTagCloud({
   prompt,
   totalTags,
   handleSelect,
@@ -40,6 +40,7 @@ export default function GenerativeTagCloud({
   return <TagCloud tags={tags} handleSelect={handleSelect} />;
 }
 
+//Component for rendering the tags and handling selection
 export function TagCloud({
   tags,
   handleSelect,

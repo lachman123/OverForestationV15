@@ -1,7 +1,7 @@
 "use client";
 
 import GenerateChart, { Chart, MapLocation } from "@/components/Chart";
-import { getMapCoordinates, saveMapCoordinates } from "@/supabase/supabase";
+import { getMapCoordinates, saveMapCoordinates } from "./supabaseMaps";
 import { useState } from "react";
 
 //Demo of generating a map of coordinates that can be selected

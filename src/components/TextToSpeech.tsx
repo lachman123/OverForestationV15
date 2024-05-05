@@ -1,5 +1,19 @@
 import { useEffect, useState } from "react";
 
+type AuraModel =
+  | "aura-asteria-en"
+  | "aura-luna-en"
+  | "aura-stella-en"
+  | "aura-athena-en"
+  | "aura-hera-en"
+  | "aura-orion-en"
+  | "aura-arcas-en"
+  | "aura-perseus-en"
+  | "aura-angus-en"
+  | "aura-orpheus-en"
+  | "aura-helios-en"
+  | "aura-zeus-en";
+
 export default function TextToSpeech({
   text,
   model = "aura-helios-en",
@@ -7,7 +21,7 @@ export default function TextToSpeech({
   autoPlay,
 }: {
   text: string;
-  model?: string;
+  model?: AuraModel;
   showControls: boolean;
   autoPlay: boolean;
 }) {
