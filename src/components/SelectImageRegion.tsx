@@ -8,7 +8,13 @@ interface SelectionArea {
   height: number;
 }
 
-export default function SelectImageRegion({ img }: { img: string }) {
+export default function SelectImageRegion({
+  img,
+  onSelect,
+}: {
+  img: string;
+  onSelect: (imgUrl: string) => void;
+}) {
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectionArea, setSelectionArea] = useState<SelectionArea>({
     startX: 0,
@@ -57,18 +63,10 @@ export default function SelectImageRegion({ img }: { img: string }) {
         Math.abs(selectionArea.width),
         Math.abs(selectionArea.height)
       );
+      //call the callback function and provide the image
+      onSelect(canvasRef.current.toDataURL("image/png"));
     }
     setIsSelecting(false);
-  };
-
-  const downloadImage = () => {
-    if (canvasRef.current) {
-      const image = canvasRef.current.toDataURL("image/png");
-      const link = document.createElement("a");
-      link.href = image;
-      link.download = "selected-region.png";
-      link.click();
-    }
   };
 
   return (
@@ -100,7 +98,6 @@ export default function SelectImageRegion({ img }: { img: string }) {
           }}
         ></div>
       )}
-      <button onClick={downloadImage}>Download PNG</button>
     </div>
   );
 }

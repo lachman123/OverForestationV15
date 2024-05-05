@@ -8,7 +8,7 @@ export default function Home() {
         <Link href="/artcritic">Art Critic Demo </Link>
         <Link href="/map">Map Demo </Link>
         <Link href="/experts">Experts Demo </Link>
-        <Link href="/selectregion">Image Selection </Link>
+        <Link href="/whatsthis">What is This?</Link>
       </div>
     </main>
   );

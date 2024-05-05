@@ -8,6 +8,7 @@ export type MapLocation = {
   coordinates: { x: number; y: number };
 };
 
+//Component for generating features within a given bounds of max - min coordinates
 export default function GenerateChart({
   bounds,
   prompt,
@@ -42,6 +43,7 @@ export default function GenerateChart({
   return <Chart locations={locations} onSelect={onSelect} />;
 }
 
+//Component for rendering an array of Location objects as buttons
 export function Chart({
   locations,
   onSelect,
