@@ -1,5 +1,3 @@
-import { generateImageFal } from "@/ai/fal";
-import { getGroqCompletion } from "@/ai/groq";
 import { useEffect, useState } from "react";
 
 type BlendImageProps = {

@@ -32,7 +32,7 @@ Environment variables in the project use specific names, so make sure you don't 
 
 ```JS
 GROQ=your_key
-FAL=your_key
+FAL_KEY=your_key
 ```
 
 If you want to use Google Gemini (which allows for very large prompts including images) then you will also need to add your Gemini API key
