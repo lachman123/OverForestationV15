@@ -1,6 +1,5 @@
 "use client";
 import Debate from "@/components/Debate";
-import Experts from "@/components/Experts";
 import { useState } from "react";
 
 //Anything you want in your scenario to track over time goes here
@@ -16,7 +15,7 @@ const initState = {
 const debateTopic =
   "A timber consortium has a vision to develop a forestry plantation of sufficient scale to entirely replace the world's dependence on concrete with renewable timber.";
 
-//Demo of generating a forecast
+//Demo of simulating a debate about a given topic
 export default function DebatePage() {
   const [state, setState] = useState<any>(initState);
 
@@ -40,7 +39,7 @@ export default function DebatePage() {
           <Debate
             initState={state}
             debateTopic={debateTopic}
-            maxTokens={512}
+            maxTokens={256}
             handleResponse={handleResponse}
           />
         </div>

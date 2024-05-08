@@ -50,9 +50,7 @@ export default function Debate({
     //remove the previous annual report from the state to prevent it from being included in the analysis
     const stateString = JSON.stringify(state);
     const newState = await getGroqCompletion(
-      `Project being debated: ${stateString}, Debate arguments and judgement: ${debate.join(
-        ","
-      )}`,
+      `Project being debated: ${stateString}, Debate outcome: ${analysis}`,
       maxTokens,
       "You are a simulation that uses debates to predict likely changes in a project over the near term future. Use the analysis to predict changes in the project state JSON object. Only return the JSON object with no other text or explanation.",
       true
