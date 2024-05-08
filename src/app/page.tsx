@@ -12,6 +12,7 @@ export default function Home() {
         <Link href="/whatsthis">What is This?</Link>
         <Link href="/realtime">Realtime image generation</Link>
         <Link href="/debate">Debate Simulator</Link>
+        <Link href="/agents">Agent Simulator</Link>
       </div>
     </main>
   );
