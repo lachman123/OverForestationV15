@@ -2,15 +2,20 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { GenerateContentRequest, VertexAI } from "@google-cloud/vertexai";
 
-// Access your API key as an environment variable (see "Set up your API key" above)
-const project_id = process.env.GEMINI_PROJECT_ID ?? "";
+const authOptions = {
+  credentials: {
+    client_email: process.env.GOOGLE_CLIENT_EMAIL,
+    private_key: process.env.GOOGLE_PRIVATE_KEY,
+  },
+};
+
+const vertexAI = new VertexAI({
+  project: process.env.GOOGLE_PROJECT_ID ?? "",
+  location: process.env.GOOGLE_LOCATION ?? "",
+  googleAuthOptions: authOptions,
+});
 
 export async function getGeminiPDF(file_url: string, prompt: string) {
-  const vertexAI = new VertexAI({
-    project: project_id,
-    location: "us-central1",
-  });
-
   const generativeModel = vertexAI.getGenerativeModel({
     model: "gemini-1.5-pro-preview-0409",
   });
