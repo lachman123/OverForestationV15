@@ -5,7 +5,7 @@ import { describeImagePrompt } from "@/ai/prompts";
 import ImageGallery from "@/components/ImageGallery";
 import { getGroqCompletion } from "@/ai/groq";
 import { generateImageFal } from "@/ai/fal";
-import { getGeminiCompletion } from "@/ai/gemini";
+import { getGeminiVision } from "@/ai/gemini";
 import GenerateTagCloud from "@/components/TagCloud";
 import { saveArtwork } from "./supabaseArt";
 import TextToSpeech from "@/components/TextToSpeech";
@@ -45,7 +45,7 @@ export default function ArtcriticPage() {
 
     setMessage("Valuing artwork...");
 
-    const critique = await getGeminiCompletion(
+    const critique = await getGeminiVision(
       "Briefly describe the artwork. Be very opinionated about its merits or failings and estimate an auction value in dollars.",
       imageUrl
     );

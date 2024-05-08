@@ -1,3 +1,4 @@
+import { getGeminiText } from "@/ai/gemini";
 import { getGroqCompletion, getGroqCompletionParallel } from "@/ai/groq";
 import { useState } from "react";
 
@@ -39,6 +40,9 @@ export default function Agents({
       "You are provided with a world state and an array of agents performing tasks to make changes to this world state. Update the world state JSON object to reflect the activities of the agents. Only return the JSON object with no other text or explanation.",
       true
     );
+
+    const gemini = await getGeminiText("this is a test");
+    console.log(gemini);
 
     //Then try to work out
     const newResourceJSON = JSON.parse(newResources);

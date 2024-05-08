@@ -1,5 +1,5 @@
 "use client";
-import { getGeminiCompletion } from "@/ai/gemini";
+import { getGeminiVision } from "@/ai/gemini";
 import SelectImageRegion from "@/components/SelectImageRegion";
 import { useState } from "react";
 
@@ -10,7 +10,7 @@ export default function WhatsThisPage() {
 
   const handleSelect = async (imgUrl: string) => {
     setDescription("Analyzing...");
-    const description = await getGeminiCompletion(
+    const description = await getGeminiVision(
       "Briefly describe the image.",
       imgUrl
     );

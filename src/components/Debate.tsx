@@ -22,19 +22,23 @@ export default function Debate({
 
     //argue for the merits of the project
     const forArgument = await getGroqCompletion(
-      debateTopic,
+      `Topic: ${debateTopic}, context: ${JSON.stringify(state)}`,
       maxTokens,
-      "You are an expert debator. You will be arguing on the FOR team, and should advocate for the merits of the topic described by the user."
+      "You are an expert but very concise debator. You will be provided with a debate topic and context. You will be arguing on the FOR team, and should advocate for the merits of the topic described by the user. Output a brief argument in dot points."
     );
     const againstArgument = await getGroqCompletion(
-      `Debate topic: ${debateTopic}, for team arguments: ${forArgument}`,
+      `Debate topic: ${debateTopic}, context: ${JSON.stringify(
+        state
+      )}, for team arguments: ${forArgument}`,
       maxTokens,
-      "You are an expert debator. You will be arguing on the AGAINST team, and should rebut the arguments of the for team (provided by the user) for the debate topic."
+      "You are an expert but very concise  debator. You will be provided with a debate topic and context. You will be arguing on the AGAINST team, and should rebut the arguments of the for team (provided by the user) for the debate topic. Output a brief argument in dot points."
     );
     const analysis = await getGroqCompletion(
-      `Debate topic: ${debateTopic}, for team arguments: ${forArgument}, against team arguments: ${againstArgument}`,
+      `Debate topic: ${debateTopic}, context: ${JSON.stringify(
+        state
+      )}, for team arguments: ${forArgument}, against team arguments: ${againstArgument}`,
       maxTokens,
-      "You are an expert debator. You will be judging the debate between the for and against teams, and should determine the winner based on the arguments provided."
+      "You are an expert but very concise  debator. You will be judging the debate between the for and against teams, and should determine the winner based on the arguments provided. Output a brief argument in dot points."
     );
 
     //Then try to work out

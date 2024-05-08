@@ -1,19 +1,19 @@
 "use client";
 import Debate from "@/components/Debate";
+import TextToSpeech from "@/components/TextToSpeech";
 import { useState } from "react";
 
 //Anything you want in your scenario to track over time goes here
 //This should really be things like current challenges, disasters, successes, design issues etc
 const initState = {
-  structures: "Main production facility, Oregon Mill A, Port facility",
-  structureStatus: "All structures are operational",
-  productionCapacity: "1M Linear Board Feet",
-  currentCrisis: "None",
-  achievements: "None",
+  newNuclearPlants: "",
+  geopoliticalConflict: "",
+  macroeconomicImplications: "",
+  debateSummary: "",
 };
 
 const debateTopic =
-  "A timber consortium has a vision to develop a forestry plantation of sufficient scale to entirely replace the world's dependence on concrete with renewable timber.";
+  "The cold war would still be going if chernobyl didn't happen";
 
 //Demo of simulating a debate about a given topic
 export default function DebatePage() {
@@ -28,6 +28,7 @@ export default function DebatePage() {
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <div className="flex flex-col w-full">
           <div>
+            <span>{debateTopic}</span>
             {Object.keys(state).map((key) => (
               <div className="flex justify-between" key={key}>
                 <span className="font-semibold">{key}: </span>
@@ -41,6 +42,11 @@ export default function DebatePage() {
             debateTopic={debateTopic}
             maxTokens={256}
             handleResponse={handleResponse}
+          />
+          <TextToSpeech
+            text={state.debateSummary}
+            showControls={true}
+            autoPlay={true}
           />
         </div>
       </div>

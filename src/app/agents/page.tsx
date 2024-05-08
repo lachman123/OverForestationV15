@@ -16,19 +16,19 @@ const initResources = {
 const initAgents = [
   {
     goal: "increase market demand for timber while maintaining environmental awareness",
-    plan: "lobby congress for timber subsidies, increase marketing spend, criticise concrete industry",
+    plan: "",
     currentTask: "",
     resourcesRequired: "",
   },
   {
     goal: "increase revenue and decrease environmental awareness",
-    plan: "develop marketing strategy, cut expenses, improve efficiency in manufacturing and production",
+    plan: "",
     currentTask: "",
     resourcesRequired: "",
   },
   {
     goal: "reduce environmental impact and market demand for timber",
-    plan: "research activist strategies, implement anarchist praxis, develop a new environmental policy, interfere with local production",
+    plan: "",
     currentTask: "",
     resourcesRequired: "",
   },
