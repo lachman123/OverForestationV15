@@ -41,9 +41,6 @@ export default function Agents({
       true
     );
 
-    const gemini = await getGeminiText("this is a test");
-    console.log(gemini);
-
     //Then try to work out
     const newResourceJSON = JSON.parse(newResources);
     setResources(newResourceJSON);
