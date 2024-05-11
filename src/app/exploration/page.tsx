@@ -125,5 +125,5 @@ export default function ExplorationPage() {
   );
 }
 
-export const newLocationPrompt = `You describe new map locations as a player adventures from a current location in a given direction. 
+const newLocationPrompt = `You describe new map locations as a player adventures from a current location in a given direction. 
 Return the new map location as a valid JSON object in the format {description:string, x:int, y:int, z:int}. Only return the JSON object with no other text or explanation.`;
