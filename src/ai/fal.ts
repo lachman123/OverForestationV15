@@ -36,28 +36,3 @@ export async function generateImageFal(
   });
   return result.images[0].url;
 }
-
-//Speech to text with Whisper
-export async function speechToText(audio_url: string = "") {
-  console.log("generating audio");
-  const response = await fetch(`https://fal.run/fal-ai/whisper`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Key ${fal_key}`,
-    },
-    body: JSON.stringify({
-      audio_url: audio_url,
-      task: "transcribe",
-      chunk_level: "segment",
-      version: "3",
-      batch_size: 64,
-    }),
-  });
-
-  const responseJSON = await response.json();
-  console.log(responseJSON);
-
-  return responseJSON?.chunks;
-}

@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import * as fal from "@fal-ai/serverless-client";
-import { speechToText } from "@/ai/fal";
 
 fal.config({
   proxyUrl: "/api/fal/proxy",
