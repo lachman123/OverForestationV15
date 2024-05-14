@@ -12,7 +12,7 @@ export type Message = {
   role: "user" | "assistant" | "system";
 };
 
-type GroqRequest = {
+export type GroqRequest = {
   response_format?: { type: "json_object" };
   messages: Message[];
   max_tokens: number;
