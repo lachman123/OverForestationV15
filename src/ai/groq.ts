@@ -1,23 +1,11 @@
 "use server";
 import Groq from "groq-sdk";
-
+import { LLMRequest, Message } from "./types";
 const groq_key = process.env.GROQ;
 
 const groq = new Groq({
   apiKey: groq_key,
 });
-
-export type Message = {
-  content: string;
-  role: "user" | "assistant" | "system";
-};
-
-export type GroqRequest = {
-  response_format?: { type: "json_object" };
-  messages: Message[];
-  max_tokens: number;
-  model: string;
-};
 
 //We can call the Groq API and pass our user prompt, max tokens and system prompt.
 export async function getGroqCompletion(
@@ -36,7 +24,7 @@ export async function getGroqCompletion(
     ],
     model: "llama3-70b-8192",
     max_tokens: max_tokens,
-  } as GroqRequest;
+  } as LLMRequest;
   if (jsonOnly) body.response_format = { type: "json_object" };
 
   const completion = await groq.chat.completions.create(body);
@@ -81,7 +69,7 @@ export async function getGroqCompletionParallel(
         ],
         model: "llama3-8b-8192",
         max_tokens: max_tokens,
-      } as GroqRequest;
+      } as LLMRequest;
       if (jsonOnly) body.response_format = { type: "json_object" };
       return groq.chat.completions.create(body);
     })

@@ -1,6 +1,6 @@
 "use server";
 import OpenAI from "openai";
-import { LLMRequest } from "./groq";
+import { LLMRequest } from "./types";
 
 const openai_key = process.env.OPENAI;
 
