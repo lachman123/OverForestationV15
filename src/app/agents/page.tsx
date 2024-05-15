@@ -1,7 +1,7 @@
 "use client";
 import { getGroqCompletion } from "@/ai/groq";
 import Agents from "@/components/Agents";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Animation from "@/components/Animation";
 import { describeImagePrompt } from "@/ai/prompts";
 import TextToSpeech from "@/components/TextToSpeech";
@@ -16,7 +16,6 @@ const initResources = {
   environmentalImpact: "",
   revenue: "",
 };
-
 const initAgents = [
   {
     goal: "increase market demand for timber while maintaining environmental awareness",
@@ -46,6 +45,19 @@ export default function AgentsPage() {
   );
   const [worldDescription, setWorldDescription] = useState<string>("");
 
+  useEffect(() => {
+    //create our documentary synopsis
+    const createSynopsis = async () => {
+      const synopsis = await getGroqCompletion(
+        "A documentary about the impact of deforestation on the environment",
+        256,
+        "You are provided with a prompt to write a short synopsis for a documentary film. Avoid flowerly language and hyperbole. "
+      );
+      setWorldDescription(synopsis);
+    };
+    createSynopsis();
+  }, []);
+
   const handleResponse = async (newResources: any, newAgents: any[]) => {
     //update the resources based on the new agents
     const description = await getGroqCompletion(
@@ -61,8 +73,8 @@ export default function AgentsPage() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
+    <main className="flex min-h-screen flex-col items-end justify-between p-24">
+      <div className="z-10 max-w-lg w-full items-center justify-between font-mono text-sm lg:flex">
         <div className="flex flex-col w-full">
           <div>
             {Object.keys(resources).map((key) => (
