@@ -1,6 +1,10 @@
 "use client";
+import { getGroqCompletion } from "@/ai/groq";
 import Agents from "@/components/Agents";
 import { useState } from "react";
+import Animation from "@/components/Animation";
+import { describeImagePrompt } from "@/ai/prompts";
+import TextToSpeech from "@/components/TextToSpeech";
 
 //Anything you want in your scenario to track over time goes here
 //This should really be things like current challenges, disasters, successes, design issues etc
@@ -40,8 +44,17 @@ export default function AgentsPage() {
   const [agents, setAgents] = useState<string[]>(
     initAgents.map((a) => JSON.stringify(a))
   );
+  const [worldDescription, setWorldDescription] = useState<string>("");
 
-  const handleResponse = (newResources: any, newAgents: any[]) => {
+  const handleResponse = async (newResources: any, newAgents: any[]) => {
+    //update the resources based on the new agents
+    const description = await getGroqCompletion(
+      `World State: ${newResources}. Agents: ${newAgents}`,
+      128,
+      "You are provided with a world state and an array of agents performing tasks to make changes to this world state. Write a short synopsis for a documentary film summarizing what has happened. Avoid flowerly language and hyperbole. "
+    );
+
+    setWorldDescription(description);
     //update resources and agents
     setResources(newResources);
     setAgents(newAgents);
@@ -59,7 +72,19 @@ export default function AgentsPage() {
               </div>
             ))}
           </div>
-
+          <div>{worldDescription}</div>
+          {worldDescription !== "" && (
+            <>
+              <Animation
+                prompt={`${worldDescription}`}
+                systemPrompt={describeImagePrompt}
+                imageSize="landscape_16_9"
+                animate={5000}
+                fullscreen={true}
+              />
+              <TextToSpeech text={worldDescription} autoPlay showControls />
+            </>
+          )}
           <Agents
             initResources={resources}
             initAgents={agents}
