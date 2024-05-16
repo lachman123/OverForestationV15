@@ -1,7 +1,7 @@
 "use server";
 
 import * as fal from "@fal-ai/serverless-client";
-const fal_key = process.env.FAL_KEY;
+const fal_key = process.env.FAL_KEY ?? process.env.FAL ?? "";
 
 fal.config({
   credentials: fal_key, // or a function that returns a string
