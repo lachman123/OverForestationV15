@@ -1,16 +1,17 @@
 "use client";
 import { getPanorama } from "@/ai/blockade";
+import { getOpenAICompletion } from "@/ai/openai";
 import Panorama from "@/components/Panorama";
 import { useState } from "react";
-
-//Add a pause feature
-//add a select feature and send to upscaler or gemini
 
 export default function App() {
   const [fetching, setFetching] = useState<boolean>(false);
   const [img, setImg] = useState<string>("/old_depot_2k.hdr");
   const [prompt, setPrompt] = useState<string>("a beautiful underwater reef");
   const [selectedImg, setSelectedImage] = useState<string>("");
+  const [description, setDescription] = useState<string>(
+    "Hold shift and drag to screencap"
+  );
   const handleCreate = async () => {
     setFetching(true);
     const pano = await getPanorama(prompt);
@@ -18,7 +19,19 @@ export default function App() {
     setFetching(false);
   };
 
-  const handleSelect = (imgUrl: string) => {
+  const handleSelect = async (imgUrl: string) => {
+    //Do whatever you want with the selected region of the image here
+    //E.g. send to openAI and ask questions about it
+    //or send to an image upscaler with FAL etc
+    const description = await getOpenAICompletion(
+      "briefly describe the image.",
+      128,
+      "",
+      false,
+      imgUrl
+    );
+
+    setDescription(description);
     setSelectedImage(imgUrl);
   };
 
@@ -44,10 +57,8 @@ export default function App() {
         </div>
         <div className="relative w-full h-full">
           <Panorama img={img} onSelect={handleSelect} />
-          <div className="absolute top-0 left-0 p-4 flex flex-col">
-            <p className="text-xs bg-white p-2">
-              Hold shift and drag to screencap
-            </p>
+          <div className="absolute top-0 left-0 p-4 flex flex-col max-w-lg">
+            <p className="text-xs bg-white p-2">{description}</p>
             <img src={selectedImg} />
           </div>
         </div>
