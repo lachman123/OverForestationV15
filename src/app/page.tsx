@@ -14,6 +14,8 @@ export default function Home() {
         <Link href="/debate">Debate Simulator</Link>
         <Link href="/agents">Agent Simulator</Link>
         <Link href="/panorama">Panorama Viewer</Link>
+        <Link href="/drawing">Sketch to Image</Link>
+        <Link href="/speech">Speech to Text</Link>
       </div>
     </main>
   );

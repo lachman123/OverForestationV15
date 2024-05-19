@@ -1,32 +1,120 @@
 "use client";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import {
   Environment,
   OrbitControls,
   PerspectiveCamera,
 } from "@react-three/drei";
-import { useState } from "react";
-export default function Panorama({ img }: { img: string }) {
-  const [fov, setFov] = useState<number>(100);
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { SelectionArea } from "./SelectImageRegion";
+export default function Panorama({
+  img,
+  onSelect,
+}: {
+  img: string;
+  onSelect: (imgUrl: string) => void;
+}) {
+  const [fov, setFov] = useState(100);
+  const [selection, setSelection] = useState<SelectionArea>({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  });
+  const [isSelecting, setIsSelecting] = useState(false);
+  const [finalSelection, setFinalSelection] = useState<SelectionArea | null>(
+    null
+  );
+  const [controlsDisabled, setControlsDisabled] = useState(false);
 
   const handleWheel = (deltaY: number) => {
     setFov((prevFov) => {
       let newFov = prevFov + deltaY * 0.05;
-      newFov = Math.max(10, Math.min(newFov, 150)); // Clamp fov value between 10 and 150
+      newFov = Math.max(10, Math.min(newFov, 150));
       return newFov;
     });
   };
+
+  const handleMouseDown = (e: any) => {
+    setIsSelecting(true);
+    const { offsetX, offsetY } = e.nativeEvent;
+    setSelection({ x: offsetX, y: offsetY, width: 0, height: 0 });
+  };
+
+  const handleMouseMove = (e: any) => {
+    if (isSelecting) {
+      const { offsetX, offsetY } = e.nativeEvent;
+      setSelection((prevSelection) => ({
+        ...prevSelection,
+        width: offsetX - prevSelection.x,
+        height: offsetY - prevSelection.y,
+      }));
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsSelecting(false);
+    if (controlsDisabled) setFinalSelection(selection);
+  };
+
   return (
-    <Canvas onWheel={(e) => handleWheel(e.deltaY)}>
-      <Environment files={img} background />
-      <OrbitControls
-        enableZoom={false}
-        enablePan={false}
-        minPolarAngle={0}
-        maxPolarAngle={Math.PI}
-        makeDefault
-      />
-      <PerspectiveCamera makeDefault position={[45, 45, 10]} fov={fov} />
-    </Canvas>
+    <>
+      <Canvas
+        onWheel={(e) => handleWheel(e.deltaY)}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onKeyDown={(e) => setControlsDisabled(e.key == "Shift")}
+        onKeyUp={(e) => setControlsDisabled(false)}
+        tabIndex={0}
+        gl={{ preserveDrawingBuffer: true }}
+      >
+        <Environment files={img} background />
+        <OrbitControls enabled={!controlsDisabled} />
+        <PerspectiveCamera makeDefault position={[45, 45, 10]} fov={fov} />
+        <SelectionHandler selectionArea={finalSelection} onSelect={onSelect} />
+      </Canvas>
+    </>
   );
 }
+
+const SelectionHandler = ({
+  selectionArea,
+  onSelect,
+}: {
+  selectionArea: SelectionArea | null;
+  onSelect: (imgUrl: string) => void;
+}) => {
+  const { gl } = useThree();
+
+  useEffect(() => {
+    if (!selectionArea) return;
+
+    const { x, y, width, height } = selectionArea;
+    if (width === 0 || height === 0) {
+      console.error("Invalid selection area");
+      return;
+    }
+
+    const offScreenCanvas = document.createElement("canvas");
+    offScreenCanvas.width = Math.abs(width);
+    offScreenCanvas.height = Math.abs(height);
+    const offScreenContext = offScreenCanvas.getContext("2d");
+    if (!offScreenContext) return;
+    offScreenContext.drawImage(
+      gl.domElement,
+      selectionArea.x,
+      selectionArea.y,
+      selectionArea.width,
+      selectionArea.height,
+      0,
+      0,
+      Math.abs(selectionArea.width),
+      Math.abs(selectionArea.height)
+    );
+    //call the callback function and provide the image
+    onSelect(offScreenCanvas.toDataURL("image/png"));
+  }, [selectionArea]);
+
+  return null;
+};
