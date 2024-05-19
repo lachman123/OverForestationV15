@@ -3,6 +3,9 @@ import { getPanorama } from "@/ai/blockade";
 import Panorama from "@/components/Panorama";
 import { useState } from "react";
 
+//Add a pause feature
+//add a select feature and send to upscaler or gemini
+
 export default function App() {
   const [fetching, setFetching] = useState<boolean>(false);
   const [img, setImg] = useState<string>("/old_depot_2k.hdr");

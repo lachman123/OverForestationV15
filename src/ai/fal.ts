@@ -36,3 +36,24 @@ export async function generateImageFal(
   });
   return result.images[0].url;
 }
+
+const seed = Math.floor(Math.random() * 100000);
+
+// This function makes a request to the FAL api and gets an image.
+export async function generateImageToImageFal(
+  prompt: string,
+  image_url: string,
+  randomSeed: boolean = false
+) {
+  const generationSeed = randomSeed ? Math.floor(Math.random() * 100000) : seed;
+  const result: Result = await fal.run(`fal-ai/lcm-sd15-i2i`, {
+    input: {
+      prompt: prompt,
+      image_url: image_url,
+      strength: 0.99,
+      sync_mode: true,
+      seed: generationSeed,
+    },
+  });
+  return result.images[0].url;
+}
