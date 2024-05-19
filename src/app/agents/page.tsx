@@ -91,10 +91,9 @@ export default function AgentsPage() {
                 prompt={`${worldDescription}`}
                 systemPrompt={describeImagePrompt}
                 imageSize="landscape_16_9"
-                animate={5000}
+                animate={0}
                 fullscreen={true}
               />
-              <TextToSpeech text={worldDescription} autoPlay showControls />
             </>
           )}
           <Agents

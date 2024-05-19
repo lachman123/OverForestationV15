@@ -10,9 +10,11 @@ import { SelectionArea } from "./SelectImageRegion";
 export default function Panorama({
   img,
   onSelect,
+  immersive = true,
 }: {
   img: string;
   onSelect: (imgUrl: string) => void;
+  immersive: boolean;
 }) {
   const [fov, setFov] = useState(100);
   const [selection, setSelection] = useState<SelectionArea>({
@@ -70,8 +72,18 @@ export default function Panorama({
         gl={{ preserveDrawingBuffer: true }}
       >
         <Environment files={img} background />
-        <OrbitControls enabled={!controlsDisabled} />
-        <PerspectiveCamera makeDefault position={[45, 45, 10]} fov={fov} />
+        <OrbitControls
+          enabled={!controlsDisabled}
+          target={[1, 0, 0]}
+          maxPolarAngle={immersive ? Math.PI : Math.PI - Math.PI / 3}
+          minPolarAngle={immersive ? 0 : Math.PI / 3}
+          minAzimuthAngle={immersive ? -Infinity : -Math.PI}
+          maxAzimuthAngle={immersive ? Infinity : 0}
+          minZoom={immersive ? 0 : 0.5}
+          autoRotate={immersive ? false : true}
+          autoRotateSpeed={0.2}
+        />
+        <PerspectiveCamera makeDefault position={[0, 0, 0]} fov={fov} />
         <SelectionHandler selectionArea={finalSelection} onSelect={onSelect} />
       </Canvas>
     </>

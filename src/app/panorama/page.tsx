@@ -1,5 +1,6 @@
 "use client";
 import { getPanorama } from "@/ai/blockade";
+import { generateImageFal } from "@/ai/fal";
 import { getOpenAICompletion } from "@/ai/openai";
 import Panorama from "@/components/Panorama";
 import { useState } from "react";
@@ -12,9 +13,15 @@ export default function App() {
   const [description, setDescription] = useState<string>(
     "Hold shift and drag to screencap"
   );
+  const [immersive, setImmersive] = useState<boolean>(false);
+
   const handleCreate = async () => {
     setFetching(true);
-    const pano = await getPanorama(prompt);
+    //if immersive, use blockade, otherwise just use fal
+    const pano = await (immersive
+      ? getPanorama(prompt)
+      : generateImageFal(prompt, "landscape_16_9"));
+
     if (pano) setImg(pano);
     setFetching(false);
   };
@@ -51,13 +58,19 @@ export default function App() {
           >
             {fetching ? "Generating skybox..." : "Create"}
           </button>
+          <button
+            className="p-2 w-full rounded bg-white"
+            onClick={() => setImmersive(!immersive)}
+          >
+            {immersive ? "Skybox (slow)" : "Flat (fast)"}
+          </button>
           <div className="fixed bottom-0 left-0 p-4">
             <img src={selectedImg} />
           </div>
         </div>
         <div className="relative w-full h-full">
-          <Panorama img={img} onSelect={handleSelect} />
-          <div className="absolute top-0 left-0 p-4 flex flex-col max-w-lg">
+          <Panorama img={img} onSelect={handleSelect} immersive={immersive} />
+          <div className="absolute top-0 left-0 p-4 flex flex-col max-w-sm">
             <p className="text-xs bg-white p-2">{description}</p>
             <img src={selectedImg} />
           </div>
