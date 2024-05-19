@@ -12,8 +12,13 @@ type Image = {
   file_name: string;
   file_size: number;
 };
+
 type Result = {
   images: Image[];
+};
+
+type UpscaleResult = {
+  image: Image;
 };
 
 // This function makes a request to the FAL api and gets an image.
@@ -56,4 +61,33 @@ export async function generateImageToImageFal(
     },
   });
   return result.images[0].url;
+}
+
+export type UpscaleOptions = {
+  prompt?: string;
+  scale?: number;
+  creativity?: number;
+  detail?: number;
+  shape_preservation?: number;
+  num_inference_steps?: number;
+};
+
+// This function makes a request to the FAL api and gets an image.
+export async function creativeUpscale(
+  image_url: string,
+  options: UpscaleOptions = {
+    scale: 2,
+    creativity: 0.5,
+    detail: 1,
+    shape_preservation: 0.25,
+    num_inference_steps: 10,
+  }
+) {
+  const result: UpscaleResult = await fal.run(`fal-ai/creative-upscaler`, {
+    input: {
+      image_url: image_url,
+      ...options,
+    },
+  });
+  return result.image.url;
 }

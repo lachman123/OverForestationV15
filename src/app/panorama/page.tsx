@@ -1,8 +1,9 @@
 "use client";
 import { getPanorama } from "@/ai/blockade";
-import { generateImageFal } from "@/ai/fal";
+import { creativeUpscale, generateImageFal } from "@/ai/fal";
 import { getOpenAICompletion } from "@/ai/openai";
 import Panorama from "@/components/Panorama";
+import Spinner from "@/components/Spinner";
 import { useState } from "react";
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
     "Hold shift and drag to screencap"
   );
   const [immersive, setImmersive] = useState<boolean>(false);
+  const [upscaling, setUpscaling] = useState<boolean>(false);
 
   const handleCreate = async () => {
     setFetching(true);
@@ -30,16 +32,21 @@ export default function App() {
     //Do whatever you want with the selected region of the image here
     //E.g. send to openAI and ask questions about it
     //or send to an image upscaler with FAL etc
+    setSelectedImage(imgUrl);
+    setUpscaling(true);
+    //try to upscale the image
+    const img = await creativeUpscale(imgUrl);
+
     const description = await getOpenAICompletion(
       "briefly describe the image.",
       128,
       "",
       false,
-      imgUrl
+      img
     );
-
     setDescription(description);
-    setSelectedImage(imgUrl);
+    setSelectedImage(img);
+    setUpscaling(false);
   };
 
   return (
@@ -72,7 +79,14 @@ export default function App() {
           <Panorama img={img} onSelect={handleSelect} immersive={immersive} />
           <div className="absolute top-0 left-0 p-4 flex flex-col max-w-sm">
             <p className="text-xs bg-white p-2">{description}</p>
-            <img src={selectedImg} />
+            <div className="relative">
+              <img className="w-full h-full" src={selectedImg} />
+              {upscaling && (
+                <div className="absolute inset-0 flex justify-center items-center">
+                  <Spinner />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </main>
