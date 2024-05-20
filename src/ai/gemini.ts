@@ -21,6 +21,5 @@ export async function getGeminiVision(prompt: string, base64Image: string) {
   }
 
   const result = await model.generateContent(body);
-  console.log(result.response.text());
   return result.response.text();
 }

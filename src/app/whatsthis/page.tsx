@@ -17,6 +17,7 @@ export default function WhatsThisPage() {
       imgUrl
     );
     /*
+    //Open AI option
     const description = await getOpenAICompletion(
       "briefly describe the image. Guess where in the world it is located.",
       128,

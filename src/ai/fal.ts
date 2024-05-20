@@ -29,12 +29,12 @@ export async function generateImageFal(
     | "fast-turbo-diffusion"
     | "hyper-sdxl"
     | "fast-sdxl" = "fast-turbo-diffusion",
-  negativePrompt: string = "cartoon, illustration, animation, face, male, female, ugly"
+  negative_prompt: string = "cartoon, illustration, animation, face, male, female, ugly"
 ) {
   const result: Result = await fal.run(`fal-ai/${model}`, {
     input: {
       prompt: prompt,
-      negativePrompt: negativePrompt,
+      negative_prompt: negative_prompt,
       image_size: image_size,
       sync_mode: true,
     },
@@ -58,6 +58,8 @@ export async function generateImageToImageFal(
       strength: 0.99,
       sync_mode: true,
       seed: generationSeed,
+      negative_prompt:
+        "cartoon, illustration, animation, face, male, female, ugly",
     },
   });
   return result.images[0].url;
@@ -70,6 +72,7 @@ export type UpscaleOptions = {
   detail?: number;
   shape_preservation?: number;
   num_inference_steps?: number;
+  skip_ccsr?: boolean;
 };
 
 // This function makes a request to the FAL api and gets an image.
@@ -79,7 +82,7 @@ export async function creativeUpscale(
     scale: 2,
     creativity: 0.5,
     detail: 1,
-    shape_preservation: 0.25,
+    shape_preservation: 0.5,
     num_inference_steps: 10,
   }
 ) {
@@ -89,5 +92,7 @@ export async function creativeUpscale(
       ...options,
     },
   });
+
+  //read result.image.url; and return base64 string
   return result.image.url;
 }
