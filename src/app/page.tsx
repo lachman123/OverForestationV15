@@ -16,6 +16,7 @@ export default function Home() {
         <Link href="/panorama">Panorama Viewer</Link>
         <Link href="/drawing">Sketch to Image</Link>
         <Link href="/speech">Speech to Text</Link>
+        <Link href="/test">Speed Comparison</Link>
       </div>
     </main>
   );
