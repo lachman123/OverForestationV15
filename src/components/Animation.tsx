@@ -1,7 +1,7 @@
 import { generateImageFal } from "@/ai/fal";
 import { getGroqCompletion } from "@/ai/groq";
 import { useEffect, useState } from "react";
-import BlendImage from "./BlendImage";
+import Blend, { BlendImage } from "./Blend";
 
 type AnimationProps = {
   prompt: string;
