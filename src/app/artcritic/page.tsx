@@ -40,7 +40,7 @@ export default function ArtcriticPage() {
 
     setDescription(description);
     //create the image
-    const imageUrl = await generateImageFal(description, "landscape_16_9");
+    const imageUrl = await generateImageFal(description);
     setImageUrl(imageUrl);
 
     setMessage("Valuing artwork...");

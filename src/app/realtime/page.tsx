@@ -54,7 +54,6 @@ export default function Home() {
             _binary: new Uint8Array(),
             prompt: e.target.value,
             seed: seed,
-            image_size: "landscape_16_9",
           });
         }}
       />

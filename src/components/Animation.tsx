@@ -6,7 +6,8 @@ import Blend, { BlendImage } from "./Blend";
 type AnimationProps = {
   prompt: string;
   systemPrompt: string;
-  imageSize: "landscape_16_9" | "square";
+  width: number;
+  height: number;
   animate: number;
   fullscreen: boolean;
   onChange?: (url: string) => void;
@@ -18,7 +19,8 @@ type AnimationProps = {
 export default function Animation({
   prompt,
   systemPrompt,
-  imageSize,
+  width,
+  height,
   animate,
   fullscreen,
   onChange,
@@ -28,14 +30,25 @@ export default function Animation({
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log("effect triggered");
+
+    async function generateDescription() {
+      return await getGroqCompletion(prompt, 32, systemPrompt);
+    }
     async function generateImage() {
-      const imageDescription = await getGroqCompletion(
-        prompt,
-        64,
-        systemPrompt
+      //improve image description
+      const imageDescription = await generateDescription();
+      console.log(
+        imageDescription +
+          " Canon EOS 5D Mark IV, 24mm, f/8, 1/250s, ISO 100, 2019"
       );
-      const url = await generateImageFal(imageDescription, imageSize);
-      return url;
+      const url = await generateImageFal(
+        imageDescription +
+          " Canon EOS 5D Mark IV, 24mm, f/8, 1/250s, ISO 100, 2019",
+        { width: width, height: height },
+        "hyper-sdxl"
+      );
+      return { imageDescription, url };
     }
 
     async function generateVideo(url: string) {
@@ -44,39 +57,32 @@ export default function Animation({
     }
 
     if (animate === 0) {
-      generateImage().then((url) => {
-        setImage(url);
+      generateImage().then((img) => {
+        setImage(img.url);
         setVideoUrl(null);
         console.log("generating video");
-        if (video && url)
-          generateVideo(url).then((videoUrl) => {
+        if (video && img.url)
+          generateVideo(img.url).then((videoUrl) => {
             console.log("got video", videoUrl);
             setVideoUrl(videoUrl);
           });
       });
     } else {
       const interval = setInterval(async () => {
-        const url = await generateImage();
+        const { url } = await generateImage();
         setImage(url); // Set new image
         if (onChange) onChange(url);
       }, animate);
 
       return () => clearInterval(interval); // Cleanup
     }
-  }, [prompt, animate, systemPrompt, imageSize, onChange, video]);
+  }, [prompt, animate, systemPrompt, width, height, video, onChange]);
 
   return (
     <Blend
       component={
         videoUrl ? (
-          <video
-            poster={image ?? ""}
-            src={videoUrl}
-            autoPlay
-            className="w-full h-full object-cover"
-            muted
-            loop
-          />
+          <VideoComponent image={image ?? ""} videoUrl={videoUrl} />
         ) : (
           <img className="w-full  h-full  object-cover" src={image ?? ""} />
         )
@@ -85,3 +91,22 @@ export default function Animation({
     />
   );
 }
+
+const VideoComponent = ({
+  image,
+  videoUrl,
+}: {
+  image: string;
+  videoUrl: string;
+}) => {
+  return (
+    <video
+      poster={image ?? ""}
+      src={videoUrl}
+      autoPlay
+      className="w-full h-full object-cover"
+      muted
+      loop={false}
+    />
+  );
+};
