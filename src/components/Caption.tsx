@@ -59,8 +59,8 @@ export default function Caption({
 
   //read the next bit of text when we finish this one
   const handleEndSpeech = async () => {
-    //wait for 2 seconds
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    //wait for 1 seconds
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     if (onComplete && currentLine < text.length - 1)
       onComplete(text[currentLine], text[currentLine + 1]);
 
