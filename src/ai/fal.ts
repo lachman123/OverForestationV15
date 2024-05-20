@@ -21,6 +21,10 @@ type UpscaleResult = {
   image: Image;
 };
 
+type VideoResult = {
+  video: Image;
+};
+
 // This function makes a request to the FAL api and gets an image.
 export async function generateImageFal(
   prompt: string,
@@ -95,4 +99,17 @@ export async function creativeUpscale(
 
   //read result.image.url; and return base64 string
   return result.image.url;
+}
+
+// This function makes a request to the FAL api and gets an image.
+export async function generateVideoFal(image_url: string, steps: number = 2) {
+  const result: VideoResult = await fal.run(`fal-ai/fast-svd-lcm`, {
+    input: {
+      image_url: image_url,
+      steps: steps,
+    },
+  });
+
+  //read result.image.url; and return base64 string
+  return result.video.url;
 }

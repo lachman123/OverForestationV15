@@ -5,7 +5,7 @@ type BlendImageProps = {
   fullscreen: boolean;
 };
 
-//blends an new image over the top of any previously rendered image
+//blends and animate an new component over the top of any previously rendered component
 export default function Blend({ component, fullscreen }: BlendImageProps) {
   const [currentComponent, setCurrentComponent] = useState<ReactNode | null>(
     null

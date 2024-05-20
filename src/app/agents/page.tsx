@@ -93,6 +93,7 @@ export default function AgentsPage() {
                 imageSize="landscape_16_9"
                 animate={0}
                 fullscreen={true}
+                video={true}
               />
             </>
           )}
