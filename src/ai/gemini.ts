@@ -6,7 +6,10 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI ?? "");
 
 //models - gemini-pro-vision, gemini-1.5-flash-latest
 
-export async function getGeminiVision(prompt: string, base64Image: string) {
+export async function getGeminiVision(
+  prompt: string,
+  base64Image: string | undefined = undefined
+) {
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
   const body = [prompt] as any[];
   if (base64Image) {
