@@ -1,7 +1,7 @@
 import { generateImageFal, generateVideoFal } from "@/ai/fal";
 import { getGroqCompletion } from "@/ai/groq";
 import { useEffect, useState } from "react";
-import AnimateContent from "./AnimateContent";
+import Blend from "./Blend";
 
 type AnimationProps = {
   prompt: string;
@@ -38,8 +38,6 @@ export default function Animation({
   const [animation, setAnimation] = useState<string>("animate-zoomIn");
 
   useEffect(() => {
-    console.log("effect triggered");
-
     async function generateDescription() {
       return await getGroqCompletion(prompt, 32, systemPrompt);
     }
@@ -67,12 +65,9 @@ export default function Animation({
     if (animate === 0) {
       generateImage().then((img) => {
         setImage(img.url);
-        setAnimation(animations[Math.floor(Math.random() * animations.length)]);
         setVideoUrl(null);
-        console.log("generating video");
         if (video && img.url)
           generateVideo(img.url).then((videoUrl) => {
-            console.log("got video", videoUrl);
             setVideoUrl(videoUrl);
           });
       });
@@ -80,7 +75,7 @@ export default function Animation({
       const interval = setInterval(async () => {
         const { url } = await generateImage();
         setImage(url); // Set new image
-        setAnimation(animations[Math.floor(Math.random() * animations.length)]);
+
         if (onChange) onChange(url);
       }, animate);
 
@@ -88,14 +83,27 @@ export default function Animation({
     }
   }, [prompt, animate, systemPrompt, width, height, video, onChange]);
 
+  const handleImageLoad = async () => {
+    //set the animation after the new image has loaded with a slight debounce
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setAnimation(animations[Math.floor(Math.random() * animations.length)]);
+  };
   return (
-    <AnimateContent animation={animation} fullscreen={fullscreen}>
+    <Blend
+      contentKey={image?.substring(-20) ?? videoUrl ?? ""}
+      animation={animation}
+      fullscreen={fullscreen}
+    >
       {videoUrl ? (
         <VideoComponent image={image ?? ""} videoUrl={videoUrl} />
       ) : (
-        <img className="w-full  h-full  object-cover" src={image ?? ""} />
+        <img
+          className="w-full  h-full  object-cover"
+          src={image ?? ""}
+          onLoad={handleImageLoad}
+        />
       )}
-    </AnimateContent>
+    </Blend>
   );
 }
 

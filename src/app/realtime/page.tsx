@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import * as fal from "@fal-ai/serverless-client";
-import Blend, { BlendImage } from "@/components/Blend";
+import Blend from "@/components/Blend";
 
 fal.config({
   proxyUrl: "/api/fal/proxy",
@@ -58,7 +58,11 @@ export default function Home() {
         }}
       />
 
-      {image && <BlendImage src={image} fullscreen={false} />}
+      {image && (
+        <Blend contentKey={input}>
+          <img className="w-full  h-full  object-cover" src={image} />
+        </Blend>
+      )}
     </main>
   );
 }
