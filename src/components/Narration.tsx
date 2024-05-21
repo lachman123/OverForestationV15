@@ -2,7 +2,8 @@
 import Caption from "./Caption";
 import { useEffect, useState } from "react";
 import { getGeminiVision } from "@/ai/gemini";
-
+import Animation from "./Animation";
+import { describeImagePrompt } from "@/ai/prompts";
 //Component that turns anything into a narrated script
 export default function Narration({
   scenario,
@@ -45,12 +46,21 @@ export default function Narration({
 
   return (
     <>
-      {script && script[currentLine] && (
-        <Caption
-          text={script[currentLine]}
-          speech
-          onComplete={handleReadText}
-        />
+      {script[currentLine] && (
+        <>
+          <Caption
+            text={script[currentLine]}
+            speech
+            onComplete={handleReadText}
+          />
+          <Animation
+            prompt={script[currentLine]}
+            systemPrompt={describeImagePrompt}
+            width={1344}
+            height={1024}
+            video={false}
+          />
+        </>
       )}
     </>
   );

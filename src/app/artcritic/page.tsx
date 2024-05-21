@@ -110,7 +110,7 @@ export default function ArtcriticPage() {
             )}
 
             {imageUrl && (
-              <Blend contentKey={imageUrl.substring(-20)}>
+              <Blend contentKey={imageUrl.slice(-20)}>
                 <img className="w-full  h-full  object-cover" src={imageUrl} />
               </Blend>
             )}

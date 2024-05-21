@@ -1,5 +1,5 @@
-import { Athiti } from "next/font/google";
-import React, { ReactNode } from "react";
+"use client";
+import React, { ReactNode, useEffect, useMemo } from "react";
 import { CrossFade } from "react-crossfade-simple";
 
 const animations = [
@@ -21,6 +21,10 @@ export default function Blend({
   contentKey: string;
   duration?: number;
 }) {
+  useEffect(() => {
+    console.log("CONTENT:", contentKey);
+  }, [contentKey]);
+
   return (
     <div
       className={`${
@@ -39,12 +43,11 @@ export default function Blend({
 }
 
 export function AnimatedImage({ src }: { src: string }) {
+  const animation = useMemo(
+    () => animations[Math.floor(Math.random() * animations.length)],
+    []
+  );
   return (
-    <img
-      className={`w-full h-full object-cover ${
-        animations[Math.floor(Math.random() * animations.length)]
-      }`}
-      src={src}
-    />
+    <img className={`w-full h-full object-cover ${animation}`} src={src} />
   );
 }

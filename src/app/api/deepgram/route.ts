@@ -1,3 +1,4 @@
+"use server";
 import { createClient } from "@deepgram/sdk";
 
 const deepgram = createClient(process.env.DEEPGRAM ?? "");

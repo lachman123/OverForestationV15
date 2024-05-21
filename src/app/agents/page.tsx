@@ -44,33 +44,16 @@ export default function AgentsPage() {
     initAgents.map((a) => JSON.stringify(a))
   );
   const [showUI, setShowUI] = useState<boolean>(true);
-  const [caption, setCaption] = useState<string>(
-    "A documentary about the impact of deforestation on the environment"
-  );
 
   const handleResponse = async (newResources: any, newAgents: any[]) => {
     setResources(newResources);
     setAgents(newAgents);
   };
 
-  const handleFinishCaption = (last: string, next: string) => {
-    setCaption(next);
-  };
-
   return (
     <main className="">
       <div className="z-10 max-w-lg w-full items-center justify-between font-mono text-sm lg:flex">
-        <Animation
-          prompt={`${caption}`}
-          systemPrompt={describeImagePrompt}
-          width={1344}
-          height={1024}
-          video={false}
-        />
-        <Narration
-          scenario={`World State: ${resources}. Agents: ${agents}`}
-          onCompleteLine={handleFinishCaption}
-        />
+        <Narration scenario={`World State: ${resources}. Agents: ${agents}`} />
         <div id="Agent UI" className="flex flex-col p-8 z-50">
           <button
             className="p-2 border rounded-lg bg-white/25 mb-2"

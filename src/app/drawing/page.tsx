@@ -23,7 +23,7 @@ export default function Page() {
             onChange={(e) => setPrompt(e.target.value)}
           />
           <SketchToImage prompt={prompt} onCreate={onCreate} />
-          <Blend contentKey={image.substring(-20)}>
+          <Blend contentKey={image.slice(-20)}>
             <img className="w-full  h-full  object-cover" src={image} />
           </Blend>
         </div>

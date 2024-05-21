@@ -76,7 +76,7 @@ export default function Animation({
 
   return (
     <Blend
-      contentKey={image?.substring(-20) ?? videoUrl ?? ""}
+      contentKey={image?.slice(-20) ?? videoUrl ?? ""}
       fullscreen={fullscreen}
       duration={2000}
     >
