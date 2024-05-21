@@ -5,26 +5,20 @@ type BlendImageProps = {
   fullscreen: boolean;
 };
 
-const animations = [
-  "animate-scale",
-  "animate-panLR",
-  "animate-panR",
-  "animate-zoomIn",
-];
 //blends and animate an new component over the top of any previously rendered component
 export default function Blend({ component, fullscreen }: BlendImageProps) {
   const [currentComponent, setCurrentComponent] = useState<ReactNode | null>(
     null
   );
   const [nextComponent, setNextComponent] = useState<ReactNode | null>(null);
-  const [animation, setAnimation] = useState("animate-scale");
 
   useEffect(() => {
     //choose random animation
-    setAnimation(animations[Math.floor(Math.random() * animations.length)]);
+
     setNextComponent(component);
     const timeout = setTimeout(() => {
       setCurrentComponent(component);
+
       setNextComponent(null);
     }, 1000); // Delay for the fade effect to complete
     return () => clearTimeout(timeout);
@@ -40,9 +34,7 @@ export default function Blend({ component, fullscreen }: BlendImageProps) {
     >
       {currentComponent && (
         <div
-          className={`${
-            fullscreen && "absolute top-0 left-0"
-          } w-full h-full ${animation}`}
+          className={`${fullscreen && "absolute top-0 left-0"} w-full h-full`}
         >
           <div
             className={`${fullscreen && "absolute top-0 left-0"} w-full h-full`}

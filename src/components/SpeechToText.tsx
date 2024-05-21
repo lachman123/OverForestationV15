@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import * as fal from "@fal-ai/serverless-client";
 import Spinner from "./Spinner";
 

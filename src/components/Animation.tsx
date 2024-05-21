@@ -1,7 +1,7 @@
 import { generateImageFal, generateVideoFal } from "@/ai/fal";
 import { getGroqCompletion } from "@/ai/groq";
-import { ReactNode, useEffect, useRef, useState } from "react";
-import Blend, { BlendImage } from "./Blend";
+import { useEffect, useState } from "react";
+import AnimateContent from "./AnimateContent";
 
 type AnimationProps = {
   prompt: string;
@@ -13,6 +13,13 @@ type AnimationProps = {
   onChange?: (url: string) => void;
   video?: boolean;
 };
+
+const animations = [
+  "animate-panR",
+  "animate-zoomIn",
+  "animate-panL",
+  "animate-zoomOut",
+];
 
 //Component that uses groq to generate image descriptions from prompts, then uses fal to generates the image and blends them together.
 //All runs on an animation timer
@@ -28,6 +35,7 @@ export default function Animation({
 }: AnimationProps) {
   const [image, setImage] = useState<string | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [animation, setAnimation] = useState<string>("animate-zoomIn");
 
   useEffect(() => {
     console.log("effect triggered");
@@ -59,6 +67,7 @@ export default function Animation({
     if (animate === 0) {
       generateImage().then((img) => {
         setImage(img.url);
+        setAnimation(animations[Math.floor(Math.random() * animations.length)]);
         setVideoUrl(null);
         console.log("generating video");
         if (video && img.url)
@@ -71,6 +80,7 @@ export default function Animation({
       const interval = setInterval(async () => {
         const { url } = await generateImage();
         setImage(url); // Set new image
+        setAnimation(animations[Math.floor(Math.random() * animations.length)]);
         if (onChange) onChange(url);
       }, animate);
 
@@ -79,16 +89,13 @@ export default function Animation({
   }, [prompt, animate, systemPrompt, width, height, video, onChange]);
 
   return (
-    <Blend
-      component={
-        videoUrl ? (
-          <VideoComponent image={image ?? ""} videoUrl={videoUrl} />
-        ) : (
-          <img className="w-full  h-full  object-cover" src={image ?? ""} />
-        )
-      }
-      fullscreen={fullscreen}
-    />
+    <AnimateContent animation={animation} fullscreen={fullscreen}>
+      {videoUrl ? (
+        <VideoComponent image={image ?? ""} videoUrl={videoUrl} />
+      ) : (
+        <img className="w-full  h-full  object-cover" src={image ?? ""} />
+      )}
+    </AnimateContent>
   );
 }
 

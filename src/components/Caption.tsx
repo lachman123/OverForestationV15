@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import SpeechToText from "./SpeechToText";
+
 import TextToSpeech, { AuraModel } from "./TextToSpeech";
 
 const models = [
@@ -94,7 +94,7 @@ export default function Caption({
       <p className="text-sm bg-black/50 p-2 rounded-lg max-w-lg text-white font-semibold">
         {text[currentLine]}
       </p>
-      {speech && (
+      {speech && text[currentLine] && (
         <TextToSpeech
           text={text[currentLine].split(":")[1]}
           showControls={false}

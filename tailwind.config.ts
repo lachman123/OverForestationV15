@@ -22,6 +22,10 @@ const config: Config = {
           "0%": { transform: "scale(1)" },
           "100%": { transform: "scale(1.4)" },
         },
+        zoomOut: {
+          "0%": { transform: "scale(1.4)" },
+          "100%": { transform: "scale(1)" },
+        },
         panLR: {
           "0%, 100%": { transform: "translateX(0) scale(1.1)" },
           "50%": { transform: "translateX(5%) scale(1.1)" },
@@ -30,12 +34,18 @@ const config: Config = {
           "0%": { transform: "translateX(-10%) scale(1.2)" },
           "100%": { transform: "translateX(10%) scale(1.2)" },
         },
+        panL: {
+          "0%": { transform: "translateX(10%) scale(1.2)" },
+          "100%": { transform: "translateX(-10%) scale(1.2)" },
+        },
       },
       animation: {
         scale: "scale 20s ease-in-out infinite",
         zoomIn: "zoomIn 10s ease-in-out forwards",
+        zoomOut: "zoomOut 10s ease-in-out forwards",
         panLR: "panLR 10s ease-in-out infinite",
         panR: "panR 10s ease-in-out forwards",
+        panL: "panL 10s ease-in-out forwards",
       },
     },
   },
