@@ -36,10 +36,6 @@ export default function Animation({
     async function generateImage() {
       //improve image description
       const imageDescription = await generateDescription();
-      console.log(
-        imageDescription +
-          " Canon EOS 5D Mark IV, 24mm, f/8, 1/250s, ISO 100, 2019"
-      );
       const url = await generateImageFal(
         imageDescription +
           " Canon EOS 5D Mark IV, 24mm, f/8, 1/250s, ISO 100, 2019",

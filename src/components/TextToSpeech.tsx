@@ -32,7 +32,6 @@ export default function TextToSpeech({
 
   useEffect(() => {
     const generateAudio = async () => {
-      console.log("generatingAudio");
       const response = await fetch("/api/deepgram", {
         method: "POST",
         headers: {

@@ -16,6 +16,7 @@ export default function Narration({
 }) {
   const [script, setScript] = useState<string[]>([]);
   const [currentLine, setCurrentLine] = useState<number>(0);
+  const [currentText, setCurrentText] = useState<string | null>(null);
 
   useEffect(() => {
     //generate the narrative
@@ -30,6 +31,7 @@ export default function Narration({
       );
       setScript(description.split("\n"));
       setCurrentLine(0);
+      setCurrentText(description.split("\n")[0]);
       if (onNarration) onNarration(description);
     };
 
@@ -39,14 +41,18 @@ export default function Narration({
   const handleReadText = () => {
     if (currentLine < script.length - 1) {
       setCurrentLine(currentLine + 1);
+      setCurrentText(script[currentLine + 1]);
       if (onCompleteLine)
         onCompleteLine(script[currentLine], script[currentLine + 1]);
     }
   };
 
+  useEffect(() => {
+    console.log("current text", currentText);
+  }, [currentText]);
   return (
     <>
-      {script[currentLine] && (
+      {currentText && (
         <>
           <Caption
             text={script[currentLine]}

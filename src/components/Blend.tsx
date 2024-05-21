@@ -21,10 +21,6 @@ export default function Blend({
   contentKey: string;
   duration?: number;
 }) {
-  useEffect(() => {
-    console.log("CONTENT:", contentKey);
-  }, [contentKey]);
-
   return (
     <div
       className={`${
