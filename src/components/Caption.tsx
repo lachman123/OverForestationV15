@@ -19,6 +19,7 @@ const models = [
   "aura-zeus-en",
 ];
 
+//This could take a string rather than array and could split in useEffect. Would solve the issue with the re-render and remove the first-line hack
 export default function Caption({
   text,
   speed = 3000,

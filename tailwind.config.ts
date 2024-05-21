@@ -18,14 +18,24 @@ const config: Config = {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.1)" },
         },
-        pan: {
-          "0%, 100%": { transform: "translateX(0)" },
-          "50%": { transform: "translateX(20px)" },
+        zoomIn: {
+          "0%": { transform: "scale(1)" },
+          "100%": { transform: "scale(1.4)" },
+        },
+        panLR: {
+          "0%, 100%": { transform: "translateX(0) scale(1.1)" },
+          "50%": { transform: "translateX(5%) scale(1.1)" },
+        },
+        panR: {
+          "0%": { transform: "translateX(-10%) scale(1.2)" },
+          "100%": { transform: "translateX(10%) scale(1.2)" },
         },
       },
       animation: {
         scale: "scale 20s ease-in-out infinite",
-        pan: "pan 20s ease-in-out infinite",
+        zoomIn: "zoomIn 10s ease-in-out forwards",
+        panLR: "panLR 10s ease-in-out infinite",
+        panR: "panR 10s ease-in-out forwards",
       },
     },
   },
