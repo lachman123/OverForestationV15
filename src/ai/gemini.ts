@@ -9,12 +9,22 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI ?? "");
 export async function getGeminiVision(
   prompt: string,
   base64Image: string | undefined = undefined,
-  systemPrompt: string = ""
+  systemPrompt: string = "",
+  json: boolean = false
 ) {
+  const generationConfig = {
+    temperature: 1,
+    topP: 0.95,
+    topK: 64,
+    maxOutputTokens: 8192,
+    responseMimeType: json ? "application/json" : "text/plain",
+  };
   const model = genAI.getGenerativeModel({
     model: "gemini-1.5-flash-latest",
     systemInstruction: systemPrompt,
+    generationConfig,
   });
+
   const body = [prompt] as any[];
   if (base64Image) {
     const formatted = base64Image.split(",")[1];

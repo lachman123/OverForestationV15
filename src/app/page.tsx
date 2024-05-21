@@ -18,6 +18,7 @@ export default function Home() {
         <Link href="/speech">Speech to Text</Link>
         <Link href="/test/image">Image Speed Comparison</Link>
         <Link href="/test/text">Text Speed Comparison</Link>
+        <Link href="/graph">Graph Concepts</Link>
       </div>
     </main>
   );
