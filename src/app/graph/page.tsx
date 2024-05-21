@@ -84,6 +84,22 @@ export default function Page() {
     relaxNodes([...nodes, ...graphJSON.nodes], [...edges, ...graphJSON.edges]);
   };
 
+  const handleEmbellish = async () => {
+    setGenerating(true);
+    const graph = await getGeminiVision(
+      JSON.stringify({ concept, nodes, edges }),
+      undefined,
+      `The user will provide you with an abstract graph of entities and relationships.
+      Use this graph as a template to generate a specific case study of the project concept. 
+       Add specific data to the properties of each node that demonstrates a real-world example of the concept.
+       Return your response in JSON in the format {nodes:Node[]}.`,
+      true
+    );
+    const graphJSON = JSON.parse(graph);
+    setGenerating(false);
+    setNodes(graphJSON.nodes);
+  };
+
   const relaxNodes = (nodes: GNode[], edges: Edge[]) => {
     const relaxedNodes = relaxGraph(nodes, edges);
     setNodes(relaxedNodes);
@@ -128,6 +144,12 @@ export default function Page() {
               onClick={() => handleInterlink()}
             >
               {generating ? "Generating..." : "Link"}
+            </button>
+            <button
+              className="p-2 bg-white rounded-lg"
+              onClick={() => handleEmbellish()}
+            >
+              {generating ? "Generating..." : "Create Project"}
             </button>
           </div>
           {selectedNode && (
