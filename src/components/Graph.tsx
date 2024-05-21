@@ -253,7 +253,7 @@ export function relaxGraph(
   repulsiveForce = 100,
   attractiveForce = 0.1,
   damping = 0.85,
-  iterations = 20
+  iterations = 10
 ) {
   //create lookup table and format
   const lookup: { [id: string]: DynamicNode } = {};

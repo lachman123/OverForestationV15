@@ -1,19 +1,22 @@
 "use client";
 import { getGeminiVision } from "@/ai/gemini";
+import { getGroqCompletion } from "@/ai/groq";
 import Graph, { Edge, GNode, relaxGraph } from "@/components/Graph";
 import { useState } from "react";
 
 export default function Page() {
   const [nodes, setNodes] = useState<GNode[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
-  const [concept, setConcept] = useState<string>("Offshore Salmon Farming");
+  const [concept, setConcept] = useState<string>(
+    "Design and engineering considerations for an offshore salmon farm"
+  );
   const [generating, setGenerating] = useState<boolean>(false);
 
   const handleCreate = async (prompt: string) => {
     setGenerating(true);
-    const graph = await getGeminiVision(
+    const graph = await getGroqCompletion(
       prompt,
-      undefined,
+      4000,
       `
         The user will provide you with a concept to be graphed. 
         Generate an array of Nodes and an array of Edges to represent the graph.
@@ -25,8 +28,8 @@ export default function Page() {
     );
 
     const graphJSON = JSON.parse(graph);
-    relaxNodes(graphJSON.nodes, graphJSON.edges);
     setGenerating(false);
+    relaxNodes(graphJSON.nodes, graphJSON.edges);
   };
 
   const handleRefine = async () => {
@@ -41,8 +44,8 @@ export default function Page() {
       true
     );
     const graphJSON = JSON.parse(graph);
-    relaxNodes(graphJSON.nodes, graphJSON.edges);
     setGenerating(false);
+    relaxNodes(graphJSON.nodes, graphJSON.edges);
   };
 
   const relaxNodes = (nodes: GNode[], edges: Edge[]) => {
