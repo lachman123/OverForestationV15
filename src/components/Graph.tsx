@@ -6,7 +6,7 @@ export type GNode = {
   name: string;
   x: number;
   y: number;
-  properties: any;
+  properties?: any;
 };
 
 export type Edge = {

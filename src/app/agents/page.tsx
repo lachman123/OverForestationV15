@@ -80,7 +80,7 @@ export default function AgentsPage() {
   );
 }
 
-function KeyValueTable({ data }: { data: any }) {
+export function KeyValueTable({ data }: { data: any }) {
   return (
     <div className="flex flex-col">
       {Object.keys(data).map((key) => (

@@ -4,6 +4,7 @@ import { getGroqCompletion } from "@/ai/groq";
 import { getOpenAICompletion } from "@/ai/openai";
 import Graph, { Edge, GNode, relaxGraph } from "@/components/Graph";
 import { useState } from "react";
+import { KeyValueTable } from "../agents/page";
 
 export default function Page() {
   const [nodes, setNodes] = useState<GNode[]>([]);
@@ -12,6 +13,7 @@ export default function Page() {
     "Design and engineering considerations for an offshore salmon farm"
   );
   const [generating, setGenerating] = useState<boolean>(false);
+  const [selectedNode, setSelectedNode] = useState<GNode | null>(null);
 
   const handleCreate = async (prompt: string) => {
     setGenerating(true);
@@ -21,7 +23,7 @@ export default function Page() {
       `
         The user will provide you with a concept to be graphed. 
         Generate an array of Nodes and an array of Edges to represent the graph.
-        Nodes should be in the format {id: string, name: string, x:number, y:number, properties: any}.
+        Nodes should be in the format {id: string, name: string, x:number, y:number, properties?: any}.
         Properties can be an object with any additional information you want to include about the node.
         Edges should be in the format {source:string, target:string, relation:string}.
         Return your response in JSON in the format {nodes:Node[], edges: Edge[]}.`,
@@ -90,6 +92,7 @@ export default function Page() {
 
   const handleSelect = (node: GNode) => {
     console.log(node);
+    setSelectedNode(node);
   };
 
   return (
@@ -127,6 +130,12 @@ export default function Page() {
               {generating ? "Generating..." : "Link"}
             </button>
           </div>
+          {selectedNode && (
+            <div className="flex flex-col w-full">
+              <span className="font-bold"> {selectedNode.name}</span>
+              <KeyValueTable data={selectedNode.properties} />
+            </div>
+          )}
           <Graph nodes={nodes} edges={edges} onSelect={handleSelect} />
         </div>
       </div>
