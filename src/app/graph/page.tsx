@@ -49,6 +49,22 @@ export default function Page() {
     relaxNodes(graphJSON.nodes, graphJSON.edges);
   };
 
+  const handleInterlink = async () => {
+    setGenerating(true);
+    const graph = await getGeminiVision(
+      JSON.stringify({ concept, nodes, edges }),
+      undefined,
+      `The user will provide you with a conceptual graph of entities and relationships.
+       Generate an array of Nodes and an array of Edges to append to this graph. 
+       New nodes should link existing concepts in the graph.
+       Return your response in JSON in the format {nodes:Node[], edges: Edge[]}.`,
+      true
+    );
+    const graphJSON = JSON.parse(graph);
+    setGenerating(false);
+    relaxNodes([...nodes, ...graphJSON.nodes], [...edges, ...graphJSON.edges]);
+  };
+
   const handleAppend = async () => {
     setGenerating(true);
     const graph = await getGeminiVision(
@@ -56,7 +72,8 @@ export default function Page() {
       undefined,
       `The user will provide you with a conceptual graph of entities and relationships.
        Generate an array of Nodes and an array of Edges to append to this graph. 
-       Use new nodes to link existing concepts in the graph and add nodes and relationships to nodes that do not have many existing edges. 
+       New nodes and edges should link existing concepts in the graph.
+       Expand on the existing graph with new concepts and relationships.
        Return your response in JSON in the format {nodes:Node[], edges: Edge[]}.`,
       true
     );
@@ -102,6 +119,12 @@ export default function Page() {
               onClick={() => handleAppend()}
             >
               {generating ? "Generating..." : "Append"}
+            </button>
+            <button
+              className="p-2 bg-white rounded-lg"
+              onClick={() => handleInterlink()}
+            >
+              {generating ? "Generating..." : "Link"}
             </button>
           </div>
           <Graph nodes={nodes} edges={edges} onSelect={handleSelect} />
