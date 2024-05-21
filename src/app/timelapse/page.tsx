@@ -42,7 +42,7 @@ export default function TimelapsePage() {
             systemPrompt={describeImagePrompt}
             width={1344}
             height={1024}
-            animate={animateImages ? 5000 : 0}
+            refreshRate={animateImages ? 5000 : 0}
             fullscreen={fullscreen}
             onChange={(url) => setYear((year) => year + 5)}
           />

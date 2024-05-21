@@ -1,17 +1,25 @@
+import { Athiti } from "next/font/google";
 import React, { ReactNode } from "react";
 import { CrossFade } from "react-crossfade-simple";
 
+const animations = [
+  "animate-panR",
+  "animate-zoomIn",
+  "animate-panL",
+  "animate-zoomOut",
+];
+
 //blends and animate an new component over the top of any previously rendered component
 export default function Blend({
-  animation = "",
   fullscreen = true,
   children,
   contentKey,
+  duration = 2000,
 }: {
-  animation?: string;
   fullscreen?: boolean;
   children: ReactNode;
   contentKey: string;
+  duration?: number;
 }) {
   return (
     <div
@@ -21,15 +29,22 @@ export default function Blend({
           : `relative max-w-full w-[1024px] h-[600px] overflow-hidden`
       }`}
     >
-      <div
-        className={`${
-          fullscreen && "absolute top-0 left-0"
-        } w-full h-full ${animation}`}
-      >
-        <CrossFade contentKey={contentKey} timeout={2000}>
+      <div className={`${fullscreen && "absolute top-0 left-0"} w-full h-full`}>
+        <CrossFade contentKey={contentKey} timeout={duration}>
           {children}
         </CrossFade>
       </div>
     </div>
+  );
+}
+
+export function AnimatedImage({ src }: { src: string }) {
+  return (
+    <img
+      className={`w-full h-full object-cover ${
+        animations[Math.floor(Math.random() * animations.length)]
+      }`}
+      src={src}
+    />
   );
 }
