@@ -1,10 +1,10 @@
 "use client";
 import { getGeminiVision } from "@/ai/gemini";
-import Graph, { Edge, Node } from "@/components/Graph";
+import Graph, { Edge, GNode, relaxGraph } from "@/components/Graph";
 import { useState } from "react";
 
 export default function Page() {
-  const [nodes, setNodes] = useState<Node[]>([]);
+  const [nodes, setNodes] = useState<GNode[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
   const [concept, setConcept] = useState<string>("Offshore Salmon Farming");
   const [generating, setGenerating] = useState<boolean>(false);
@@ -25,15 +25,7 @@ export default function Page() {
     );
 
     const graphJSON = JSON.parse(graph);
-    console.log(graphJSON);
-    setNodes(
-      graphJSON.nodes.map((node: Node) => ({
-        ...node,
-        x: node.x + Math.random() * 100,
-        y: node.y + Math.random() * 100,
-      }))
-    );
-    setEdges(graphJSON.edges);
+    relaxNodes(graphJSON.nodes, graphJSON.edges);
     setGenerating(false);
   };
 
@@ -49,19 +41,17 @@ export default function Page() {
       true
     );
     const graphJSON = JSON.parse(graph);
-    console.log(graphJSON);
-    setNodes(
-      graphJSON.nodes.map((node: Node) => ({
-        ...node,
-        x: node.x + Math.random() * 100,
-        y: node.y + Math.random() * 100,
-      }))
-    );
-    setEdges(graphJSON.edges);
+    relaxNodes(graphJSON.nodes, graphJSON.edges);
     setGenerating(false);
   };
 
-  const handleSelect = (node: Node) => {
+  const relaxNodes = (nodes: GNode[], edges: Edge[]) => {
+    const relaxedNodes = relaxGraph(nodes, edges);
+    setNodes(relaxedNodes);
+    setEdges(edges);
+  };
+
+  const handleSelect = (node: GNode) => {
     console.log(node);
   };
 

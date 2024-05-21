@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-export type Node = {
+export type GNode = {
   id: string;
   name: string;
   x: number;
@@ -20,9 +20,9 @@ export default function Graph({
   edges,
   onSelect,
 }: {
-  nodes: Node[];
+  nodes: GNode[];
   edges: Edge[];
-  onSelect: (node: Node) => void;
+  onSelect: (node: GNode) => void;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [scale, setScale] = useState(1);
@@ -32,16 +32,15 @@ export default function Graph({
     null
   );
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const mapScale = 5;
 
   const lookup = useMemo(() => {
-    const lookup: { [id: string]: Node } = {};
+    const lookup: { [id: string]: GNode } = {};
     nodes.forEach((node) => {
       lookup[node.id] = node;
     });
     return lookup;
   }, [nodes]);
-
-  const mapScale = 5;
 
   const drawMap = () => {
     const canvas = canvasRef.current;
@@ -207,4 +206,94 @@ export default function Graph({
       <canvas ref={canvasRef} width={1024} height={1024} />
     </div>
   );
+}
+
+type DynamicNode = GNode & {
+  vx: number;
+  vy: number;
+};
+function distance(node1: GNode, node2: GNode) {
+  const dx = node1.x - node2.x;
+  const dy = node1.y - node2.y;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+function applyRepulsiveForce(
+  node: DynamicNode,
+  otherNode: DynamicNode,
+  repulsiveForce: number
+) {
+  const dist = distance(node, otherNode);
+  if (dist === 0) return;
+  const force = repulsiveForce / (dist * dist);
+  node.vx += (node.x - otherNode.x) * force;
+  node.vy += (node.y - otherNode.y) * force;
+}
+
+function applyAttractiveForce(
+  edge: Edge,
+  lookup: { [id: string]: DynamicNode },
+  attractiveForce: number
+) {
+  const source = lookup[edge.source];
+  const target = lookup[edge.target];
+  if (!source || !target) return;
+  const dist = distance(source, target);
+  const force = attractiveForce * (dist - 1); // Assuming desired distance is 1
+  const angle = Math.atan2(target.y - source.y, target.x - source.x);
+  source.vx += Math.cos(angle) * force;
+  source.vy += Math.sin(angle) * force;
+  target.vx -= Math.cos(angle) * force;
+  target.vy -= Math.sin(angle) * force;
+}
+
+export function relaxGraph(
+  nodes: GNode[],
+  edges: Edge[],
+  repulsiveForce = 100,
+  attractiveForce = 0.1,
+  damping = 0.85,
+  iterations = 20
+) {
+  //create lookup table and format
+  const lookup: { [id: string]: DynamicNode } = {};
+  const dynamicNodes = nodes.map((node) => {
+    const dNode = {
+      ...node,
+      x: node.x + Math.random() * 10,
+      y: node.y + Math.random() * 10,
+      vx: 0,
+      vy: 0,
+    };
+    lookup[node.id] = dNode;
+    return dNode;
+  });
+
+  for (let i = 0; i < iterations; i++) {
+    // Apply repulsive forces
+    dynamicNodes.forEach((node) => {
+      dynamicNodes.forEach((otherNode) => {
+        if (node !== otherNode) {
+          applyRepulsiveForce(node, otherNode, repulsiveForce);
+        }
+      });
+    });
+    // Apply attractive forces
+    edges.forEach((edge) => {
+      applyAttractiveForce(edge, lookup, attractiveForce);
+    });
+
+    // Update positions and apply damping
+    dynamicNodes.forEach((node) => {
+      node.x += node.vx;
+      node.y += node.vy;
+      node.vx *= damping;
+      node.vy *= damping;
+    });
+  }
+
+  return dynamicNodes.map((node) => {
+    const { vx, vy, ...rest } = node;
+    return rest as GNode;
+  });
 }
