@@ -294,6 +294,8 @@ export function relaxGraph(
 
   return dynamicNodes.map((node) => {
     const { vx, vy, ...rest } = node;
+    rest.x = Math.round(rest.x);
+    rest.y = Math.round(rest.y);
     return rest as GNode;
   });
 }
