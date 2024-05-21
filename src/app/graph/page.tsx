@@ -1,6 +1,7 @@
 "use client";
 import { getGeminiVision } from "@/ai/gemini";
 import { getGroqCompletion } from "@/ai/groq";
+import { getOpenAICompletion } from "@/ai/openai";
 import Graph, { Edge, GNode, relaxGraph } from "@/components/Graph";
 import { useState } from "react";
 
@@ -35,10 +36,10 @@ export default function Page() {
   const handleRefine = async () => {
     setGenerating(true);
     const graph = await getGeminiVision(
-      JSON.stringify({ nodes, edges }),
+      JSON.stringify({ concept, nodes, edges }),
       undefined,
-      `The user will provide you with a graph of entities and relationships.
-       For each node in the graph, add additional nodes and relationships that describe the entity in more detail. 
+      `The user will provide you with a conceptual graph of entities and relationships.
+       Add nodes to the graph to further connect and explain entities and relationships.
        Add nodes and relationships to nodes that do not have many existing edges. 
        Return your response in JSON in the format {nodes:Node[], edges: Edge[]}.`,
       true
@@ -46,6 +47,22 @@ export default function Page() {
     const graphJSON = JSON.parse(graph);
     setGenerating(false);
     relaxNodes(graphJSON.nodes, graphJSON.edges);
+  };
+
+  const handleAppend = async () => {
+    setGenerating(true);
+    const graph = await getGeminiVision(
+      JSON.stringify({ concept, nodes, edges }),
+      undefined,
+      `The user will provide you with a conceptual graph of entities and relationships.
+       Generate an array of Nodes and an array of Edges to append to this graph. 
+       Use new nodes to link existing concepts in the graph and add nodes and relationships to nodes that do not have many existing edges. 
+       Return your response in JSON in the format {nodes:Node[], edges: Edge[]}.`,
+      true
+    );
+    const graphJSON = JSON.parse(graph);
+    setGenerating(false);
+    relaxNodes([...nodes, ...graphJSON.nodes], [...edges, ...graphJSON.edges]);
   };
 
   const relaxNodes = (nodes: GNode[], edges: Edge[]) => {
@@ -79,6 +96,12 @@ export default function Page() {
               onClick={() => handleRefine()}
             >
               {generating ? "Generating..." : "Refine"}
+            </button>
+            <button
+              className="p-2 bg-white rounded-lg"
+              onClick={() => handleAppend()}
+            >
+              {generating ? "Generating..." : "Append"}
             </button>
           </div>
           <Graph nodes={nodes} edges={edges} onSelect={handleSelect} />
