@@ -22,7 +22,19 @@ export default function Page() {
   const [generating, setGenerating] = useState<boolean>(false);
   const [selectedNode, setSelectedNode] = useState<GNode | null>(null);
   const [editNode, setEditNode] = useState<EditNode | null>(null);
+  const [question, setQuestion] = useState<string>("");
+  const [answer, setAnswer] = useState<string>("");
 
+  const handleAsk = async () => {
+    setAnswer("answering...");
+    const response = await getGeminiVision(
+      `Knowledge Graph: ${JSON.stringify({
+        nodes,
+        edges,
+      })} Question: ${question} `
+    );
+    setAnswer(response);
+  };
   const handleCreate = async (prompt: string) => {
     setGenerating(true);
     try {
@@ -188,8 +200,8 @@ export default function Page() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-8">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <div className="flex flex-col justify-center items-center w-full h-full">
-          <div className="flex justify-between w-full mb-4 gap-4">
+        <div className="flex flex-col justify-center items-center w-full h-full gap-4">
+          <div className="flex justify-between w-full gap-4">
             <input
               className="p-2 bg-white rounded-lg w-full"
               value={concept}
@@ -247,6 +259,17 @@ export default function Page() {
               onCreate={handleCreateNode}
             />
           )}
+          <div className="flex justify-between w-full mb-4 gap-4">
+            <input
+              className="p-2 bg-white rounded-lg w-full"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+            />
+            <button className="p-2 bg-white rounded-lg" onClick={handleAsk}>
+              Ask Question
+            </button>
+          </div>
+          <span>{answer}</span>
         </div>
       </div>
     </main>
