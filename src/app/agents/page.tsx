@@ -4,7 +4,7 @@ import { useState } from "react";
 import Animation from "@/components/Animation";
 import { describeImagePrompt } from "@/ai/prompts";
 import Narration from "@/components/Narration";
-import { KeyValueTable } from "@/components/KeyValueTable";
+import KeyValueTable from "@/components/KeyValueTable";
 
 const initResources = {
   land: "2000 acres",

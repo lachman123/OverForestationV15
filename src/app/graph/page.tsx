@@ -4,7 +4,7 @@ import { getGroqCompletion } from "@/ai/groq";
 import Graph, { Edge, GNode, relaxGraph } from "@/components/Graph";
 import { useEffect, useState } from "react";
 import crypto from "crypto";
-import { KeyValueTable } from "@/components/KeyValueTable";
+import KeyValueTable from "@/components/KeyValueTable";
 
 type EditNode = {
   x: number;

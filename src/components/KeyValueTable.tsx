@@ -1,4 +1,4 @@
-export function KeyValueTable({ data }: { data: any }) {
+export default function KeyValueTable({ data }: { data: any }) {
   return (
     <div className="flex flex-col">
       {data && Object.keys(data).length > 0 && (
