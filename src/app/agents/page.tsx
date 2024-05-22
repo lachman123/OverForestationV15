@@ -4,6 +4,7 @@ import { useState } from "react";
 import Animation from "@/components/Animation";
 import { describeImagePrompt } from "@/ai/prompts";
 import Narration from "@/components/Narration";
+import { KeyValueTable } from "@/components/KeyValueTable";
 
 const initResources = {
   land: "2000 acres",
@@ -77,18 +78,5 @@ export default function AgentsPage() {
         </div>
       </div>
     </main>
-  );
-}
-
-export function KeyValueTable({ data }: { data: any }) {
-  return (
-    <div className="flex flex-col">
-      {Object.keys(data).map((key) => (
-        <div key={key} className="flex justify-between">
-          <span>{key}</span>
-          <span>{data[key]}</span>
-        </div>
-      ))}
-    </div>
   );
 }

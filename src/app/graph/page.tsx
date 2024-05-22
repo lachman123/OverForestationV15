@@ -1,10 +1,17 @@
 "use client";
 import { getGeminiVision } from "@/ai/gemini";
 import { getGroqCompletion } from "@/ai/groq";
-import { getOpenAICompletion } from "@/ai/openai";
 import Graph, { Edge, GNode, relaxGraph } from "@/components/Graph";
-import { useState } from "react";
-import { KeyValueTable } from "../agents/page";
+import { useEffect, useState } from "react";
+import crypto from "crypto";
+import { KeyValueTable } from "@/components/KeyValueTable";
+
+type EditNode = {
+  x: number;
+  y: number;
+  node?: GNode;
+  context: GNode[];
+};
 
 export default function Page() {
   const [nodes, setNodes] = useState<GNode[]>([]);
@@ -14,90 +21,117 @@ export default function Page() {
   );
   const [generating, setGenerating] = useState<boolean>(false);
   const [selectedNode, setSelectedNode] = useState<GNode | null>(null);
+  const [editNode, setEditNode] = useState<EditNode | null>(null);
 
   const handleCreate = async (prompt: string) => {
     setGenerating(true);
-    const graph = await getGeminiVision(
-      prompt,
-      undefined,
-      `
+    try {
+      const graph = await getGeminiVision(
+        prompt,
+        undefined,
+        `
         The user will provide you with a concept to be graphed. 
         Generate an array of Nodes and an array of Edges to represent the graph.
         Nodes should be in the format {id: string, name: string, x:number, y:number, properties?: any}.
         Properties can be an object with any additional information you want to include about the node.
         Edges should be in the format {source:string, target:string, relation:string}.
         Return your response in JSON in the format {nodes:Node[], edges: Edge[]}.`,
-      true
-    );
+        true
+      );
 
-    const graphJSON = JSON.parse(graph);
+      const graphJSON = JSON.parse(graph);
+      relaxNodes(graphJSON.nodes, graphJSON.edges);
+    } catch (e) {
+      console.error(e);
+    }
     setGenerating(false);
-    relaxNodes(graphJSON.nodes, graphJSON.edges);
   };
 
   const handleRefine = async () => {
     setGenerating(true);
-    const graph = await getGeminiVision(
-      JSON.stringify({ concept, nodes, edges }),
-      undefined,
-      `The user will provide you with a conceptual graph of entities and relationships.
+    try {
+      const graph = await getGeminiVision(
+        JSON.stringify({ concept, nodes, edges }),
+        undefined,
+        `The user will provide you with a conceptual graph of entities and relationships.
        Add nodes to the graph to further connect and explain entities and relationships.
        Add nodes and relationships to nodes that do not have many existing edges. 
        Return your response in JSON in the format {nodes:Node[], edges: Edge[]}.`,
-      true
-    );
-    const graphJSON = JSON.parse(graph);
+        true
+      );
+      const graphJSON = JSON.parse(graph);
+      relaxNodes(graphJSON.nodes, graphJSON.edges);
+    } catch (e) {
+      console.error(e);
+    }
     setGenerating(false);
-    relaxNodes(graphJSON.nodes, graphJSON.edges);
   };
 
   const handleLink = async () => {
     setGenerating(true);
-    const graph = await getGeminiVision(
-      JSON.stringify({ concept, nodes, edges }),
-      undefined,
-      `The user will provide you with a conceptual graph of entities and relationships.
+    try {
+      const graph = await getGeminiVision(
+        JSON.stringify({ concept, nodes, edges }),
+        undefined,
+        `The user will provide you with a conceptual graph of entities and relationships.
        Generate an array of Edges to append to this graph. 
        New edges should link existing concepts in the graph.
        Return your response in JSON in the format { edges: Edge[]}.`,
-      true
-    );
-    const graphJSON = JSON.parse(graph);
+        true
+      );
+      const graphJSON = JSON.parse(graph);
+      setEdges([...edges, ...graphJSON.edges]);
+    } catch (e) {
+      console.error(e);
+    }
     setGenerating(false);
-    setEdges([...edges, ...graphJSON.edges]);
   };
 
   const handleAppend = async () => {
     setGenerating(true);
-    const graph = await getGeminiVision(
-      JSON.stringify({ concept, nodes, edges }),
-      undefined,
-      `The user will provide you with a conceptual graph of entities and relationships.
+    try {
+      const graph = await getGeminiVision(
+        JSON.stringify({ concept, nodes, edges }),
+        undefined,
+        `The user will provide you with a conceptual graph of entities and relationships.
        Generate an array of Nodes and an array of Edges to append to this graph. 
        New nodes and edges should link existing concepts in the graph.
        Expand on the existing graph with new concepts and relationships.
        Return your response in JSON in the format {nodes:Node[], edges: Edge[]}.`,
-      true
-    );
-    const graphJSON = JSON.parse(graph);
+        true
+      );
+      const graphJSON = JSON.parse(graph);
+      relaxNodes(
+        [...nodes, ...graphJSON.nodes],
+        [...edges, ...graphJSON.edges]
+      );
+    } catch (e) {
+      console.error(e);
+    }
     setGenerating(false);
-    relaxNodes([...nodes, ...graphJSON.nodes], [...edges, ...graphJSON.edges]);
   };
 
-  const handleEmbellish = async () => {
+  const handleCreateProject = async () => {
     setGenerating(true);
-    const graph = await getGeminiVision(
-      JSON.stringify({ concept, nodes, edges }),
-      undefined,
-      `The user will provide you with an abstract graph of entities and relationships.
-      Use this graph as a template to generate a specific case study of the project concept. 
-       Add specific data to the properties of each node that demonstrates a real-world example of the concept.
-       Return your response in JSON in the format {nodes:Node[]}.`,
-      true
-    );
-    const graphJSON = JSON.parse(graph);
+    try {
+      const graph = await getGeminiVision(
+        JSON.stringify({ concept, nodes, edges }),
+        undefined,
+        `The user will provide you with an abstract graph of entities and relationships in a project concept.
+        Your task is to implement this template to create a concrete design proposal.
+        Add an "implementation" property to each node in the graph that describes how the abstract template is implemented in a specific case study.
+        Always give a single exact specification in the implementation. For example, is implementing a site, specify the exact location. If implementing a technology, specify the exact technology. 
+        Use specific examples and details to describe the implementation, and add any additional nodes or edges that are necessary to complete the implementation.
+       Return your response in JSON in the format {caseStudy: string, nodes:Node[]}.`,
+        true
+      );
+      const graphJSON = JSON.parse(graph);
+      console.log(graphJSON);
+      setNodes(graphJSON.nodes);
+    } catch (e) {
+      console.error(e);
+    }
     setGenerating(false);
-    setNodes(graphJSON.nodes);
   };
 
   const relaxNodes = (nodes: GNode[], edges: Edge[]) => {
@@ -109,6 +143,44 @@ export default function Page() {
   const handleSelect = (node: GNode) => {
     console.log(node);
     setSelectedNode(node);
+  };
+
+  const handleRightClick = (
+    x: number,
+    y: number,
+    onNode: boolean,
+    nodes: GNode[]
+  ) => {
+    //create a new node at the location of the right click
+    console.log(x, y, onNode, nodes);
+    const e = { x, y, context: nodes } as EditNode;
+    if (onNode) e.node = nodes[0];
+    setEditNode(e);
+  };
+
+  const handleClose = () => {
+    setEditNode(null);
+  };
+
+  const handleCreateNode = async (node: GNode, context: GNode[]) => {
+    //connect to graph
+    try {
+      const newEdges = await getGroqCompletion(
+        JSON.stringify({ concept, node, context: editNode }),
+        128,
+        `The user will provide you with a concept, node and an array of proximate nodes in a graph representing some aspect of this concept.
+         Generate an array of new edges that relate the node to the context.
+         Only generate edges if they are relevant to the context.
+         Return your response in JSON in the format {edges: {source:id, target:id, relation:string}[]}.`,
+        true
+      );
+      const graphJSON = JSON.parse(newEdges);
+      console.log(node, graphJSON.edges);
+      setEdges([...edges, ...graphJSON.edges]);
+      setNodes([...nodes, node]);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -147,7 +219,7 @@ export default function Page() {
             </button>
             <button
               className="p-2 bg-white rounded-lg"
-              onClick={() => handleEmbellish()}
+              onClick={() => handleCreateProject()}
             >
               {generating ? "Generating..." : "Create Project"}
             </button>
@@ -155,12 +227,159 @@ export default function Page() {
           {selectedNode && (
             <div className="flex flex-col w-full">
               <span className="font-bold"> {selectedNode.name}</span>
-              <KeyValueTable data={selectedNode.properties} />
+              <KeyValueTable data={selectedNode} />
             </div>
           )}
-          <Graph nodes={nodes} edges={edges} onSelect={handleSelect} />
+          <Graph
+            nodes={nodes}
+            edges={edges}
+            onSelect={handleSelect}
+            onRightClick={handleRightClick}
+          />
+          {editNode && (
+            <EditNodeDialog
+              editNode={editNode}
+              graph={{ nodes, edges }}
+              concept={concept}
+              onClose={handleClose}
+              onCreate={handleCreateNode}
+            />
+          )}
         </div>
       </div>
     </main>
+  );
+}
+
+function EditNodeDialog({
+  editNode,
+  graph,
+  concept,
+  onClose,
+  onCreate,
+}: {
+  editNode: EditNode;
+  graph: { nodes: GNode[]; edges: Edge[] };
+  concept: string;
+  onClose: () => void;
+  onCreate: (node: GNode, context: GNode[]) => void;
+}) {
+  const [name, setName] = useState(editNode.node?.name || "");
+  const [properties, setProperties] = useState(editNode.node?.properties || {});
+  const [newPropKey, setNewPropKey] = useState("");
+  const [generating, setGenerating] = useState(false);
+
+  const handleConfirm = () => {
+    //update the node and close the dialog
+    if (editNode.node) {
+      editNode.node.name = name;
+      editNode.node.properties = properties;
+    } else {
+      //add new node
+      const id = crypto.randomBytes(4).toString("hex");
+      onCreate(
+        { id: id, name, x: editNode.x, y: editNode.y, properties },
+        editNode.context
+      );
+    }
+    onClose();
+  };
+
+  useEffect(() => {
+    if (!editNode.node) {
+      predictNode();
+    }
+  }, [editNode]);
+
+  const predictNode = async () => {
+    setGenerating(true);
+    try {
+      const node = await getGeminiVision(
+        JSON.stringify({ concept, context: editNode, nodes: graph }),
+        undefined,
+        `The user will provide you with a concept and an array of proximate nodes in a graph representing some aspect of this concept.
+         Generate a new node that fits into this graph.
+         Return your response in JSON in the format {x:number, y:number, name:string, properties:{description:string}}.`,
+        true
+      );
+      const graphJSON = JSON.parse(node);
+      if (graphJSON) {
+        setName(graphJSON.name);
+        setProperties(graphJSON.properties);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    setGenerating(false);
+  };
+
+  const addProperty = () => {
+    if (newPropKey) {
+      setProperties({ ...properties, [newPropKey]: "" });
+      setNewPropKey("");
+    }
+  };
+
+  return (
+    <div
+      onContextMenu={(e) => e.preventDefault()}
+      className={`absolute top-0 left-0 w-full h-full bg-black/25 flex flex-col items-center justify-center`}
+    >
+      <div className="flex flex-col p-4 max-w-lg bg-white rounded-lg shadow-xl gap-4 w-full">
+        <span className="text-lg font-bold w-full">
+          {editNode.node
+            ? "Edit Node"
+            : generating
+            ? "Generating..."
+            : "Create Node"}
+        </span>
+        <input
+          onChange={(e) => setName(e.target.value)}
+          className="p-2 bg-white rounded-lg w-full border border-black/10"
+          value={name}
+        />
+        {properties &&
+          Object.entries(properties).map(([key, value]) => (
+            <div
+              key={key}
+              className="flex w-full gap-4 items-center justify-between"
+            >
+              <span>{key}</span>
+              <input
+                className="p-2 bg-white rounded-lg w-full border border-black/10"
+                value={properties[key]}
+                onChange={(e) =>
+                  setProperties({ ...properties, [key]: e.target.value })
+                }
+              />
+            </div>
+          ))}
+        <div className="w-full border border-black/50 p-2 flex flex-col rounded-lg gap-2">
+          <input
+            onChange={(e) => setNewPropKey(e.target.value)}
+            className="p-2 bg-white rounded-lg w-full border border-black/10"
+            value={newPropKey}
+          />
+          <button
+            className="p-2 bg-white w-full rounded-lg border hover:shadow"
+            onClick={addProperty}
+          >
+            Add Property
+          </button>
+        </div>
+
+        <div className="flex justify-between items-center gap-2">
+          <button className="p-2 bg-white rounded-lg" onClick={onClose}>
+            Cancel
+          </button>
+          <button
+            className="p-2 bg-white rounded-lg border hover:shadow"
+            onClick={handleConfirm}
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

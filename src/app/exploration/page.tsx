@@ -26,6 +26,7 @@ export default function ExplorationPage() {
   }, []);
 
   const handleVisitLocation = async (location: GNode) => {
+    console.log(location);
     //get all connections for this location
     const connections = edges.filter((e) => e.source === location.id);
     if (connections.length <= 1) {
@@ -73,12 +74,26 @@ export default function ExplorationPage() {
     }`;
   };
 
+  const handleEmptyClick = (
+    x: number,
+    y: number,
+    onNode: boolean,
+    nodes: GNode[]
+  ) => {
+    console.log(x, y, onNode, nodes);
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <div className="flex flex-col">
           <span className="text-xl">{selectedNode?.name}</span>
-          <Graph nodes={nodes} edges={edges} onSelect={handleVisitLocation} />
+          <Graph
+            nodes={nodes}
+            edges={edges}
+            onSelect={handleVisitLocation}
+            onRightClick={handleEmptyClick}
+          />
         </div>
       </div>
     </main>

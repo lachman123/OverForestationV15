@@ -20,20 +20,29 @@ export default function Graph({
   nodes,
   edges,
   onSelect,
+  onRightClick,
 }: {
   nodes: GNode[];
   edges: Edge[];
   onSelect: (node: GNode) => void;
+  onRightClick?: (
+    x: number,
+    y: number,
+    onNode: boolean,
+    nearest: GNode[]
+  ) => void;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
-  const [mouseClick, setMouseClick] = useState<{ x: number; y: number } | null>(
-    null
-  );
+  const [mouseClick, setMouseClick] = useState<{
+    button: number;
+    x: number;
+    y: number;
+  } | null>(null);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const mapScale = 5;
+  const mapScale = 4;
 
   const lookup = useMemo(() => {
     const lookup: { [id: string]: GNode } = {};
@@ -77,6 +86,7 @@ export default function Graph({
         connections?.forEach((c) => {
           //draw a line to the connection
           const connection = lookup[c.target];
+          if (!connection) return;
           ctx.beginPath();
           ctx.moveTo(x * mapScale, y * mapScale + 2);
           ctx.lineTo(connection.x * mapScale, connection.y * mapScale + 2);
@@ -112,27 +122,33 @@ export default function Graph({
 
   useEffect(() => {
     const canvas = canvasRef.current;
-
-    if (canvas) drawMap();
-
-    const handleClick = (mouseX: number, mouseY: number) => {
+    const handleClick = (button: number, mouseX: number, mouseY: number) => {
       if (!mouseClick) return;
       setMouseClick(null);
       const canvas = canvasRef.current;
       if (canvas) {
-        const clickedFeature = nodes.find((feature) => {
-          const x = feature.x;
-          const y = feature.y;
-          const distance = Math.sqrt(
-            (x * mapScale - mouseX) ** 2 + (y * mapScale - mouseY) ** 2
+        //get distance to all features and sort
+        const sortedNodes = nodes
+          .map((node) => {
+            const x = node.x;
+            const y = node.y;
+            const distance = Math.sqrt(
+              (x * mapScale - mouseX) ** 2 + (y * mapScale - mouseY) ** 2
+            );
+            return { d: distance, n: node };
+          })
+          .sort((a, b) => a.d - b.d);
+        const closest = sortedNodes[0];
+        if (button === 2) {
+          const nearest = sortedNodes.slice(0, 3);
+          onRightClick?.(
+            Math.floor(mouseX / mapScale),
+            Math.floor(mouseY / mapScale),
+            closest.d < 20 / scale,
+            nearest.map((d) => d.n)
           );
-          if (distance < 20 / scale) console.log(feature.name);
-          return distance <= 20 / scale;
-        });
-
-        if (clickedFeature) {
-          onSelect(clickedFeature);
         } else {
+          if (closest.d < 20 / scale) onSelect(closest.n);
         }
       }
     };
@@ -152,10 +168,13 @@ export default function Graph({
     };
 
     const handleMouseDown = (event: MouseEvent) => {
+      //check if right click
+      event.preventDefault();
       const canvas = canvasRef.current;
       if (canvas) {
         const rect = canvas.getBoundingClientRect();
         setMouseClick({
+          button: event.button,
           x: (event.clientX - rect.left - offset.x) / scale,
           y: (event.clientY - rect.top - offset.y) / scale,
         });
@@ -179,7 +198,7 @@ export default function Graph({
     const handleMouseUp = () => {
       if (mouseClick) {
         console.log("handling click");
-        handleClick(mouseClick.x, mouseClick.y);
+        handleClick(mouseClick.button, mouseClick.x, mouseClick.y);
       }
       setIsDragging(false);
     };
@@ -190,6 +209,10 @@ export default function Graph({
       canvas.addEventListener("mousemove", handleMouseMove);
       canvas.addEventListener("mouseup", handleMouseUp);
       canvas.addEventListener("mouseleave", handleMouseUp);
+      canvas.oncontextmenu = (e) => {
+        e.preventDefault();
+      };
+      drawMap();
     }
 
     return () => {
@@ -201,7 +224,16 @@ export default function Graph({
         canvas.removeEventListener("mouseleave", handleMouseUp);
       }
     };
-  }, [scale, offset, mapScale, isDragging, dragStart, mouseClick]);
+  }, [
+    scale,
+    offset,
+    mapScale,
+    isDragging,
+    dragStart,
+    mouseClick,
+    nodes,
+    edges,
+  ]);
 
   return (
     <div className="relative flex flex-col items-center justify-center rounded-lg border border-black overflow-hidden">
