@@ -197,6 +197,32 @@ export default function Page() {
     }
   };
 
+  const integrateAnswer = async () => {
+    setGenerating(true);
+    try {
+      const graph = await getGeminiVision(
+        `Knowledge Graph: ${JSON.stringify({
+          nodes,
+          edges,
+        })} Additional information: ${answer}`,
+        undefined,
+        `The user will provide you with a conceptual graph of entities and relationships.
+        The user has made a query to the graph and identified that there is additional information that should be included.
+         Generate a new array of nodes and a new array of edges to append to the graph that maps the new information.
+         Return your response in JSON in the format {nodes:Node[], edges: Edge[]}.`,
+        true
+      );
+      const graphJSON = JSON.parse(graph);
+      relaxNodes(
+        [...nodes, ...graphJSON.nodes],
+        [...edges, ...graphJSON.edges]
+      );
+    } catch (e) {
+      console.error(e);
+    }
+    setGenerating(false);
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-8">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
@@ -208,31 +234,31 @@ export default function Page() {
               onChange={(e) => setConcept(e.target.value)}
             />
             <button
-              className="p-2 bg-white rounded-lg"
+              className="p-2 bg-white rounded-lg  hover:shadow"
               onClick={() => handleCreate(concept)}
             >
               {generating ? "Generating..." : "Create"}
             </button>
             <button
-              className="p-2 bg-white rounded-lg"
+              className="p-2 bg-white rounded-lg  hover:shadow"
               onClick={() => handleRefine()}
             >
               {generating ? "Generating..." : "Refine"}
             </button>
             <button
-              className="p-2 bg-white rounded-lg"
+              className="p-2 bg-white rounded-lg  hover:shadow"
               onClick={() => handleAppend()}
             >
               {generating ? "Generating..." : "Append"}
             </button>
             <button
-              className="p-2 bg-white rounded-lg"
+              className="p-2 bg-white rounded-lg  hover:shadow"
               onClick={() => handleLink()}
             >
               {generating ? "Generating..." : "Link"}
             </button>
             <button
-              className="p-2 bg-white rounded-lg"
+              className="p-2 bg-white rounded-lg  hover:shadow"
               onClick={() => handleCreateProject()}
             >
               {generating ? "Generating..." : "Create Project"}
@@ -265,11 +291,20 @@ export default function Page() {
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
             />
-            <button className="p-2 bg-white rounded-lg" onClick={handleAsk}>
+            <button
+              className="p-2 bg-white rounded-lg hover:shadow"
+              onClick={handleAsk}
+            >
               Ask Question
             </button>
           </div>
           <span>{answer}</span>
+          <button
+            className="p-2 bg-white rounded-lg hover:shadow"
+            onClick={integrateAnswer}
+          >
+            Integrate Answer
+          </button>
         </div>
       </div>
     </main>
