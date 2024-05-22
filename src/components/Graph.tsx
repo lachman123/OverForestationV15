@@ -6,13 +6,14 @@ export type GNode = {
   name: string;
   x: number;
   y: number;
+  z?: number;
   properties?: any;
 };
 
 export type Edge = {
   source: string;
   target: string;
-  relation: string;
+  relation?: string;
 };
 
 export default function Graph({
@@ -85,13 +86,15 @@ export default function Graph({
           ctx.strokeStyle = "rgb(220 220 220)";
           ctx.stroke();
           ctx.closePath();
-          ctx.font = `${10 / scale}px Arial`;
-          ctx.fillStyle = "gray";
-          ctx.fillText(
-            c.relation,
-            ((x + connection.x) / 2) * mapScale,
-            ((y + connection.y) / 2) * mapScale - 2 / scale
-          );
+          if (c.relation) {
+            ctx.font = `${10 / scale}px Arial`;
+            ctx.fillStyle = "gray";
+            ctx.fillText(
+              c.relation,
+              ((x + connection.x) / 2) * mapScale,
+              ((y + connection.y) / 2) * mapScale - 2 / scale
+            );
+          }
         });
         const fontSize = 12 / scale;
         ctx.font = `${fontSize}px Arial`;

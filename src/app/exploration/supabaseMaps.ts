@@ -21,14 +21,6 @@ export async function getMapCoordinates() {
   return map;
 }
 
-export async function setVisited(id: string) {
-  let { data: map, error } = await supabase
-    .from("map")
-    .update({ visited: true })
-    .eq("id", id);
-  return map;
-}
-
 export async function getLastMapCoordinate() {
   const { data, error } = await supabase
     .from("map")
@@ -48,8 +40,8 @@ export async function getLastMapCoordinate() {
 export async function getConnectedLocations(id: string, start: boolean = true) {
   let { data: connections, error } = await supabase
     .from("connections")
-    .select(`*, map:${start ? "end" : "start"}(*)`)
-    .eq(`${start ? "start" : "end"}`, id);
+    .select(`*, map:${start ? "target" : "source"}(*)`)
+    .eq(`${start ? "source" : "target"}`, id);
   return connections;
 }
 
@@ -60,6 +52,6 @@ export async function getMap() {
     .order("created_at", { ascending: false });
   let { data: connections, error: connectionError } = await supabase
     .from("connections")
-    .select("*, map_s:start(*), map_e:end(*)");
+    .select("*, map_s:source(*), map_e:target(*)");
   return { map, connections };
 }

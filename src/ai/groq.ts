@@ -69,7 +69,7 @@ export async function getGroqCompletionParallel(
             content: userPrompt,
           },
         ],
-        model: "llama3-70b-8192",
+        model: "llama3-8b-8192",
         max_tokens: max_tokens,
       } as LLMRequest;
       if (jsonOnly) body.response_format = { type: "json_object" };
