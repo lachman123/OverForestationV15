@@ -121,6 +121,7 @@ export default function Page() {
         Your task is to implement this template to create a concrete design proposal.
         Add an "implementation" property to each node in the graph that describes how the abstract template is implemented in a specific case study.
         Always give a single exact specification in the implementation. For example, is implementing a site, specify the exact location. If implementing a technology, specify the exact technology. 
+        If implementation requires estimating quantities, do so. If implementation requires analysis, conduct the analysis and draw conclusions. 
         Use specific examples and details to describe the implementation, and add any additional nodes or edges that are necessary to complete the implementation.
        Return your response in JSON in the format {caseStudy: string, nodes:Node[]}.`,
         true
@@ -130,6 +131,7 @@ export default function Page() {
       setNodes(graphJSON.nodes);
     } catch (e) {
       console.error(e);
+      alert(e);
     }
     setGenerating(false);
   };
