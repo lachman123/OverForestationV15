@@ -263,6 +263,12 @@ export default function Page() {
             >
               {generating ? "Generating..." : "Create Project"}
             </button>
+            <button
+              className="p-2 bg-white rounded-lg  hover:shadow"
+              onClick={() => relaxNodes(nodes, edges)}
+            >
+              Relax Graph
+            </button>
           </div>
           {selectedNode && (
             <div className="flex flex-col w-full">
