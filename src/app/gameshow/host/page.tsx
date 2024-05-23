@@ -173,8 +173,8 @@ function PlayerList({ players }: { players: Player[] }) {
   return (
     <div className="flex flex-col gap-2">
       <div className="text-xs font-semibold">Other Players</div>
-      {players.map((player) => (
-        <div className="flex justify-between items-center">
+      {players.map((player, i) => (
+        <div key={i} className="flex justify-between items-center">
           <p>
             {player.player_name} - {player.status}
           </p>
