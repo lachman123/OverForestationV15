@@ -35,7 +35,7 @@ export default function ExplorationPage() {
       //save to database
       const newNodes = await saveMapCoordinates(generatedLocations);
       if (!newNodes) return;
-      const newEdges = newNodes.map((n) => ({
+      const newEdges = newNodes.map((n: GNode) => ({
         source: location.id,
         target: n.id,
       }));
