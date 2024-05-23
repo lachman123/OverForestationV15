@@ -79,7 +79,7 @@ export default function AgentsPage() {
       <div className="z-10 max-w-lg w-full items-center justify-between font-mono text-sm lg:flex">
         <Narration
           play={playNarration}
-          textToNarrate={`World State: ${graph}. Agents: ${agents}`}
+          textToNarrate={JSON.stringify(graph)}
           captionPrompt={`You are provided with a world state and an array of agents performing tasks to make changes to this world state. 
         Write a short script that narrates a documentary film that dramatizes these events and embellishes them where necessary to make them 
         engaging to the audience. Narrate the documenary as lines of dialogue by a narrator and other characters. Place each item of dialogue on a new line. 
