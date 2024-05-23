@@ -120,7 +120,7 @@ export default function GameshowPage() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-start justify-between font-mono text-sm lg:flex gap-4 ">
         <div className="flex flex-col gap-4 w-full">
-          <h1>Hosting {quiz && `${playerName}'s`} Game</h1>
+          <h1>Hosting {quiz && `${playerName}s`} Game</h1>
           {!quiz ? (
             <>
               <input

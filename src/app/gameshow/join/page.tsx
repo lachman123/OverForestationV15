@@ -131,7 +131,7 @@ export default function GameshowPage() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-start justify-between font-mono text-sm lg:flex gap-4 ">
         <div className="flex flex-col gap-4 w-full">
-          <h1>Join{quiz && `ed ${quiz.host_player_name}'s`} Game</h1>
+          <h1>Join{quiz && `ed ${quiz.host_player_name}s`} Game</h1>
           {!quiz && (
             <div className="flex flex-col gap-2">
               <div className="text-xs font-semibold">Available Games</div>
