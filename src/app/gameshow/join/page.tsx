@@ -189,9 +189,14 @@ export default function GameshowPage() {
 function PlayerList({ players }: { players: Player[] }) {
   return (
     <div className="flex flex-col gap-2">
-      <div className="text-xs font-semibold">Connected Players</div>
-      {players.map((player) => (
-        <p>{player.player_name}</p>
+      <div className="text-xs font-semibold">Other Players</div>
+      {players.map((player, i) => (
+        <div key={i} className="flex justify-between items-center">
+          <p>
+            {player.player_name} - {player.status}
+          </p>
+          <p>{player.score}pts</p>
+        </div>
       ))}
     </div>
   );
