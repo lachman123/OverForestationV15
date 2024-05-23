@@ -141,7 +141,7 @@ export default function GameshowPage() {
                   key={i}
                   onClick={() => joinGame(i)}
                 >
-                  {game.host_player_name}'s Game
+                  {game.host_player_name}s Game
                 </button>
               ))}
             </div>
