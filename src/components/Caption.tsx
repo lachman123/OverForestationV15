@@ -48,7 +48,11 @@ export default function Caption({
     const speaker = text.split(":")[0];
     const script = text.split(":")[1];
 
-    if (!speaker || !script) setSpokenText(null);
+    if (!speaker || !script) {
+      //just read the script
+      setSpokenText(text);
+      return;
+    }
 
     setSpokenText(script);
 

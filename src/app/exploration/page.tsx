@@ -3,7 +3,7 @@
 import { getMap, saveConnections, saveMapCoordinates } from "./supabaseMaps";
 import { useEffect, useState } from "react";
 import { getGroqCompletionParallel } from "@/ai/groq";
-import Graph, { Edge, GNode } from "@/components/Graph";
+import GraphCanvas, { Edge, GNode } from "@/components/Graph";
 
 export default function ExplorationPage() {
   const [selectedNode, setSelectedNode] = useState<GNode | null>(null);
@@ -88,7 +88,7 @@ export default function ExplorationPage() {
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <div className="flex flex-col">
           <span className="text-xl">{selectedNode?.name}</span>
-          <Graph
+          <GraphCanvas
             nodes={nodes}
             edges={edges}
             onSelect={handleVisitLocation}

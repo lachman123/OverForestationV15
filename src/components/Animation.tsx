@@ -37,8 +37,7 @@ export default function Animation({
       //improve image description
       const imageDescription = await generateDescription();
       const url = await generateImageFal(
-        imageDescription +
-          " Canon EOS 5D Mark IV, 24mm, f/8, 1/250s, ISO 100, 2019",
+        imageDescription,
         { width: width, height: height },
         "hyper-sdxl"
       );

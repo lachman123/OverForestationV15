@@ -16,7 +16,12 @@ export type Edge = {
   relation?: string;
 };
 
-export default function Graph({
+export type Graph = {
+  nodes: GNode[];
+  edges: Edge[];
+};
+
+export default function GraphCanvas({
   nodes,
   edges,
   onSelect,
@@ -122,6 +127,7 @@ export default function Graph({
 
   useEffect(() => {
     const canvas = canvasRef.current;
+
     const handleClick = (button: number, mouseX: number, mouseY: number) => {
       if (!mouseClick) return;
       setMouseClick(null);
@@ -238,7 +244,7 @@ export default function Graph({
   return (
     <div className="relative flex flex-col items-center justify-center rounded-lg border border-black overflow-hidden">
       <h1>Graph</h1>
-      <canvas ref={canvasRef} width={1024} height={1024} />
+      <canvas ref={canvasRef} width={640} height={640} />
     </div>
   );
 }
@@ -258,8 +264,7 @@ function applyRepulsiveForce(
   otherNode: DynamicNode,
   repulsiveForce: number
 ) {
-  const dist = distance(node, otherNode);
-  if (dist === 0) return;
+  const dist = Math.max(distance(node, otherNode), 1);
   const force = repulsiveForce / (dist * dist);
   node.vx += (node.x - otherNode.x) * force;
   node.vy += (node.y - otherNode.y) * force;
@@ -273,9 +278,10 @@ function applyAttractiveForce(
   const source = lookup[edge.source];
   const target = lookup[edge.target];
   if (!source || !target) return;
-  const dist = distance(source, target);
+  const dist = Math.max(distance(source, target), 1);
   const force = attractiveForce * (dist - 1); // Assuming desired distance is 1
   const angle = Math.atan2(target.y - source.y, target.x - source.x);
+  if (!angle) console.log(angle);
   source.vx += Math.cos(angle) * force;
   source.vy += Math.sin(angle) * force;
   target.vx -= Math.cos(angle) * force;
@@ -288,15 +294,15 @@ export function relaxGraph(
   repulsiveForce = 100,
   attractiveForce = 0.1,
   damping = 0.85,
-  iterations = 50
+  iterations = 10
 ) {
   //create lookup table and format
   const lookup: { [id: string]: DynamicNode } = {};
   const dynamicNodes = nodes.map((node) => {
     const dNode = {
       ...node,
-      x: node.x + Math.random() * 10,
-      y: node.y + Math.random() * 10,
+      x: (node.x ?? 0) + (Math.random() - 0.5) * 10,
+      y: (node.y ?? 0) + (Math.random() - 0.5) * 10,
       vx: 0,
       vy: 0,
     };
@@ -320,8 +326,8 @@ export function relaxGraph(
 
     // Update positions and apply damping
     dynamicNodes.forEach((node) => {
-      node.x += node.vx;
-      node.y += node.vy;
+      node.x += node.vx ?? 0;
+      node.y += node.vy ?? 0;
       node.vx *= damping;
       node.vy *= damping;
     });

@@ -3,14 +3,19 @@ import Caption from "./Caption";
 import { useEffect, useState } from "react";
 import { getGeminiVision } from "@/ai/gemini";
 import Animation from "./Animation";
-import { describeImagePrompt } from "@/ai/prompts";
 //Component that turns anything into a narrated script
 export default function Narration({
-  scenario,
+  play = true,
+  textToNarrate,
+  captionPrompt,
+  imagePrompt,
   onNarration,
   onCompleteLine,
 }: {
-  scenario: string;
+  play?: boolean;
+  textToNarrate: string;
+  captionPrompt: string;
+  imagePrompt: string;
   onNarration?: (narration: string) => void;
   onCompleteLine?: (line: string, nextLine: string) => void;
 }) {
@@ -22,12 +27,9 @@ export default function Narration({
     //generate the narrative
     const generateNarrative = async () => {
       const description = await getGeminiVision(
-        scenario,
+        textToNarrate,
         undefined,
-        `You are provided with a world state and an array of agents performing tasks to make changes to this world state. 
-        Write a short script that narrates a documentary film that dramatizes these events and embellishes them where necessary to make them 
-        engaging to the audience. Narrate the documenary as lines of dialogue by a narrator and other characters. Place each item of dialogue on a new line. 
-        Each line should be in the format "Speaker: Dialogue". Do not include any other text or explanation.`
+        captionPrompt
       );
       setScript(description.split("\n"));
       setCurrentLine(0);
@@ -36,7 +38,7 @@ export default function Narration({
     };
 
     generateNarrative();
-  }, [scenario]);
+  }, [textToNarrate]);
 
   const handleReadText = () => {
     if (currentLine < script.length - 1) {
@@ -52,7 +54,7 @@ export default function Narration({
   }, [currentText]);
   return (
     <>
-      {currentText && (
+      {currentText && play && (
         <>
           <Caption
             text={script[currentLine]}
@@ -61,7 +63,7 @@ export default function Narration({
           />
           <Animation
             prompt={script[currentLine]}
-            systemPrompt={describeImagePrompt}
+            systemPrompt={imagePrompt}
             width={1344}
             height={1024}
             video={false}
