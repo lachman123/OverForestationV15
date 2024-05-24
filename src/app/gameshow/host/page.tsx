@@ -141,17 +141,18 @@ export default function GameshowPage() {
           ) : (
             <>
               <button
-                onClick={quiz.status === "Live" ? stopGame : startGame}
+                onClick={quiz.status === "playing" ? stopGame : startGame}
                 disabled={!quiz}
                 className="p-2 text-white font-semibold rounded-lg bg-blue-500 mb-2 w-full shadow hover:shadow-lg transition"
               >
-                {quiz.status === "Live" ? "End Game" : "Start Game"}
+                {quiz.status === "playing" ? "End Game" : "Start Game"}
               </button>
-
-              <QuestionAnswer
-                onQuestion={handleQuestion}
-                onAnswer={handleAnswer}
-              />
+              {quiz.status === "playing" && (
+                <QuestionAnswer
+                  onQuestion={handleQuestion}
+                  onAnswer={handleAnswer}
+                />
+              )}
             </>
           )}
         </div>

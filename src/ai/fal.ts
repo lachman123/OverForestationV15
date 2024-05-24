@@ -28,7 +28,7 @@ type VideoResult = {
 // This function makes a request to the FAL api and gets an image.
 export async function generateImageFal(
   prompt: string,
-  image_size: { width: number; height: number } = { width: 512, height: 576 },
+  image_size: { width: number; height: number } = { width: 1344, height: 576 },
   model:
     | "fast-turbo-diffusion"
     | "hyper-sdxl"

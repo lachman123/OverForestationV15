@@ -15,23 +15,25 @@ export default function GameshowPage() {
   const [player, setPlayer] = useState<Player | null>(null);
   const [players, setPlayers] = useState<any[]>([]);
   const [question, setQuestion] = useState<Question>();
+  const [answer, setAnswer] = useState<string>("");
   const [timer, setTimer] = useState<number>(30);
 
-  useEffect(() => {
-    //Get all games in lobby status
-    const getGames = async () => {
-      const { data, error } = await supabase
-        .from("quiz")
-        .select()
-        .eq("status", "lobby");
-      if (data) setAvailableGames(data);
-    };
+  const getGames = async () => {
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+    const { data, error } = await supabase
+      .from("quiz")
+      .select()
+      .eq("status", "lobby")
+      .gte("created_at", fiveMinutesAgo);
+    if (data) setAvailableGames(data);
+  };
 
+  useEffect(() => {
+    //Get all games in lobby status that were created in the last 5 mins
     getGames();
   }, []);
 
   useEffect(() => {
-    //create a new question every 30 seconds
     const interval = setInterval(() => {
       setTimer((t) => t - 1);
     }, 1000);
@@ -66,10 +68,16 @@ export default function GameshowPage() {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "question" },
         (payload) => {
-          const question = payload.new;
-          if (question.quiz_id === quiz.id) {
-            setQuestion(question as Question);
-            setTimer(30);
+          const newQuestion = payload.new;
+          if (newQuestion.quiz_id === quiz.id) {
+            if (question && answer == "") {
+              //player didn't answer, they need to lose
+              handleNoAnswer();
+            } else {
+              setAnswer("");
+              setQuestion(newQuestion as Question);
+              setTimer(30);
+            }
           }
         }
       )
@@ -101,9 +109,20 @@ export default function GameshowPage() {
     if (data) setPlayer(data);
   };
 
+  const handleNoAnswer = async () => {
+    if (!player) return;
+    await supabase
+      .from("player")
+      .update({
+        status: "lost",
+      })
+      .eq("id", player.id);
+  };
+
   const handleAnswer = async (i: number) => {
     //send the answer to supabase
     if (!question || !player || !quiz) return;
+
     const answer = {
       player_answer: question.answers[i],
       quiz_id: quiz.id,
@@ -111,19 +130,28 @@ export default function GameshowPage() {
       player_id: player.id,
     };
 
+    //update our answer state
+    setAnswer(question.answers[i]);
+
     const { data, error } = await supabase
       .from("answer")
       .insert(answer)
       .select()
       .single();
 
-    //boot the player if they are wrong
+    //update the player
+    const correct = question.answers[i] !== question.correct_answer;
     if (question.answers[i] !== question.correct_answer) {
-      await supabase
+      const { data, error } = await supabase
         .from("player")
-        .update({ status: "lost" })
+        .update({
+          score: player.score + (correct ? question.points : 0),
+          status: correct ? "playing" : "lost",
+        })
         .eq("id", player.id)
         .single();
+
+      if (data) setPlayer(data);
     }
   };
 
@@ -134,6 +162,12 @@ export default function GameshowPage() {
           <h1>Join{quiz && `ed ${quiz.host_player_name}s`} Game</h1>
           {!quiz && (
             <div className="flex flex-col gap-2">
+              <button
+                onClick={getGames}
+                className="p-2 border rounded-lg bg-white mb-2 w-full hover:shadow"
+              >
+                Refresh
+              </button>
               <div className="text-xs font-semibold">Available Games</div>
               {availableGames.map((game, i) => (
                 <button

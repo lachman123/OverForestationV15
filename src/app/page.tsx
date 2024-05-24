@@ -19,6 +19,7 @@ export default function Home() {
         <Link href="/test/image">Image Speed Comparison</Link>
         <Link href="/test/text">Text Speed Comparison</Link>
         <Link href="/graph">Graph Concepts</Link>
+        <Link href="/gameshow">Gameshow</Link>
       </div>
     </main>
   );

@@ -33,10 +33,13 @@ export default function QuestionAnswer({
   const [question, setQuestion] = useState<Question>();
   const [timer, setTimer] = useState<number>(30);
   const [selectedAnswer, setSelectedAnswer] = useState<number>();
+
   useEffect(() => {
-    //create a new question when the time is at 0
-    if (timer == 30) createQuestion();
-    //create a new question every 30 seconds
+    //create question on load
+    createQuestion();
+  }, []);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setTimer((t) => t - 1);
     }, 1000);
@@ -95,6 +98,7 @@ export default function QuestionAnswer({
       };
 
       setQuestion(newQuestion);
+      setTimer(30);
       onQuestion(newQuestion);
     } catch (e) {
       console.error(e);
@@ -115,15 +119,15 @@ export default function QuestionAnswer({
         <>
           <button
             className="p-2 bg-white rounded-lg border border-black/25 w-full hover:shadow "
-            onClick={() => setTimer(30)}
+            onClick={createQuestion}
           >
             Next Question
           </button>
           {selectedAnswer && question.answers && (
             <p>
               {question.answers[selectedAnswer] === question.correct_answer
-                ? "Correct!"
-                : "Wrong..."}
+                ? "Correct"
+                : "Incorrect"}
             </p>
           )}
         </>
@@ -149,10 +153,14 @@ export function QuizUI({
   question: Question;
   handleSelect: (i: number) => void;
 }) {
-  const [selectedAnswer, setSelectedAnswer] = useState<number>();
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   useEffect(() => {
-    setSelectedAnswer(undefined);
+    setSelectedAnswer(null);
   }, [question]);
+
+  useEffect(() => {
+    console.log("selectedAnswer", selectedAnswer);
+  }, [selectedAnswer]);
   return (
     <div className="flex flex-col w-full gap-4">
       <p>
@@ -166,9 +174,9 @@ export function QuizUI({
               setSelectedAnswer(i);
               handleSelect(i);
             }}
-            disabled={selectedAnswer !== undefined || disabled}
-            className={`p-2 bg-white rounded-lg border border-black/25 w-full hover:shadow ${
-              i === selectedAnswer ? "bg-blue-100" : ""
+            disabled={selectedAnswer !== null || disabled}
+            className={`p-2  rounded-lg border border-black/25 w-full hover:shadow ${
+              i === selectedAnswer ? "bg-blue-100" : "bg-white"
             }`}
           >
             {a}
