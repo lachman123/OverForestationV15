@@ -34,7 +34,6 @@ export default function App() {
       ? getPanorama(newPrompt)
       : generateImageFal(newPrompt));
     if (pano) setImg(pano);
-    console.log(pano);
     setFetching(false);
   };
 
@@ -90,9 +89,14 @@ export default function App() {
           </button>
           <button
             className="p-2 w-full rounded bg-white"
-            onClick={() => setUpscale(!upscale)}
+            onClick={() => {
+              var a = document.createElement("a");
+              a.href = img;
+              a.download = "Image.png";
+              a.click();
+            }}
           >
-            {upscale ? "Upscaling (slow)" : "Image-to-Image (fast)"}
+            Download Img
           </button>
         </div>
         <div className="relative w-full h-full">
