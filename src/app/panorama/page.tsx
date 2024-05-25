@@ -6,7 +6,6 @@ import {
   generateImageToImageFal,
 } from "@/ai/fal";
 import { getGeminiVision } from "@/ai/gemini";
-import { getOpenAICompletion } from "@/ai/openai";
 import Panorama from "@/components/Panorama";
 import Spinner from "@/components/Spinner";
 import { useState } from "react";
@@ -27,7 +26,7 @@ export default function App() {
     setFetching(true);
     //improve prompt
     const newPrompt =
-      "A photograph of" +
+      "An equirectangular photograph of" +
       prompt +
       ". Canon EOS 5D Mark IV, 24mm, f/8, 1/250s, ISO 100, 2019";
     //if immersive, use blockade, otherwise just use fal
@@ -35,6 +34,7 @@ export default function App() {
       ? getPanorama(newPrompt)
       : generateImageFal(newPrompt));
     if (pano) setImg(pano);
+    console.log(pano);
     setFetching(false);
   };
 
