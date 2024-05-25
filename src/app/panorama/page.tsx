@@ -83,12 +83,6 @@ export default function App() {
           </button>
           <button
             className="p-2 w-full rounded bg-white"
-            onClick={() => setImmersive(!immersive)}
-          >
-            {immersive ? "Skybox (slow)" : "Flat (fast)"}
-          </button>
-          <button
-            className="p-2 w-full rounded bg-white"
             onClick={() => {
               var a = document.createElement("a");
               a.href = img;
