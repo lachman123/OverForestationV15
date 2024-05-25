@@ -8,26 +8,55 @@ import { getGroqCompletion } from "@/ai/groq";
 
 const initAgents = [
   {
-    name: "Norweigan Offshore Aquaculture Company",
-    goal: "Grow global salmon farming production to meet increasing demand for seafood",
+    name: "Saskatoon Timber Expansion Alliance",
+    goal: "Increase timber capacity within distribution facilities and sawmill operations in Saskatoon to meet market demands. This effort aims to boost the local economy but may lead to concerns over resource management and sustainability.",
     plan: "",
     currentTask: "",
     resourcesRequired: "",
   },
   {
-    name: "Cattle Farming Industry",
-    goal: "Aggressively expand cattle farming operations and inhibit the growth of competing markets",
+    name: "Global Sustainable Timber Logistics Taskforce",
+    goal: "Reconfigure sawmills, distribution centers, and transport logistics to provide timber to companies just in time, ensuring smooth operations. This initiative aims to enhance efficiency on a global scale but could face challenges with environmental regulations and community approval.",
     plan: "",
     currentTask: "",
     resourcesRequired: "",
   },
   {
-    name: "Grassroots activist organization",
-    goal: "reduce environmental impact and market demand for timber",
+    name: "Concerned Citizens Against Forestation",
+    goal: "Increase community hesitation and opposition towards the forestation development, aiming to halt the project entirely. This local group believes the project will cause irreversible environmental damage and disrupt local communities.",
     plan: "",
     currentTask: "",
     resourcesRequired: "",
   },
+  {
+    name: "International Timber Market Stability Group",
+    goal: "Address storage issues and market value fluctuations for imported timber, ensuring stability despite competition from lower-cost materials. The group's actions are crucial for maintaining economic viability but may face market resistance globally.",
+    plan: "",
+    currentTask: "",
+    resourcesRequired: "",
+  },
+  {
+    name: "Earthquake-Resilient Construction Initiative",
+    goal: "Redesign timber construction techniques for use in earthquake-prone environments, promoting safety and innovation despite potential drawbacks. This initiative seeks to expand timber use in construction worldwide while addressing structural challenges.",
+    plan: "",
+    currentTask: "",
+    resourcesRequired: "",
+  },
+  {
+    name: "Canadian Public Land and Resource Preservation Committee",
+    goal: "Address public concerns about increased sawmill and distribution center sizes and timber output in Canada, focusing on preventing permanent land degradation. This group advocates for responsible land use and long-term environmental health within Canada.",
+    plan: "",
+    currentTask: "",
+    resourcesRequired: "",
+  },
+  {
+    name: "International Anti-Forestation Network",
+    goal: "Stop forestation projects altogether due to concerns over environmental degradation, loss of agricultural land, and disruption to local ecosystems. This global group engages in protests, campaigns, and legal actions to halt the progress of such projects worldwide.",
+    plan: "",
+    currentTask: "",
+    resourcesRequired: "",
+  },
+
 ];
 
 //Demo of running multiple agents that all compete for resources
