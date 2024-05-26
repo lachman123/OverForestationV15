@@ -6,6 +6,8 @@ import KnowledgeGraph from "@/components/KnowledgeGraph";
 import { GNode, Graph, relaxGraph } from "@/components/Graph";
 import { getGroqCompletion } from "@/ai/groq";
 
+const initAgents: any = [];
+
 //Demo of running multiple agents that all compete for resources
 export default function AgentsPage() {
   const [graph, setGraph] = useState<Graph>({ nodes: [], edges: [] });
@@ -83,7 +85,11 @@ export default function AgentsPage() {
             </button>
             {generating && <span>Updating Graph...</span>}
             <KnowledgeGraph graph={graph} onUpdate={getGraph} />
-            <Agents world={graph} initAgents={[]} onUpdate={handleResponse} />
+            <Agents
+              world={graph}
+              initAgents={initAgents}
+              onUpdate={handleResponse}
+            />
           </div>
         </div>
       </div>
