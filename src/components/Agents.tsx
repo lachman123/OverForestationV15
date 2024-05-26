@@ -8,23 +8,25 @@ export default function Agents({
   initAgents,
   maxTokens = 1024,
   onUpdate,
+  goal,
 }: {
   world: any;
   initAgents: any[];
   maxTokens?: number;
   onUpdate: (agents: string[]) => void;
+  goal?: string;
 }) {
   const [generating, setGenerating] = useState<boolean>(false);
   const [agents, setAgents] = useState<any[]>(initAgents);
 
-  const generateAgents = async (context: any) => {
+  const generateAgents = async (context: any, goal: string) => {
     setGenerating(true);
     try {
       const newAgents = await getGroqCompletion(
         //run all agents in parallel
         JSON.stringify({
           context,
-          goal: "Build an offshore aquaculture farm to supply the worlds protein demands by 2050",
+          goal,
         }),
         512,
         `You simulate autonomous agent behaviour within a given world state. 
@@ -47,8 +49,8 @@ export default function Agents({
   const runAgents = async () => {
     //don't generate if already running
     if (generating) return;
-    if (agents.length === 0) {
-      await generateAgents(world);
+    if (agents.length === 0 && goal) {
+      await generateAgents(world, goal);
       return;
     }
     setGenerating(true);
@@ -59,7 +61,8 @@ export default function Agents({
         1024,
         `You simulate autonomous agent behaviour within a world state represented by a knowledge graph. 
         The goal and other properties of the agent will be provided by the user. 
-        Update the agent to reflect how they act ON the knowledge graph to work towards their goal.
+        If the current task of the agent has been completed, determine the result of the task as specifically as possible based on the knowledge graph. 
+        Generate a task for each agent to help them achieve their goal, and describe actions they perform and resources they consume to achieve it.
         Return a new JSON object with the updated agents in the format {agents: Agent[]}.`,
         true
       );

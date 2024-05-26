@@ -3,10 +3,18 @@ import Agents from "@/components/Agents";
 import { useState } from "react";
 import Narration from "@/components/Narration";
 import KnowledgeGraph from "@/components/KnowledgeGraph";
-import { GNode, Graph, relaxGraph } from "@/components/Graph";
+import { Graph, relaxGraph } from "@/components/Graph";
 import { getGroqCompletion } from "@/ai/groq";
 
+export const dynamic = "force-dynamic";
+
+//This is new - just provide a high level goal and groq will figure out how to make agents
+const agentGoal =
+  "Build an offshore aquaculture farm to supply the worlds protein demands by 2050";
+//set your agents here. If you leave this empty then Groq creates some for you based on your graph.
 const initAgents: any = [];
+//if this is true, agents add nodes to the graph as well as update implementation data. Its slower.
+const addNodes = false;
 
 //Demo of running multiple agents that all compete for resources
 export default function AgentsPage() {
@@ -19,27 +27,53 @@ export default function AgentsPage() {
     setGenerating(true);
     //now we have the new agents, we can implement our logic for how to update the graph.
     try {
+      const requestString = JSON.stringify({ graph, newAgents });
+      console.log(requestString);
       //just refine implementation
-      const newData = await getGroqCompletion(
-        JSON.stringify({ graph, newAgents }),
-        4096,
+      const newStates = await getGroqCompletion(
+        requestString,
+        256,
         `The user will provide you with an implementation of a specific concept in the form of a knowledge graph together with an array of agents working towards specific goals within this graph.
-          Generate a new array of nodes, a new array of edges that integrate any new concepts described by agent behaviours with the existing graph.
-          If necessary, generate intermediate nodes to help link agent goals and tasks to the existing nodes in the graph.
-          If the agent behaviour can already be described by the existing graph nodes, update the state property of the nodes to include the agent behaviour.
-          Return the state updates with a map using the node ID as the key and the new state as the value.
-          Return your response in JSON in the format {newNodes: Node[], newEdges: Edge[], stateUpdates:{[id:string]: string}}.`,
+          Your task is to update the knowledge graph to reflect the changes made by the agents.
+          For any nodes affected by the agents, generate a new state object for the node using the node ID as the key and the new state as the value.
+          Return your response in JSON in the format {[id:string]: string}.`,
         true
       );
-      const graphJSON = JSON.parse(newData);
+      const graphJSON = JSON.parse(newStates);
       console.log(graphJSON);
-      const newNodes = graph.nodes.map((n: GNode) => ({
-        ...n,
-        state: graphJSON.stateUpdates[n.id] ?? "",
-      }));
-      const edges = [...graph.edges, ...graphJSON.newEdges];
-      const relaxed = relaxGraph([...newNodes, ...graphJSON.newNodes], edges);
-      setGraph({ nodes: relaxed, edges: edges });
+      //iterate over state updates
+      const updatedNodes = [...graph.nodes];
+      for (const [id, state] of Object.entries(graphJSON)) {
+        const node: any = updatedNodes.find((n) => n.id === id);
+        if (node) node.state = state;
+      }
+
+      console.log("updated nodes");
+
+      if (addNodes) {
+        const appendGraph = await getGroqCompletion(
+          requestString,
+          512,
+          `The user will provide you with an implementation of a specific concept in the form of a knowledge graph together with an array of agents working towards specific goals within this graph.
+         Your task is to generate new nodes to describe any agent tasks not currently modelled by the knowledge graph. 
+         Generate intermediate nodes if new concepts seem unrelated to the existing graph. Do not repeat concepts already modelled in the graph. 
+          Return your response in JSON in the format {newNodes: Node[], newEdges: Edge[]}.`,
+          true
+        );
+
+        console.log("appended graph");
+        const nodeJSON = JSON.parse(appendGraph);
+        console.log(nodeJSON);
+        //iterate over state updates
+        const edges = [...graph.edges, ...nodeJSON.newEdges];
+        const relaxed = relaxGraph(
+          [...updatedNodes, ...nodeJSON.newNodes],
+          edges
+        );
+        setGraph({ nodes: relaxed, edges: edges });
+      } else {
+        setGraph({ nodes: updatedNodes, edges: graph.edges });
+      }
     } catch (e) {
       console.error(e);
       alert("failed to update graph");
@@ -89,6 +123,7 @@ export default function AgentsPage() {
               world={graph}
               initAgents={initAgents}
               onUpdate={handleResponse}
+              goal={agentGoal}
             />
           </div>
         </div>
