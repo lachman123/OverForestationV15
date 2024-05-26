@@ -6,10 +6,6 @@ import KnowledgeGraph from "@/components/KnowledgeGraph";
 import { GNode, Graph, relaxGraph } from "@/components/Graph";
 import { getGroqCompletion } from "@/ai/groq";
 
-//If true, the agents will add new nodes and edges to the graph
-//If false, the agents will refine the implementation of the nodes in the graph
-const addToGraph = true;
-
 //Demo of running multiple agents that all compete for resources
 export default function AgentsPage() {
   const [graph, setGraph] = useState<Graph>({ nodes: [], edges: [] });
@@ -21,51 +17,27 @@ export default function AgentsPage() {
     setGenerating(true);
     //now we have the new agents, we can implement our logic for how to update the graph.
     try {
-      if (addToGraph) {
-        const newGraph = await getGroqCompletion(
-          JSON.stringify({
-            graph: { nodes: graph.nodes, edges: graph.edges },
-            agents: newAgents,
-          }),
-          1024,
-          `The user will provide you with an implementation of a project in the form of a knowledge graph
-        together with an array of agents working towards specific goals within this project.
-        Generate a new array of nodes and a new array of edges that integrate new concepts and relationships required to describe the goals and tasks of the agents.
-        If necessary, generate intermediate nodes to help link agent goals and tasks to the existing nodes in the graph.
-        For each new node, include an implementation property that describes the actions of the agents. 
-        Return your response in JSON in the format {newNodes:Node[], newEdges: Edge[]}.`,
-          true
-        );
-        const graphJSON = JSON.parse(newGraph);
-        const edges = [...graph.edges, ...graphJSON.newEdges];
-        const relaxed = relaxGraph(
-          [...graph.nodes, ...graphJSON.newNodes],
-          edges
-        );
-        setGraph({ nodes: relaxed, edges: edges });
-      } else {
-        //just refine implementation
-        const newData = await getGroqCompletion(
-          JSON.stringify({ graph, newAgents }),
-          2048,
-          `The user will provide you with an implementation of a specific concept in the form of a knowledge graph together with an array of agents working towards specific goals within this graph.
-        Generate a new state property for each node that describes how the goals, tasks and actions of an agent has impacted this node. 
-        If the node is impacted, include a brief summary of the agent name and their task in the new state. 
-        Include specific changes that may be required to the implementation of the node, or challenges the node now faces.
-        Generate a map using the node ID as the key and the new state as the value.
-        Return your response in JSON in the format {[id:string]: string}.`,
-          true
-        );
-        const graphJSON = JSON.parse(newData);
-        console.log(graphJSON);
-        const newNodes = graph.nodes.map((n: GNode) => ({
-          ...n,
-          state: graphJSON[n.id] ?? "",
-        }));
-
-        console.log(newNodes);
-        setGraph({ nodes: newNodes, edges: graph.edges });
-      }
+      //just refine implementation
+      const newData = await getGroqCompletion(
+        JSON.stringify({ graph, newAgents }),
+        4096,
+        `The user will provide you with an implementation of a specific concept in the form of a knowledge graph together with an array of agents working towards specific goals within this graph.
+          Generate a new array of nodes, a new array of edges that integrate any new concepts described by agent behaviours with the existing graph.
+          If necessary, generate intermediate nodes to help link agent goals and tasks to the existing nodes in the graph.
+          If the agent behaviour can already be described by the existing graph nodes, update the state property of the nodes to include the agent behaviour.
+          Return the state updates with a map using the node ID as the key and the new state as the value.
+          Return your response in JSON in the format {newNodes: Node[], newEdges: Edge[], stateUpdates:{[id:string]: string}}.`,
+        true
+      );
+      const graphJSON = JSON.parse(newData);
+      console.log(graphJSON);
+      const newNodes = graph.nodes.map((n: GNode) => ({
+        ...n,
+        state: graphJSON.stateUpdates[n.id] ?? "",
+      }));
+      const edges = [...graph.edges, ...graphJSON.newEdges];
+      const relaxed = relaxGraph([...newNodes, ...graphJSON.newNodes], edges);
+      setGraph({ nodes: relaxed, edges: edges });
     } catch (e) {
       console.error(e);
       alert("failed to update graph");

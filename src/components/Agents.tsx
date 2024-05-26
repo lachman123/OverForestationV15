@@ -57,8 +57,9 @@ export default function Agents({
         //run all agents in parallel
         JSON.stringify({ world, agents }),
         1024,
-        `You simulate autonomous agent behaviour within a given world state. The goal and other properties of the agent will be provided by the user. 
-        Generate a task for each agent to help them achieve their goal, and describe actions they perform and resources they consume to achieve it.
+        `You simulate autonomous agent behaviour within a world state represented by a knowledge graph. 
+        The goal and other properties of the agent will be provided by the user. 
+        Update the agent to reflect how they act ON the knowledge graph to work towards their goal.
         Return a new JSON object with the updated agents in the format {agents: Agent[]}.`,
         true
       );
