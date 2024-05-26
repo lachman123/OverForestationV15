@@ -1,5 +1,5 @@
 import { getGroqCompletion } from "@/ai/groq";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import KeyValueTable from "./KeyValueTable";
 
 //function that runs multiple agents in parallel that compete over given resources
@@ -17,7 +17,40 @@ export default function Agents({
   const [generating, setGenerating] = useState<boolean>(false);
   const [agents, setAgents] = useState<any[]>(initAgents);
 
+  const generateAgents = async (context: any) => {
+    setGenerating(true);
+    try {
+      const newAgents = await getGroqCompletion(
+        //run all agents in parallel
+        JSON.stringify({
+          context,
+          goal: "Build an offshore aquaculture farm to supply the worlds protein demands by 2050",
+        }),
+        512,
+        `You simulate autonomous agent behaviour within a given world state. 
+        A knowledge graph representing the world state together with a high level goal for the agents will be provided by the user. 
+        Generate an array of three Agent objects that represent the agents in the world working towards the high level goal.
+        Return a JSON object in the format {agents: {name: string, goal:string, currentTask:string, inhibitors:string, resourcesRequired:string}[]}.`,
+        true
+      );
+      console.log(newAgents);
+      const agentJSON = JSON.parse(newAgents);
+      setAgents(agentJSON.agents);
+      onUpdate(agentJSON.agents);
+    } catch (e) {
+      console.error(e);
+      alert("Error generating agents");
+    }
+    setGenerating(false);
+  };
+
   const runAgents = async () => {
+    //don't generate if already running
+    if (generating) return;
+    if (agents.length === 0) {
+      await generateAgents(world);
+      return;
+    }
     setGenerating(true);
     try {
       const newAgents = await getGroqCompletion(

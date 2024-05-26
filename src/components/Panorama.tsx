@@ -43,6 +43,7 @@ export default function Panorama({
     setIsSelecting(true);
     const { offsetX, offsetY } = e.nativeEvent;
     setSelection({ x: offsetX, y: offsetY, width: 0, height: 0 });
+    if (e.button === 2 && onRightClick) onRightClick("right");
   };
 
   const handleMouseMove = (e: any) => {
