@@ -26,9 +26,9 @@ export default function App() {
     setFetching(true);
     //improve prompt
     const newPrompt =
-      "An equirectangular photograph of" +
+      "An equirectangular panorama of" +
       prompt +
-      ". Canon EOS 5D Mark IV, 24mm, f/8, 1/250s, ISO 100, 2019";
+      ". Canon EOS 5D Mark IV, 24mm, f/8, 1/250s, ISO 100";
     //if immersive, use blockade, otherwise just use fal
     const pano = await (immersive
       ? getPanorama(newPrompt)
