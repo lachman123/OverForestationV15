@@ -24,12 +24,15 @@ export async function getGroqCompletion(
         content: userPrompt,
       },
     ],
-    model: "llama3-70b-8192",
+    model: model,
     max_tokens: max_tokens,
   } as LLMRequest;
   if (jsonOnly) body.response_format = { type: "json_object" };
+  const time = Date.now();
+  console.log("getting groq", body);
 
   const completion = await groq.chat.completions.create(body);
+  console.log("got groq, time: ", Date.now() - time);
   return (
     completion.choices[0]?.message?.content || "Oops, something went wrong."
   );
