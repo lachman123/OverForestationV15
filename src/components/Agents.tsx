@@ -82,6 +82,12 @@ export default function Agents({
     <div className="flex flex-col w-full rounded-lg border border-black/25 p-4 ">
       <button
         className="p-2 bg-white rounded-lg my-4 border border-black/25 w-full hover:shadow"
+        onClick={() => generateAgents(world, goal ?? "")}
+      >
+        {generating ? "Generating..." : "Create New Agents"}
+      </button>
+      <button
+        className="p-2 bg-white rounded-lg my-4 border border-black/25 w-full hover:shadow"
         onClick={() => runAgents()}
       >
         {generating ? "Generating..." : "Run Agents"}
