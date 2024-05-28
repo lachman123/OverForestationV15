@@ -22,10 +22,10 @@ type EditNode = {
 //The onChange event is fired whenever the graph changes for integration with other components
 export default function KnowledgeGraph({
   graph = { nodes: [], edges: [] },
-  onUpdate,
+  onUpdate = (graph: Graph) => {},
 }: {
   graph?: Graph;
-  onUpdate: (graph: Graph) => void;
+  onUpdate?: (graph: Graph) => void;
 }) {
   const [nodes, setNodes] = useState<GNode[]>(graph.nodes);
   const [edges, setEdges] = useState<Edge[]>(graph.edges);
@@ -40,6 +40,8 @@ export default function KnowledgeGraph({
 
   //listen for changes to the props
   useEffect(() => {
+    if (!graph || !graph.nodes || graph.nodes.length == 0) return;
+
     setNodes(graph.nodes);
     setEdges(graph.edges);
   }, [graph]);
