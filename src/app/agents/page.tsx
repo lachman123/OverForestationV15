@@ -6,6 +6,8 @@ import KnowledgeGraph from "@/components/KnowledgeGraph";
 import { GNode, Graph } from "@/components/Graph";
 import { getGroqCompletion } from "@/ai/groq";
 
+//comment me out later
+
 const initAgents = [
   {
     name: "Saskatoon Timber Expansion Alliance",
