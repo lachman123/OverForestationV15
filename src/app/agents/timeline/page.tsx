@@ -5,21 +5,29 @@ import Narration from "@/components/Narration";
 import KnowledgeGraph from "@/components/KnowledgeGraph";
 import { Graph, relaxGraph } from "@/components/Graph";
 import { getGroqCompletion } from "@/ai/groq";
-
-export const dynamic = "force-dynamic";
+import Timeline, { TimelineEvent } from "@/components/Timeline";
+import { jsonText } from "@/ai/prompts";
+import { unstable_noStore as noStore } from "next/cache";
 
 //This is new - just provide a high level goal and groq will figure out how to make agents
 const agentGoal =
   "Build an offshore aquaculture farm to supply the worlds protein demands by 2050";
 //set your agents here. If you leave this empty then Groq creates some for you based on your graph and the goal above.
 const initAgents: any = [];
+//if this is true, agents add nodes to the graph as well as update implementation data. Its slower.
+const addNodes = true;
+//start year
+const startYear = 2024;
 
 //Demo of running multiple agents that all compete for resources
 export default function AgentsPage() {
+  noStore();
   const [graph, setGraph] = useState<Graph>({ nodes: [], edges: [] });
   const [showUI, setShowUI] = useState<boolean>(true);
   const [playNarration, setPlayNarration] = useState<boolean>(false);
   const [generating, setGenerating] = useState<boolean>(false);
+  const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>([]);
+  const [currentYear, setCurrentYear] = useState<number>(startYear);
 
   const handleResponse = async (newAgents: any[]) => {
     setGenerating(true);
@@ -35,7 +43,8 @@ export default function AgentsPage() {
           Your task is to update the knowledge graph to reflect the changes made by the agents.
           Generate an array of new Nodes and an array of new Edges to represent any concepts not already modelled by the knowledge graph.
           Update any existing nodes affected by the agents using a state map. Generate a new state object for each affected node using the node ID as the key and the new state as the value.
-          Return your response in JSON in the format {newNodes:Node[], newEdges:Edge[], newStates:{[id:string]: string}}.Only return a single valid JSON object with no other text or explanation.`,
+          Return your response in JSON in the format {newNodes:Node[], newEdges:Edge[], newStates:{[id:string]: string}}.` +
+          jsonText,
         true,
         "llama3-8b-8192"
       );
@@ -55,6 +64,13 @@ export default function AgentsPage() {
       const newGraph = { nodes: relaxed, edges: edges };
 
       setGraph(newGraph);
+      setCurrentYear((c) => c + 5);
+      //add to timeline
+      timelineEvents.push({
+        time: currentYear,
+        title: currentYear.toString(),
+        data: newGraph,
+      });
     } catch (e) {
       console.error(e);
       alert("failed to update graph");
@@ -64,6 +80,16 @@ export default function AgentsPage() {
 
   const getGraph = (graph: Graph) => {
     setGraph(graph);
+    setCurrentYear((c) => c + 2);
+    timelineEvents.push({
+      time: currentYear,
+      title: currentYear.toString(),
+      data: graph,
+    });
+  };
+
+  const handleTimelineSelect = (event: TimelineEvent) => {
+    setGraph(event.data);
   };
 
   return (
@@ -99,12 +125,14 @@ export default function AgentsPage() {
               {playNarration ? "Stop Narrating" : "Start Narrating"}
             </button>
             {generating && <span>Updating Graph...</span>}
+            <Timeline events={timelineEvents} onSelect={handleTimelineSelect} />
             <KnowledgeGraph graph={graph} onUpdate={getGraph} />
             <Agents
               world={graph}
               initAgents={initAgents}
               onUpdate={handleResponse}
               goal={agentGoal}
+              time={currentYear.toString()}
             />
           </div>
         </div>

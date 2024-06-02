@@ -6,7 +6,6 @@ import {
   generateImageToImageFal,
 } from "@/ai/fal";
 import { getGeminiVision } from "@/ai/gemini";
-import { getOpenAICompletion } from "@/ai/openai";
 import Panorama from "@/components/Panorama";
 import Spinner from "@/components/Spinner";
 import { useState } from "react";
@@ -27,9 +26,9 @@ export default function App() {
     setFetching(true);
     //improve prompt
     const newPrompt =
-      "A photograph of" +
+      "An equirectangular panorama of" +
       prompt +
-      ". Canon EOS 5D Mark IV, 24mm, f/8, 1/250s, ISO 100, 2019";
+      ". Canon EOS 5D Mark IV, 24mm, f/8, 1/250s, ISO 100";
     //if immersive, use blockade, otherwise just use fal
     const pano = await (immersive
       ? getPanorama(newPrompt)
@@ -84,15 +83,14 @@ export default function App() {
           </button>
           <button
             className="p-2 w-full rounded bg-white"
-            onClick={() => setImmersive(!immersive)}
+            onClick={() => {
+              var a = document.createElement("a");
+              a.href = img;
+              a.download = "Image.png";
+              a.click();
+            }}
           >
-            {immersive ? "Skybox (slow)" : "Flat (fast)"}
-          </button>
-          <button
-            className="p-2 w-full rounded bg-white"
-            onClick={() => setUpscale(!upscale)}
-          >
-            {upscale ? "Upscaling (slow)" : "Image-to-Image (fast)"}
+            Download Img
           </button>
         </div>
         <div className="relative w-full h-full">

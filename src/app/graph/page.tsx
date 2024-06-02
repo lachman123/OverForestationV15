@@ -22,7 +22,7 @@ export default function Page() {
           </button>
         </div>
         <div className={`${showUI ? "flex" : "hidden"} flex flex-col`}>
-          <KnowledgeGraph onUpdate={handleUpdate} />
+          <KnowledgeGraph />
         </div>
       </div>
     </main>
