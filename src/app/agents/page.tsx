@@ -30,7 +30,7 @@ export default function AgentsPage() {
       //just refine implementation
       const newStates = await getGroqCompletion(
         requestString,
-        1024,
+        2000,
         `The user will provide you with an implementation of a specific concept in the form of a knowledge graph together with an array of agents working towards specific goals within this graph.
           Your task is to update the knowledge graph to reflect the changes made by the agents.
           Generate an array of new Nodes and an array of new Edges to represent any concepts not already modelled by the knowledge graph.
