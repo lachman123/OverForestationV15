@@ -21,43 +21,43 @@ export default function Home() {
           </div>
           <div className="flex flex-col items-start gap-4 absolute left-4 top-20 bottom-20 justify-between w-48">
             <Link href="/experts" legacyBehavior>
-              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-center w-full">
+              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-right w-full">
                 <div className="mb-2">
-                  <img src="/path/to/icon2.svg" alt="Kitchen System" className="mx-auto" />
+                  <img src="/path/to/icon2.svg" alt="Story Board" className="mx-auto" />
                 </div>
-                <p>Kitchen System</p>
+                <p></p>
               </a>
             </Link>
             <Link href="/debate" legacyBehavior>
-              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-center w-full">
+              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-right w-full">
                 <div className="mb-2">
-                  <img src="/path/to/icon3.svg" alt="L Series Lights" className="mx-auto" />
+                  <img src="/path/to/icon3.svg" alt="Cinematic Photos" className="mx-auto" />
                 </div>
-                <p>L Series Lights</p>
+                <p></p>
               </a>
             </Link>
             <Link href="/panorama" legacyBehavior>
-              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-center w-full">
+              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-right w-full">
                 <div className="mb-2">
-                  <img src="/path/to/icon4.svg" alt="Attention Seeking Hydropod" className="mx-auto" />
+                  <img src="/path/to/icon4.svg" alt="Development Blog" className="mx-auto" />
                 </div>
-                <p>Attention Seeking Hydropod</p>
+                <p></p>
               </a>
             </Link>
             <Link href="/drawing" legacyBehavior>
-              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-center w-full">
+              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-right w-full">
                 <div className="mb-2">
-                  <img src="/path/to/icon5.svg" alt="Outdoor Light" className="mx-auto" />
+                  <img src="/path/to/icon5.svg" alt="Drawings" className="mx-auto" />
                 </div>
-                <p>Outdoor Light</p>
+                <p></p>
               </a>
             </Link>
             <Link href="/graph" legacyBehavior>
-              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-center w-full">
+              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-right w-full">
                 <div className="mb-2">
-                  <img src="/path/to/icon6.svg" alt="Notebook" className="mx-auto" />
+                  <img src="/path/to/icon6.svg" alt="Recorded Video" className="mx-auto" />
                 </div>
-                <p>Notebook</p>
+                <p></p>
               </a>
             </Link>
           </div>
