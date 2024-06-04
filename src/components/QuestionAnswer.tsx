@@ -43,7 +43,6 @@ export default function QuestionAnswer({
   const [question, setQuestion] = useState<Question>();
   const [timer, setTimer] = useState<number>(questionTime);
   const [generating, setGenerating] = useState<boolean>(false);
-  const [themes, setThemes] = useState<string[] | undefined>(playerData);
 
   useEffect(() => {
     //create question on load
@@ -73,15 +72,15 @@ export default function QuestionAnswer({
         `The previous themes and types in a gameshow were ${pastQuestions
           .map((q) => `${q.theme} and ${q.type}`)
           .join(",")} ${
-          themes &&
+          playerData &&
           `The next theme should be ${
-            themes[Math.floor(Math.random() * themes.length)]
+            playerData[Math.floor(Math.random() * playerData.length)]
           }`
         }`,
         32,
         `You are a gameshow host tasked with creating new themes for questions.
          ${
-           themes
+           playerData
              ? "The user will provide you with previous question themes and types along with the current theme. Generate a question type for the theme."
              : "The user will provide you with previous question themes and types and you must create a new theme and appropriate question type."
          } 
