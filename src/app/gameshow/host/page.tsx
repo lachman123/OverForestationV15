@@ -8,7 +8,7 @@ import QuestionAnswer, {
 } from "@/components/QuestionAnswer";
 import { useRouter } from "next/navigation";
 import PlayerList from "../PlayerList";
-import { questionTime } from "../page";
+import { questionTime } from "../GameList";
 
 export const dynamic = "force-dynamic";
 

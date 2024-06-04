@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import supabase from "@/supabase/supabaseClient";
 import { Player, Question, Quiz, QuizUI } from "@/components/QuestionAnswer";
 import PlayerList from "../PlayerList";
-import { questionTime } from "../page";
+import { questionTime } from "../GameList";
 
 export default function GameshowPage({ params }: { params: { id: string } }) {
   const [quiz, setQuiz] = useState<Quiz | null>(null);

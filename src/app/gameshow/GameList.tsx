@@ -4,6 +4,8 @@ import supabase from "@/supabase/supabaseClient";
 import { Quiz } from "@/components/QuestionAnswer";
 import { useRouter } from "next/navigation";
 
+export const questionTime = 15;
+
 export default function GameList() {
   const [availableGames, setAvailableGames] = useState<Quiz[]>([]);
   const router = useRouter();
