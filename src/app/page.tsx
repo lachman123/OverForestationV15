@@ -10,56 +10,48 @@ export default function Home() {
       </header>
 
       <section className="relative w-full h-[75vh] bg-cover bg-center" style={{ backgroundImage: "url('https://i.imgur.com/qnF3sqs.png')" }}>
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center">
-          <div className="text-center text-white mb-6 max-w-xl mx-auto px-4">
-            <p className="text-lg mb-4">
-              A world timber shortage is an imminent and pressing issue which is slowly impacting the global construction industry. It is very important as the world relies heavily on timber as a key construction material in houses and buildings, and now more than ever becoming essential in reducing the carbon dioxide in the earths atmosphere as the global temperature increases. With the increase in timber harvesting and shortage comes the decrease in natural forest size due to logging.
-            </p>
-            <Link href="/agents" legacyBehavior>
-              <a className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">PLAY SIMULATION</a>
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-between py-8">
+          <div className="flex flex-col items-start gap-4 absolute left-12 top-20 bottom-20 justify-between w-48">
+            <Link href="/storyboard" className="bg-orange-300 bg-opacity-60 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-right w-full">
+              <div className="mb-2">
+                <img src="/path/to/icon2.svg" alt="Story Board" className="mx-auto" />
+              </div>
+              <p>Story Board</p>
+            </Link>
+            <Link href="/cinematicphotos" className="bg-orange-300 bg-opacity-60 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-right w-full">
+              <div className="mb-2">
+                <img src="/path/to/icon3.svg" alt="Cinematic Photos" className="mx-auto" />
+              </div>
+              <p>Cinematic Photos</p>
+            </Link>
+            <Link href="/developmentblog" className="bg-orange-300 bg-opacity-60 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-right w-full">
+              <div className="mb-2">
+                <img src="/path/to/icon4.svg" alt="Development Blog" className="mx-auto" />
+              </div>
+              <p>Development Blog</p>
+            </Link>
+            <Link href="/drawings" className="bg-orange-300 bg-opacity-60 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-right w-full">
+              <div className="mb-2">
+                <img src="/path/to/icon5.svg" alt="Drawings" className="mx-auto" />
+              </div>
+              <p>Drawings</p>
+            </Link>
+            <Link href="/recordedvideo" className="bg-orange-300 bg-opacity-60 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-right w-full">
+              <div className="mb-2">
+                <img src="/path/to/icon6.svg" alt="Recorded Video" className="mx-auto" />
+              </div>
+              <p>Recorded Video</p>
             </Link>
           </div>
-          <div className="flex flex-col items-start gap-4 absolute left-4 top-20 bottom-20 justify-between w-48">
-            <Link href="/experts" legacyBehavior>
-              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-right w-full">
-                <div className="mb-2">
-                  <img src="/path/to/icon2.svg" alt="Story Board" className="mx-auto" />
-                </div>
-                <p></p>
-              </a>
-            </Link>
-            <Link href="/debate" legacyBehavior>
-              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-right w-full">
-                <div className="mb-2">
-                  <img src="/path/to/icon3.svg" alt="Cinematic Photos" className="mx-auto" />
-                </div>
-                <p></p>
-              </a>
-            </Link>
-            <Link href="/panorama" legacyBehavior>
-              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-right w-full">
-                <div className="mb-2">
-                  <img src="/path/to/icon4.svg" alt="Development Blog" className="mx-auto" />
-                </div>
-                <p></p>
-              </a>
-            </Link>
-            <Link href="/drawing" legacyBehavior>
-              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-right w-full">
-                <div className="mb-2">
-                  <img src="/path/to/icon5.svg" alt="Drawings" className="mx-auto" />
-                </div>
-                <p></p>
-              </a>
-            </Link>
-            <Link href="/graph" legacyBehavior>
-              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-right w-full">
-                <div className="mb-2">
-                  <img src="/path/to/icon6.svg" alt="Recorded Video" className="mx-auto" />
-                </div>
-                <p></p>
-              </a>
-            </Link>
+          <div className="text-center text-white mb-6 max-w-4xl mx-auto px-4 mt-8">
+            <p className="text-lg mb-4">
+              A world timber shortage is an imminent and pressing issue which is slowly impacting the global construction industry. It is very important as the world relies heavily on timber as a key construction material in houses and buildings, and now more than ever becoming essential in reducing the carbon dioxide in the earth's atmosphere as the global temperature increases. With the increase in timber harvesting and shortage comes the decrease in natural forest size due to logging.
+            </p>
+            <div className="mt-10">
+              <Link href="/agents" className="bg-orange-500 bg-opacity-50 text-white px-8 py-4 rounded hover:bg-yellow-600 transition text-lg">
+                PLAY SIMULATION
+              </Link>
+            </div>
           </div>
         </div>
       </section>

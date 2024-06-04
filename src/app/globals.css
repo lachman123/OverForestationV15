@@ -4,14 +4,93 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
+  --primary-color: #DAA520; /* Goldenrod color for the orange rectangles */
 }
 
 body {
-  background: rgb(240, 240, 240, 1);
+  background-color: #F0F0F0; /* Light grey background */
+  color: rgb(var(--foreground-rgb));
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.header {
+  width: 100%;
+  text-align: center;
+  padding: 20px 0;
+  background-color: white;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.header p {
+  margin: 5px 0 0;
+  font-size: 1rem;
+}
+
+.image-section {
+  width: 100%;
+  position: relative;
+}
+
+.image-section img {
+  width: 100%;
+  height: auto;
+}
+
+.play-simulation {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.nav {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.nav a {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 150px;
+  text-align: center;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: white;
+  color: black;
+  width: 100%;
+}
+
+.placeholder-text {
+  max-width: 800px;
+  margin: 20px auto;
+  text-align: left;
+  color: black;
 }
