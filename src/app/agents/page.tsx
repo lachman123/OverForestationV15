@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 //This is new - just provide a high level goal and groq will figure out how to make agents
 const agentGoal =
-  "Build and expand a forestation project in Canada's northern short grasslands, with the goal of supplying the worlds construction timber by 2060, whilst resolving unexpected conflicts and events between agents";
+  "Build and expand a forestation project in Canadas northern short grasslands, with the goal of supplying the worlds construction timber by 2060, whilst resolving unexpected conflicts and events between agents";
 //set your agents here. If you leave this empty then Groq creates some for you based on your graph and the goal above.
 const initAgents: any = [];
 

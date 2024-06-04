@@ -13,7 +13,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center">
           <div className="text-center text-white mb-6 max-w-xl mx-auto px-4">
             <p className="text-lg mb-4">
-              A world timber shortage is an imminent and pressing issue which is slowly impacting the global construction industry. It is very important as the world relies heavily on timber as a key construction material in houses and buildings, and now more than ever becoming essential in reducing the carbon dioxide in the earth's atmosphere as the global temperature increases. With the increase in timber harvesting and shortage comes the decrease in natural forest size due to logging.
+              A world timber shortage is an imminent and pressing issue which is slowly impacting the global construction industry. It is very important as the world relies heavily on timber as a key construction material in houses and buildings, and now more than ever becoming essential in reducing the carbon dioxide in the earths atmosphere as the global temperature increases. With the increase in timber harvesting and shortage comes the decrease in natural forest size due to logging.
             </p>
             <Link href="/agents" legacyBehavior>
               <a className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">PLAY SIMULATION</a>
