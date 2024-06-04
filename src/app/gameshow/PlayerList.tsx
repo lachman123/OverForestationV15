@@ -13,6 +13,10 @@ export default function PlayerList({
   const [players, setPlayers] = useState<Player[]>(initPlayers);
 
   useEffect(() => {
+    setPlayers(initPlayers);
+  }, [initPlayers]);
+
+  useEffect(() => {
     if (!quiz) return;
 
     //get all current players first
