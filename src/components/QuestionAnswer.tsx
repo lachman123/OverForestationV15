@@ -12,6 +12,7 @@ export type Question = {
   answers: string[];
   correct_answer: string;
   points: number;
+  image?: string;
 };
 export type Quiz = {
   id: string;
@@ -24,21 +25,26 @@ export type Player = {
   status: string;
   score: number;
   quiz_id: string;
+  player_data: string;
+  image: string;
 };
 
 export default function QuestionAnswer({
   questionTime = 15,
   onQuestion,
   onAnswer,
+  playerData,
 }: {
   questionTime: number;
   onQuestion: (question: Question) => void;
   onAnswer: (question: Question, answer: string) => void;
+  playerData?: string[];
 }) {
   const [pastQuestions, setPastQuestions] = useState<Question[]>([]);
   const [question, setQuestion] = useState<Question>();
   const [timer, setTimer] = useState<number>(questionTime);
   const [generating, setGenerating] = useState<boolean>(false);
+
   useEffect(() => {
     //create question on load
     createQuestion();
@@ -60,20 +66,31 @@ export default function QuestionAnswer({
   const createQuestion = async () => {
     setGenerating(true);
     try {
+      console.log(playerData);
+      //get a random string from playerData
       //get groq to generate a theme for our question
       const themeType = await getGroqCompletion(
         `The previous themes and types in a gameshow were ${pastQuestions
           .map((q) => `${q.theme} and ${q.type}`)
-          .join(",")}`,
+          .join(",")} ${
+          playerData &&
+          `The next theme should be ${
+            playerData[Math.floor(Math.random() * playerData.length)]
+          }`
+        }`,
         32,
         `You are a gameshow host tasked with creating new themes for questions.
-         The user will provide you with previous question themes and types and you must create a new theme and appropriate question type. 
+         ${
+           playerData
+             ? "The user will provide you with previous question themes and types along with the current theme. Generate a question type for the theme."
+             : "The user will provide you with previous question themes and types and you must create a new theme and appropriate question type."
+         } 
          Output your response in JSON in the format {theme: string, type: string}`,
         true
       );
-
       const themeTypeJSON = JSON.parse(themeType);
 
+      console.log(themeTypeJSON);
       //get groq to generate a question
       const generatedQuestion = await getGroqCompletion(
         `The current theme of a gameshow is ${themeTypeJSON.theme}. The current type of the question is ${themeTypeJSON.type}. Generate a gameshow question for the players to answer.
