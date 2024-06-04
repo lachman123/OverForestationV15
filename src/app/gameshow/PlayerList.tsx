@@ -8,7 +8,7 @@ export default function PlayerList({
   quiz,
 }: {
   initPlayers: Player[];
-  quiz: Quiz | null;
+  quiz: Quiz;
 }) {
   const [players, setPlayers] = useState<Player[]>(initPlayers);
 
@@ -47,7 +47,10 @@ export default function PlayerList({
     <div className="flex flex-col gap-4 p-4 w-full bg-white border rounded-lg">
       {players.map((player, i) => (
         <div key={i} className="flex items-center gap-4">
-          <img className="max-w-16 aspect-square" src={player.image} />
+          <img
+            className="max-w-16 aspect-square rounded-md"
+            src={player.image}
+          />
           <div className="flex flex-col">
             <p>
               {player.player_name} - {player.player_data} ({player.status})

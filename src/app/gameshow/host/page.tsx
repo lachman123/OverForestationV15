@@ -143,7 +143,7 @@ export default function GameshowPage() {
           )}
         </div>
 
-        <PlayerList initPlayers={players} quiz={quiz} />
+        {players && quiz && <PlayerList initPlayers={players} quiz={quiz} />}
       </div>
     </main>
   );
