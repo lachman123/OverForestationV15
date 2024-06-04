@@ -45,15 +45,13 @@ export default function Caption({
   }, [speed, speech]);
 
   useEffect(() => {
-    const speaker = text.split(":")[0];
-    const script = text.split(":")[1];
-
-    if (!speaker || !script) {
-      //just read the script
+    //check to see if : is in the string
+    if (!text.includes(":")) {
       setSpokenText(text);
       return;
     }
-
+    const speaker = text.split(":")[0];
+    const script = text.split(":")[1];
     setSpokenText(script);
 
     if (voices[speaker]) {
