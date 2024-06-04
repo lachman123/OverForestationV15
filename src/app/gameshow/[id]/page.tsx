@@ -92,6 +92,7 @@ export default function GameshowPage({ params }: { params: { id: string } }) {
   }, [quiz]);
 
   const handleNoAnswer = async () => {
+    /*
     if (!player) return;
     const { data, error } = await supabase
       .from("player")
@@ -103,6 +104,7 @@ export default function GameshowPage({ params }: { params: { id: string } }) {
       .single();
     console.log("no answer", data, error);
     if (data) setPlayer(data);
+    */
   };
 
   const handleAnswer = async (i: number) => {
@@ -129,13 +131,17 @@ export default function GameshowPage({ params }: { params: { id: string } }) {
     //update the player
     const correct = question.answers[i] === question.correct_answer;
 
-    console.log("correct?", correct, question.points);
+    console.log(
+      "correct?",
+      correct,
+      Math.floor(question.points * (timer / 15))
+    );
 
     const { data: playerUpdate, error: playerError } = await supabase
       .from("player")
       .update({
         score: player.score + (correct ? question.points : 0),
-        status: correct ? "playing" : "lost",
+        // status: correct ? "playing" : "lost",
       })
       .eq("id", player.id)
       .select()
@@ -165,7 +171,7 @@ export default function GameshowPage({ params }: { params: { id: string } }) {
           )}
         </div>
 
-        <PlayerList initPlayers={players} quiz={quiz} />
+        {players && quiz && <PlayerList initPlayers={players} quiz={quiz} />}
       </div>
     </main>
   );
