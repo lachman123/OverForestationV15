@@ -9,6 +9,9 @@ import QuestionAnswer, {
 import { useRouter } from "next/navigation";
 import PlayerList from "../PlayerList";
 import { questionTime } from "../GameList";
+import { generateImageFal } from "@/ai/fal";
+import { getGroqCompletion } from "@/ai/groq";
+import { uploadImageToSupabase } from "../CreatePlayer";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +19,7 @@ export default function GameshowPage() {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [player, setPlayer] = useState<Player | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
+  const [img, setImg] = useState<string>("");
   const router = useRouter();
 
   useEffect(() => {
@@ -104,19 +108,52 @@ export default function GameshowPage() {
   const handleQuestion = async (question: Question) => {
     //save the question to supabase so other players can answer it
     if (!quiz) return;
-    const { data, error } = await supabase
-      .from("question")
-      .insert({
-        quiz_id: quiz.id,
-        theme: question.theme,
-        type: question.type,
-        question: question.question,
-        answers: question.answers,
-        correct_answer: question.correct_answer,
-        points: question.points,
-      })
-      .select()
-      .single();
+    //generate an image
+    let imageUrl = "";
+    try {
+      const imageDesc = await getGroqCompletion(
+        `Question: ${question.question} Type: ${
+          question.type
+        } Answers: ${question.answers.join(", ")}`,
+        128,
+        "You are a gameshow host responsible for illustrating quiz questions using images. Return your response in JSON in the format {requiresImage:boolean, imageDescription:string}",
+        true
+      );
+      const imageDescJSON = JSON.parse(imageDesc);
+      console.log(imageDescJSON);
+      if (imageDescJSON.requiresImage) {
+        const img = await generateImageFal(
+          imageDescJSON.imageDescription,
+          {
+            width: 512,
+            height: 512,
+          },
+          "fast-turbo-diffusion"
+        );
+        //upload to supabase
+        const res = await uploadImageToSupabase(question.question, img);
+
+        imageUrl = `https://fsqgenrxuhqhffkevrbp.supabase.co/storage/v1/object/public/images/${res.path}`;
+        setImg(imageUrl);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      const { data, error } = await supabase
+        .from("question")
+        .insert({
+          quiz_id: quiz.id,
+          theme: question.theme,
+          type: question.type,
+          question: question.question,
+          answers: question.answers,
+          correct_answer: question.correct_answer,
+          points: question.points,
+          image: imageUrl,
+        })
+        .select()
+        .single();
+    }
   };
 
   if (!quiz || !player) return <div>Creating Quiz...</div>;
@@ -133,6 +170,7 @@ export default function GameshowPage() {
           >
             {quiz.status === "playing" ? "End Game" : "Start Game"}
           </button>
+          {img && <img src={img} className="w-full" />}
           {quiz.status === "playing" && (
             <QuestionAnswer
               questionTime={questionTime}

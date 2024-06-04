@@ -12,6 +12,7 @@ export type Question = {
   answers: string[];
   correct_answer: string;
   points: number;
+  image?: string;
 };
 export type Quiz = {
   id: string;

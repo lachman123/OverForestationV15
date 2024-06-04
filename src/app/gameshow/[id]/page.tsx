@@ -160,6 +160,9 @@ export default function GameshowPage({ params }: { params: { id: string } }) {
                 Time: {timer}s{" "}
                 {timer == 0 && "(Waiting for host to create a new question...)"}
               </p>
+              {question.image && (
+                <img src={question.image} className="w-full" />
+              )}
               <QuizUI
                 question={question}
                 handleSelect={handleAnswer}
