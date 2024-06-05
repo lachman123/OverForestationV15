@@ -71,9 +71,9 @@ export default function KnowledgeGraph({
   const handleCreate = async (prompt: string) => {
     setGenerating(true);
     try {
-      const graph = await getGroqCompletion(
+      const graph = await getGeminiVision(
         prompt,
-        1024,
+        undefined,
         `
         The user will provide you with a concept to be graphed. 
         Generate an array of Nodes and an array of Edges to represent the knowledge graph.
