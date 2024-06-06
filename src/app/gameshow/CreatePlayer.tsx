@@ -4,12 +4,16 @@ import { useState } from "react";
 import supabase from "@/supabase/supabaseClient";
 import Link from "next/link";
 import { generateImageFal } from "@/ai/fal";
+import { useRouter } from "next/navigation";
 
 export default function CreatePlayer() {
   const [playerName, setPlayerName] = useState<string>("");
   const [expertise, setExpertise] = useState<string>("");
   const [player, setPlayer] = useState<Player | null>(null);
   const [creating, setCreating] = useState<boolean>(false);
+
+  const router = useRouter();
+
   const createPlayer = async () => {
     //create an image for the player
     setCreating(true);
@@ -39,8 +43,6 @@ export default function CreatePlayer() {
         .single();
       if (data) {
         setPlayer(data);
-        //save player id to local storage
-        localStorage.setItem("player_id", data.id);
       }
     } catch (e) {
       console.error(e);
@@ -84,13 +86,13 @@ export default function CreatePlayer() {
           <p>{player.player_name}</p>
           <p>{player.player_data}</p>
           <Link
-            href="/gameshow/host"
+            href={`/gameshow/host?player=${player.id}`}
             className="w-full p-2 border rounded-lg hover:shadow bg-white"
           >
             Host a new game
           </Link>
           <Link
-            href="/gameshow/join"
+            href={`/gameshow/join?player=${player.id}`}
             className="w-full p-2 border rounded-lg hover:shadow bg-white"
           >
             Search for a game

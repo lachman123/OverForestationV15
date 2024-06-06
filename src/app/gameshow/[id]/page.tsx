@@ -4,6 +4,7 @@ import supabase from "@/supabase/supabaseClient";
 import { Player, Question, Quiz, QuizUI } from "@/components/QuestionAnswer";
 import PlayerList from "../PlayerList";
 import { questionTime } from "../GameList";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function GameshowPage({ params }: { params: { id: string } }) {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
@@ -13,6 +14,8 @@ export default function GameshowPage({ params }: { params: { id: string } }) {
   const [timer, setTimer] = useState<number>(questionTime);
   const [players, setPlayers] = useState<Player[]>([]);
 
+  const searchParams = useSearchParams();
+  const router = useRouter();
   useEffect(() => {
     const interval = setInterval(() => {
       setTimer((t) => t - 1);
@@ -37,8 +40,8 @@ export default function GameshowPage({ params }: { params: { id: string } }) {
         .single();
       if (data) setQuiz(data);
 
-      //get the player from local storage
-      const playerId = localStorage.getItem("player_id");
+      //get the player from search params
+      const playerId = searchParams.get("player");
       if (playerId) {
         const { data, error } = await supabase
           .from("player")
@@ -66,7 +69,7 @@ export default function GameshowPage({ params }: { params: { id: string } }) {
     getPlayers();
 
     const questionChannel = supabase
-      .channel("players")
+      .channel("players" + player?.id)
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "question" },
@@ -80,6 +83,24 @@ export default function GameshowPage({ params }: { params: { id: string } }) {
               setAnswer("");
               setQuestion(newQuestion as Question);
               setTimer(questionTime);
+            }
+          }
+        }
+      )
+      .subscribe();
+
+    //supscribe to quiz status changes
+    const quizChannel = supabase
+      .channel("quiz" + player?.id)
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "quiz" },
+        (payload) => {
+          const quizUpdate = payload.new;
+          if (quizUpdate.id === quiz.id) {
+            if (quizUpdate.status === "ended") {
+              //game over
+              router.push("/gameshow/gameover?quiz=" + quiz.id);
             }
           }
         }
@@ -140,7 +161,9 @@ export default function GameshowPage({ params }: { params: { id: string } }) {
     const { data: playerUpdate, error: playerError } = await supabase
       .from("player")
       .update({
-        score: player.score + (correct ? question.points : 0),
+        score:
+          player.score +
+          (correct ? Math.floor(question.points * (timer / 15)) : 0),
         // status: correct ? "playing" : "lost",
       })
       .eq("id", player.id)
@@ -151,7 +174,7 @@ export default function GameshowPage({ params }: { params: { id: string } }) {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col items-center justify-between p-8">
       <div className="z-10 max-w-2xl w-full items-start justify-between font-mono text-sm lg:flex lg: flex-col gap-4 ">
         <div className="flex flex-col gap-4 w-full">
           {question ? (
@@ -174,7 +197,9 @@ export default function GameshowPage({ params }: { params: { id: string } }) {
           )}
         </div>
 
-        {players && quiz && <PlayerList initPlayers={players} quiz={quiz} />}
+        {players && quiz && (
+          <PlayerList initPlayers={players} quiz={quiz} playerId={player?.id} />
+        )}
       </div>
     </main>
   );

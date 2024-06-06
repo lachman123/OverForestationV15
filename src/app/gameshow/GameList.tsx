@@ -2,13 +2,14 @@
 import { useEffect, useState } from "react";
 import supabase from "@/supabase/supabaseClient";
 import { Quiz } from "@/components/QuestionAnswer";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const questionTime = 15;
 
 export default function GameList() {
   const [availableGames, setAvailableGames] = useState<Quiz[]>([]);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const getGames = async () => {
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
     const { data, error } = await supabase
@@ -25,15 +26,15 @@ export default function GameList() {
   }, []);
 
   const joinGame = async (i: number) => {
-    //assign the quiz id to the player in supabase
-    const playerId = localStorage.getItem("player_id");
+    //get player from search params
+    const playerId = searchParams.get("player");
     if (!playerId) return router.push("/gameshow");
     const quizId = availableGames[i].id;
     const { error } = await supabase
       .from("player")
       .update({ quiz_id: quizId })
       .eq("id", playerId);
-    router.push(`/gameshow/${quizId}`);
+    router.push(`/gameshow/${quizId}?player=${playerId}`);
   };
 
   return (

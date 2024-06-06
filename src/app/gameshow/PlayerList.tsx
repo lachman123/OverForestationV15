@@ -6,9 +6,11 @@ import supabase from "@/supabase/supabaseClient";
 export default function PlayerList({
   initPlayers,
   quiz,
+  playerId,
 }: {
   initPlayers: Player[];
   quiz: Quiz;
+  playerId?: string;
 }) {
   const [players, setPlayers] = useState<Player[]>(initPlayers);
 
@@ -17,17 +19,17 @@ export default function PlayerList({
   }, [initPlayers]);
 
   useEffect(() => {
-    if (!quiz) return;
+    if (!quiz || !playerId) return;
 
     //get all current players first
     const playerChannel = supabase
-      .channel("players")
+      .channel(`player-${playerId}`)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "player" },
         (payload) => {
           const player = payload.new as any;
-          console.log("got player", player);
+          console.log("got player update:", player);
           if (player.quiz_id === quiz.id)
             setPlayers((p: any[]) => {
               const index = p.findIndex((pl) => pl.id === player.id);
@@ -41,7 +43,7 @@ export default function PlayerList({
     return () => {
       playerChannel.unsubscribe();
     };
-  }, [quiz]);
+  }, [quiz, playerId]);
 
   return (
     <div className="flex flex-col gap-4 p-4 w-full bg-white border rounded-lg">

@@ -6,7 +6,7 @@ import QuestionAnswer, {
   Question,
   Quiz,
 } from "@/components/QuestionAnswer";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import PlayerList from "../PlayerList";
 import { questionTime } from "../GameList";
 import { generateImageFal } from "@/ai/fal";
@@ -20,13 +20,16 @@ export default function GameshowPage() {
   const [player, setPlayer] = useState<Player | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
   const [img, setImg] = useState<string>("");
+  const [questions, setQuestions] = useState<Question[]>([]);
+
   const router = useRouter();
+  const searchparams = useSearchParams();
 
   useEffect(() => {
     //create the quiz
     const createGame = async () => {
-      //get the player
-      const playerId = localStorage.getItem("player_id");
+      //get the player from search params
+      const playerId = searchparams.get("player");
       if (!playerId) return router.push("/gameshow");
       //get the player from local storage
       const { data, error } = await supabase
@@ -86,7 +89,7 @@ export default function GameshowPage() {
       .eq("id", quiz.id)
       .select()
       .single();
-    router.push("/gameshow");
+    router.push("/gameshow/gameover?quiz=" + quiz.id);
   };
 
   const handleAnswer = async (question: Question, answer: string) => {
@@ -108,6 +111,12 @@ export default function GameshowPage() {
   const handleQuestion = async (question: Question) => {
     //save the question to supabase so other players can answer it
     if (!quiz) return;
+
+    //if we have generated 10 questions then stop the game
+    if (questions.length >= 10) {
+      stopGame();
+      return;
+    }
     //generate an image
     let imageUrl = "";
     try {
@@ -153,13 +162,16 @@ export default function GameshowPage() {
         })
         .select()
         .single();
+      if (data) {
+        setQuestions([...questions, data]);
+      }
     }
   };
 
   if (!quiz || !player) return <div>Creating Quiz...</div>;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col items-center justify-between p-8">
       <div className="z-10 max-w-2xl w-full items-start justify-between font-mono text-sm lg:flex lg:flex-col gap-4 ">
         <div className="flex flex-col gap-4 w-full">
           <h1>Hosting {quiz && `${player.player_name}s`} Game</h1>
@@ -181,7 +193,9 @@ export default function GameshowPage() {
           )}
         </div>
 
-        {players && quiz && <PlayerList initPlayers={players} quiz={quiz} />}
+        {players && quiz && (
+          <PlayerList initPlayers={players} quiz={quiz} playerId={player.id} />
+        )}
       </div>
     </main>
   );
