@@ -3,11 +3,13 @@ import Agents from "@/components/Agents";
 import { useState } from "react";
 import Narration from "@/components/Narration";
 import KnowledgeGraph from "@/components/KnowledgeGraph";
-import { Graph, relaxGraph } from "@/components/Graph";
+import { GNode, Graph, relaxGraph } from "@/components/Graph";
 import { getGroqCompletion } from "@/ai/groq";
 import Timeline, { TimelineEvent } from "@/components/Timeline";
 import { jsonText } from "@/ai/prompts";
 import { unstable_noStore as noStore } from "next/cache";
+import { generateImageFal } from "@/ai/fal";
+import Panorama from "@/components/Panorama";
 
 //This is new - just provide a high level goal and groq will figure out how to make agents
 const agentGoal =
@@ -28,6 +30,8 @@ export default function AgentsPage() {
   const [generating, setGenerating] = useState<boolean>(false);
   const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>([]);
   const [currentYear, setCurrentYear] = useState<number>(startYear);
+  const [fetching, setFetching] = useState<boolean>(false);
+  const [img, setImg] = useState<string>("");
 
   const handleResponse = async (newAgents: any[]) => {
     setGenerating(true);
@@ -92,9 +96,26 @@ export default function AgentsPage() {
     setGraph(event.data);
   };
 
+  const handleNodeSelect = async (node: GNode) => {
+    setFetching(true);
+    //improve prompt
+    const newPrompt =
+      "An equirectangular panorama of" + node.name + node.properties.image ??
+      "" + ". Canon EOS 5D Mark IV, 24mm, f/8, 1/250s, ISO 100";
+    //if immersive, use blockade, otherwise just use fal
+    const pano = await generateImageFal(newPrompt);
+    if (pano) setImg(pano);
+    setFetching(false);
+  };
+
   return (
     <main className="">
       <div className="z-10 max-w-lg w-full items-center justify-between font-mono text-sm lg:flex">
+        {img && !playNarration && (
+          <div className="fixed top-0 left-0 w-screen h-screen min-h-screen">
+            <Panorama img={img} immersive={false} />
+          </div>
+        )}
         <Narration
           play={playNarration}
           textToNarrate={JSON.stringify(graph)}
@@ -126,7 +147,11 @@ export default function AgentsPage() {
             </button>
             {generating && <span>Updating Graph...</span>}
             <Timeline events={timelineEvents} onSelect={handleTimelineSelect} />
-            <KnowledgeGraph graph={graph} onUpdate={getGraph} />
+            <KnowledgeGraph
+              graph={graph}
+              onUpdate={getGraph}
+              onSelect={handleNodeSelect}
+            />
             <Agents
               world={graph}
               initAgents={initAgents}

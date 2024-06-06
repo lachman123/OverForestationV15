@@ -10,7 +10,6 @@ import GraphCanvas, {
 import { useEffect, useState } from "react";
 import crypto from "crypto";
 import KeyValueTable from "@/components/KeyValueTable";
-import { jsonText } from "@/ai/prompts";
 import { unstable_noStore as noStore } from "next/cache";
 type EditNode = {
   x: number;
@@ -24,9 +23,11 @@ type EditNode = {
 export default function KnowledgeGraph({
   graph = { nodes: [], edges: [] },
   onUpdate = (graph: Graph) => {},
+  onSelect = (node: GNode) => {},
 }: {
   graph?: Graph;
   onUpdate?: (graph: Graph) => void;
+  onSelect?: (node: GNode) => void;
 }) {
   noStore();
   const [nodes, setNodes] = useState<GNode[]>(graph.nodes);
@@ -79,6 +80,7 @@ export default function KnowledgeGraph({
         Generate an array of Nodes and an array of Edges to represent the knowledge graph.
         Nodes should be in the format {id: string, name: string, x:number, y:number, properties?: any}.
         Properties can be an object with any additional information you want to include about the node.
+        Include an image key in the properties object that describes an image prompt for stable diffusion used to illustrate the concept.
         Edges should be in the format {source:string, target:string, relation:string}.
         Return your response in JSON in the format {nodes:Node[], edges: Edge[]}.`,
         true
@@ -205,6 +207,7 @@ export default function KnowledgeGraph({
   const handleSelect = (node: GNode) => {
     console.log(node);
     setSelectedNode(node);
+    onSelect(node);
   };
 
   const handleRightClick = (

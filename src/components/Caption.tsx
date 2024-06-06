@@ -67,7 +67,7 @@ export default function Caption({
   }, [text]);
 
   return (
-    <div className="absolute bottom-0 left-0 w-screen h-auto flex flex-col items-center justify-end pb-4">
+    <div className="absolute bottom-0 left-0 w-full h-auto flex flex-col items-center justify-end pb-4">
       <div className="flex flex-col items-center justify-center bg-black/50 text-white max-w-lg rounded text-sm p-2 font-semibold">
         <p className="p-2">{text}</p>
         <button className=" bg-black/50 p-2 rounded" onClick={onComplete}>
