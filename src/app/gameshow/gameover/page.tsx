@@ -37,6 +37,8 @@ function Leaderboard() {
     getPlayers();
   }, [quizId]);
 
+  if (!quizId) return <div>Loading...</div>;
+
   return (
     <div className="flex flex-col gap-4 p-4 w-full bg-white border rounded-lg">
       <h1 className="text-lg font-bold py-4">
