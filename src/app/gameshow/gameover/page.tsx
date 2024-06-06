@@ -21,8 +21,9 @@ export default function JoinGamePage() {
 function Leaderboard() {
   const [players, setPlayers] = useState<Player[]>([]);
   const searchParams = useSearchParams();
+  const quizId = searchParams.get("quiz");
+
   useEffect(() => {
-    const quizId = searchParams.get("quiz");
     if (!quizId) return;
     //get all other players
     const getPlayers = async () => {
@@ -34,7 +35,7 @@ function Leaderboard() {
       if (data) setPlayers(data);
     };
     getPlayers();
-  }, [searchParams]);
+  }, [quizId]);
 
   return (
     <div className="flex flex-col gap-4 p-4 w-full bg-white border rounded-lg">
