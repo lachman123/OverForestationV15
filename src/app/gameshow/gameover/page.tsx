@@ -21,13 +21,13 @@ export default function JoinGamePage() {
       if (data) setPlayers(data);
     };
     getPlayers();
-  }, []);
+  }, [searchParams]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-8">
       <div className="z-10 max-w-5xl w-full items-start justify-between font-mono text-sm lg:flex lg:flex-col gap-4 ">
         <h1 className="text-lg font-bold py-4">
-          That's the end of the quiz! {players[0].player_name} Won!
+          {`That's the end of the quiz!`} {players[0].player_name} Won!
         </h1>
         <div className="flex flex-col gap-4 p-4 w-full bg-white border rounded-lg">
           {players.map((player, i) => (
