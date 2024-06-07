@@ -13,43 +13,33 @@ export default function Home() {
         <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-between py-8">
           <div className="flex flex-col items-start gap-4 absolute left-4 top-20 bottom-20 justify-between w-48">
             <Link href="/scenario" legacyBehavior>
-              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-center w-full">
-                <div className="mb-2">
-                  <img src="https://i.imgur.com/VLO3oN5.png" alt="Scenario" className="mx-auto max-h-10" />
-                </div>
-                <p>Scenario</p>
+              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition w-48 flex items-center">
+                <img src="https://i.imgur.com/VLO3oN5.png" alt="Scenario" className="max-h-10" />
+                <p className="ml-4 text-left w-full font-semibold">Scenario</p>
               </a>
             </Link>
             <Link href="/cinematicphotos" legacyBehavior>
-              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-center w-full">
-                <div className="mb-2">
-                  <img src="https://i.imgur.com/ataZSXC.png" alt="Cinematic Photos" className="mx-auto max-h-9" />
-                </div>
-                <p>Cinematic Photos</p>
+              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition w-48 flex items-center">
+                <img src="https://i.imgur.com/ataZSXC.png" alt="Cinematic Photos" className="max-h-9" />
+                <p className="ml-4 text-left w-full font-semibold">Cinematic Photos</p>
               </a>
             </Link>
             <Link href="/developmentblog" legacyBehavior>
-              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-center w-full">
-                <div className="mb-2">
-                  <img src="https://i.imgur.com/AkDjQci.png" alt="Development Blog" className="mx-auto max-h-8" />
-                </div>
-                <p>Development Blog</p>
+              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition w-48 flex items-center">
+                <img src="https://i.imgur.com/AkDjQci.png" alt="Development Blog" className="max-h-9" />
+                <p className="ml-4 text-left w-full font-semibold">Development Blog</p>
               </a>
             </Link>
             <Link href="/drawings" legacyBehavior>
-              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-center w-full">
-                <div className="mb-2">
-                  <img src="https://i.imgur.com/mfiOmKQ.png" alt="Drawings" className="mx-auto max-h-10" />
-                </div>
-                <p>Drawings</p>
+              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition w-48 flex items-center">
+                <img src="https://i.imgur.com/zKW9Mrq.png" alt="Drawings" className="max-h-8" />
+                <p className="ml-4 text-left w-full font-semibold">Drawings</p>
               </a>
             </Link>
             <Link href="/recordedvideo" legacyBehavior>
-              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition text-center w-full">
-                <div className="mb-2">
-                  <img src="https://i.imgur.com/WWel7ro.png" alt="Recorded Video" className="mx-auto max-h-8" />
-                </div>
-                <p>Recorded Video</p>
+              <a className="bg-orange-300 bg-opacity-75 text-black p-4 rounded shadow-lg hover:bg-opacity-50 transition w-48 flex items-center">
+                <img src="https://i.imgur.com/WWel7ro.png" alt="Recorded Video" className="max-h-8" />
+                <p className="ml-4 text-left w-full font-semibold">Recorded Video</p>
               </a>
             </Link>
           </div>
