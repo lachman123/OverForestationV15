@@ -9,7 +9,7 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="relative w-full h-[52vh] bg-cover bg-center" style={{ backgroundImage: "url('https://i.imgur.com/vs4kNWj.jpeg')", backgroundSize: "cover", opacity: 0.9 }}>
+      <section className="relative w-full h-[52vh] bg-cover bg-center" style={{ backgroundImage: "url('https://i.imgur.com/vs4kNWj.jpeg')", backgroundSize: "cover", opacity: 0.8 }}>
         <div className="absolute inset-0 bg-black bg-opacity-0 flex flex-col justify-around py-8 px-10">
           <div className="flex flex-col items-start gap-10">
             <Link href="/scenario" legacyBehavior>
@@ -68,7 +68,7 @@ export default function Home() {
               A world timber shortage is an imminent and pressing issue which is slowly impacting the global construction industry. It is very important as the world relies heavily on timber as a key construction material in houses and buildings, and now more than ever becoming essential in reducing the carbon dioxide in the earth's atmosphere as the global temperature increases. With the increase in timber harvesting and shortage comes the decrease in natural forest size due to logging.
             </p>
           </div>
-          <div className="w-full md:w-2/5">
+          <div className="w-full md:w-2/5" style={{ opacity: 0.8 }}>
             <img src="https://i.imgur.com/wFgE97f.jpeg" alt="Slim Image" className="w-full h-auto object-cover" />
           </div>
         </div>
