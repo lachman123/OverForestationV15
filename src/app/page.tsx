@@ -9,7 +9,7 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="relative w-full h-[52vh] bg-cover bg-center" style={{ backgroundImage: "url('https://i.imgur.com/vs4kNWj.jpeg')", backgroundSize: "cover" }}>
+      <section className="relative w-full h-[52vh] bg-cover bg-center" style={{ backgroundImage: "url(https://i.imgur.com/vs4kNWj.jpeg)", backgroundSize: "cover" }}>
         <div className="absolute inset-0 bg-black bg-opacity-0 flex items-center justify-start px-10">
           <div className="flex flex-col items-start gap-4">
             <Link href="/scenario" legacyBehavior>
