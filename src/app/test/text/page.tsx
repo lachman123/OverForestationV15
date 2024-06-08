@@ -20,7 +20,7 @@ export default function Page() {
     setGemini(null);
     setFirstRun(false);
     const prompt =
-      "Write a short synopsis of a documenary film covering the development of the aquaculture industry in Norway from 2025 to 2060. Include the main themes, key events, and the impact of the industry on the environment and society. The synopsis should be engaging and informative, providing a clear overview of the film's content and themes.";
+      "Write a short synopsis of a documenary film covering the development of the aquaculture industry in Norway from 2025 to 2060. Include the main themes, key events, and the impact of the industry on the environment and society. The synopsis should be engaging and informative, providing a clear overview of the films content and themes.";
     let time = new Date().getTime();
 
     const groqResponse = await getGroqCompletion(
