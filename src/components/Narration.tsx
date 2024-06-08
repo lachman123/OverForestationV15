@@ -34,7 +34,12 @@ export default function Narration({
         undefined,
         captionPrompt
       );
-      setScript(description.split("\n"));
+      //filter empty lines
+      setScript(description.split("\n").filter((line) => line !== ""));
+      console.log(
+        "Generated Script",
+        description.split("\n").filter((line) => line !== "")
+      );
       setCurrentLine(0);
       setCurrentText(description.split("\n")[0]);
       if (onNarration) onNarration(description);

@@ -78,14 +78,13 @@ export default function QuestionAnswer({
             playerData[Math.floor(Math.random() * playerData.length)]
           }`
         }`,
-        32,
-        `You are a gameshow host tasked with creating new themes for questions.
+        64,
+        `
          ${
            playerData
-             ? "The user will provide you with previous question themes and types along with the current theme. Generate a question type for the theme."
-             : "The user will provide you with previous question themes and types and you must create a new theme and appropriate question type."
-         } 
-         Output your response in JSON in the format {theme: string, type: string}`,
+             ? "You are a gameshow host tasked with creating new types for questions for a given theme. The user will provide you with previous question themes and types along with the current theme. Generate a new question type for the theme. Output your response in JSON in the format {theme: string, type: string}"
+             : "You are a gameshow host tasked with creating new themes and types for questions. The user will provide you with previous question themes and types and you must create a new theme and appropriate question type. Output your response in JSON in the format {theme: string, type: string}"
+         }`,
         true
       );
       const themeTypeJSON = JSON.parse(themeType);
@@ -93,11 +92,17 @@ export default function QuestionAnswer({
       console.log(themeTypeJSON);
       //get groq to generate a question
       const generatedQuestion = await getGroqCompletion(
-        `The current theme of a gameshow is ${themeTypeJSON.theme}. The current type of the question is ${themeTypeJSON.type}. Generate a gameshow question for the players to answer.
-        Output your response as a JSON object in the format {theme: string, type: string, question: string, points:number}`,
-        128,
-        `You are a gameshow host tasked with creating gameshow questions.
+        `The current theme of a gameshow is ${
+          themeTypeJSON.theme
+        }. The current type of the question is ${
+          themeTypeJSON.type
+        }. The previous questions were ${pastQuestions
+          .map((q) => q.question)
+          .join(",")}. Generate a new question`,
+        196,
+        `You are a gameshow host tasked with creating new and original gameshow questions.
         The user will provide you with the theme and type of questions to be created. 
+        Questions may be related to the theme in any way.
         Output your response in JSON in the format {question: string, points:number}`,
         true
       );
