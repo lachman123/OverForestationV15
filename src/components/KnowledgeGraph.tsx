@@ -32,7 +32,7 @@ export default function KnowledgeGraph({
   const [nodes, setNodes] = useState<GNode[]>(graph.nodes);
   const [edges, setEdges] = useState<Edge[]>(graph.edges);
   const [concept, setConcept] = useState<string>(
-    "The city of Saskatoon becomes a key part of a large scale forestation project in Canada's northern short grasslands, with a plan to centralize the worlds timber supply in order to supply the worlds timber for construction. There a long timeline of positive and negative outcomes and events throughout the project. Certain agents within the project reach points of conflict and must come to agreement and work together to solve issues arising to the projects continuation. Consider every single possible aspect relating to the project in extreme detail."
+    "The city of Saskatoon becomes a key part of a large scale forestation project in Canadas northern short grasslands, with a plan to centralize the worlds timber supply in order to supply the worlds timber for construction. There a long timeline of positive and negative outcomes and events throughout the project. Certain agents within the project reach points of conflict and must come to agreement and work together to solve issues arising to the projects continuation. Consider every single possible aspect relating to the project in extreme detail."
   );
   const [generating, setGenerating] = useState<boolean>(false);
   const [selectedNode, setSelectedNode] = useState<GNode | null>(null);

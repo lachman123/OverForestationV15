@@ -49,7 +49,7 @@ export default function Agents({
   };
 
   const runAgents = async () => {
-    //don't generate if already running
+    //dont generate if already running
     if (generating) return;
     if (agents.length === 0 && goal) {
       await generateAgents(world, goal);

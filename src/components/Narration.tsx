@@ -5,7 +5,7 @@ import { getGeminiVision } from "@/ai/gemini";
 import Animation from "./Animation";
 //Component that turns anything into a narrated script
 
-//TODO - add a style prop and a next / prev button incase the narration doesn't play
+//TODO - add a style prop and a next / prev button incase the narration doesnt play
 export default function Narration({
   play = true,
   textToNarrate,
