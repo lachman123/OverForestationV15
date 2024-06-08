@@ -49,7 +49,7 @@ export default function Home() {
             Play the simulation to generate a possible story and outcome for the project, as it navigates through unexpected challenges.
           </p>
           <div className="mt-2">
-            <Link href="/agents" legacyBehavior>
+            <Link href="/agents/timeline" legacyBehavior>
               <a className="bg-orange-500 text-white px-8 py-4 rounded hover:bg-yellow-600 transition text-lg">
                 PLAY SIMULATION
               </a>
