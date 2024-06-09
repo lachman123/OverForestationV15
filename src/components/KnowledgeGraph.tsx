@@ -18,8 +18,6 @@ type EditNode = {
   context: GNode[];
 };
 
-//Generates a knowledge graph of a given concept and allows for quering it
-//The onChange event is fired whenever the graph changes for integration with other components
 export default function KnowledgeGraph({
   graph = { nodes: [], edges: [] },
   onUpdate = (graph: Graph) => {},
@@ -41,7 +39,6 @@ export default function KnowledgeGraph({
   const [question, setQuestion] = useState<string>("");
   const [answer, setAnswer] = useState<any>({});
 
-  //listen for changes to the props
   useEffect(() => {
     if (!graph || !graph.nodes || graph.nodes.length == 0) return;
     setNodes(graph.nodes);
@@ -64,11 +61,14 @@ export default function KnowledgeGraph({
       );
       const graphJSON = JSON.parse(response);
       setAnswer(graphJSON);
+      return graphJSON;
     } catch (e) {
       console.error(e);
       setAnswer({});
+      throw e;
     }
   };
+
   const handleCreate = async (prompt: string) => {
     setGenerating(true);
     try {
@@ -216,8 +216,6 @@ export default function KnowledgeGraph({
     onNode: boolean,
     nodes: GNode[]
   ) => {
-    //create a new node at the location of the right click
-    console.log(x, y, onNode, nodes);
     const e = { x, y, context: nodes } as EditNode;
     if (onNode) e.node = nodes[0];
     setEditNode(e);
@@ -228,7 +226,6 @@ export default function KnowledgeGraph({
   };
 
   const handleCreateNode = async (node: GNode, context: GNode[]) => {
-    //connect to graph
     try {
       const newEdges = await getGroqCompletion(
         JSON.stringify({ concept, node, context: editNode }),
@@ -313,10 +310,19 @@ export default function KnowledgeGraph({
     setEditNode(null);
   };
 
+  const askQuestion = async (questionText: string) => {
+    setQuestion(questionText);
+    const response = await handleAsk();
+    if (response) {
+      await integrateAnswer();
+    }
+  };
+
   return (
     <div className="flex flex-col justify-center items-center w-full h-full gap-4 bg-white rounded-lg p-4 border border-black/25">
       <div className="flex justify-between w-full gap-4 flex-wrap">
         <input
+          id="concept-input"
           className="p-2 bg-white rounded-lg border border-black/25 w-full"
           value={concept}
           onChange={(e) => setConcept(e.target.value)}
@@ -384,6 +390,7 @@ export default function KnowledgeGraph({
       )}
       <div className="flex justify-between w-full mb-4 gap-4">
         <input
+          id="question-input"
           className="p-2 bg-white rounded-lg  border border-black/25 w-full"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
@@ -397,11 +404,68 @@ export default function KnowledgeGraph({
       </div>
       <KeyValueTable data={answer} />
       <button
+        id="integrate-answer-button"
         className="p-2 bg-white rounded-lg  border border-black/25 hover:shadow"
         onClick={integrateAnswer}
       >
         Integrate Answer
       </button>
+      <div className="flex flex-wrap gap-2 mt-4">
+        <button
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
+          onClick={() => askQuestion("What are the consequences of centralised timber production?")}
+        >
+          What are the consequences of centralised timber production?
+        </button>
+        <button
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
+          onClick={() => askQuestion("What infrastructure is required for the forestation project to supply the world's timber?")}
+        >
+          What infrastructure is required for the forestation project to supply the world's timber?
+        </button>
+        <button
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
+          onClick={() => askQuestion("What specific standards would be changed to accommodate this forestry project, and what would they be specific to?")}
+        >
+          What specific standards would be changed to accommodate this forestry project, and what would they be specific to?
+        </button>
+        <button
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
+          onClick={() => askQuestion("What are the implications of centralizing the world's timber supply?")}
+        >
+          What are the implications of centralizing the world's timber supply?
+        </button>
+        <button
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
+          onClick={() => askQuestion("Would other countries see this project as a target?")}
+        >
+          Would other countries see this project as a target?
+        </button>
+        <button
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
+          onClick={() => askQuestion("What parties or agents would be against the forestry project?")}
+        >
+          What parties or agents would be against the forestry project?
+        </button>
+        <button
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
+          onClick={() => askQuestion("How would these parties who are against the project effect how the project developes, does this also effect the economy?")}
+        >
+          How would these parties who are against the project effect how the project developes, does this also effect the economy?
+        </button>
+        <button
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
+          onClick={() => askQuestion("What unexpected consequences would arise if the forestry project leaders refuse to listen to those against the forestry project?")}
+        >
+          What unexpected consequences would arise if the forestry project leaders refuse to listen to those against the forestry project?
+        </button>
+        <button
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
+          onClick={() => askQuestion("Could this projects success be made into a template for other countries to develope thier own timber sustainably?")}
+        >
+          Could this projects success be made into a template for other countries to develope thier own timber sustainably?
+        </button>
+      </div>
     </div>
   );
 }
@@ -427,12 +491,10 @@ function EditNodeDialog({
   const [generating, setGenerating] = useState(false);
 
   const handleConfirm = () => {
-    //update the node and close the dialog
     if (editNode.node) {
       editNode.node.name = name;
       editNode.node.properties = properties;
     } else {
-      //add new node
       const id = crypto.randomBytes(4).toString("hex");
       onCreate(
         { id: id, name, x: editNode.x, y: editNode.y, properties },
