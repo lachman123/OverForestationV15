@@ -1,6 +1,5 @@
 import { getGroqCompletion } from "@/ai/groq";
-import { useEffect, useState } from "react";
-import KeyValueTable from "./KeyValueTable";
+import { useState } from "react";
 
 //function that runs multiple agents in parallel that compete over given resources
 export default function Agents({
@@ -20,6 +19,7 @@ export default function Agents({
 }) {
   const [generating, setGenerating] = useState<boolean>(false);
   const [agents, setAgents] = useState<any[]>(initAgents);
+  const [agentNames, setAgentNames] = useState<string[]>([]);
 
   const generateAgents = async (context: any, goal: string) => {
     setGenerating(true);
@@ -40,21 +40,21 @@ export default function Agents({
       console.log(newAgents);
       const agentJSON = JSON.parse(newAgents);
       setAgents(agentJSON.agents);
+      setAgentNames(agentJSON.agents.map((agent: any) => agent.name));
       onUpdate(agentJSON.agents);
+      return agentJSON.agents;
     } catch (e) {
       console.error(e);
       alert("Error generating agents");
+      return [];
+    } finally {
+      setGenerating(false);
     }
-    setGenerating(false);
   };
 
-  const runAgents = async () => {
-    //dont generate if already running
+  const runAgents = async (agents: any[]) => {
+    //don't generate if already running
     if (generating) return;
-    if (agents.length === 0 && goal) {
-      await generateAgents(world, goal);
-      return;
-    }
     setGenerating(true);
     try {
       const newAgents = await getGroqCompletion(
@@ -72,40 +72,40 @@ export default function Agents({
       const agentJSON = JSON.parse(newAgents);
       setAgents(agentJSON.agents);
       onUpdate(agentJSON.agents);
+      return agentJSON.agents;
     } catch (e) {
       console.error(e);
       alert("Error running agents");
+      return [];
+    } finally {
+      setGenerating(false);
     }
+  };
 
-    setGenerating(false);
+  const generateAndRunAgents = async () => {
+    let newAgents = await generateAgents(world, goal ?? "");
+    while (newAgents.length === 0) {
+      newAgents = await generateAgents(world, goal ?? "");
+    }
+    let resultAgents = await runAgents(newAgents);
+    while (resultAgents.length === 0) {
+      resultAgents = await runAgents(newAgents);
+    }
   };
 
   return (
-    <div className="flex flex-col w-full rounded-lg border border-black/25 p-4 ">
+    <div className="flex flex-col w-full rounded-lg border border-black/25 p-4">
       <button
         className="p-2 bg-white rounded-lg my-4 border border-black/25 w-full hover:shadow"
-        onClick={() => generateAgents(world, goal ?? "")}
+        onClick={() => generateAndRunAgents()}
       >
-        {generating ? "Generating..." : "Create New Agents"}
+        {generating ? "Generating..." : "Generate Agents"}
       </button>
-      <button
-        className="p-2 bg-white rounded-lg my-4 border border-black/25 w-full hover:shadow"
-        onClick={() => runAgents()}
-      >
-        {generating ? "Generating..." : "Run Agents"}
-      </button>
-      <div className="flex justify-between w-full flex-wrap">
-        {agents.map((a, i) => (
-          <div
-            key={i}
-            className="flex flex-col rounded-lg bg-white p-2 shadow m-2 w-full"
-          >
-            <span>
-              {generating ? "Generating..." : <KeyValueTable data={a} />}
-            </span>
-          </div>
-        ))}
-      </div>
+      {agentNames.length > 0 && (
+        <p className="text-center mt-4">
+          The agents generated are: {agentNames.join(", ")}
+        </p>
+      )}
     </div>
   );
 }

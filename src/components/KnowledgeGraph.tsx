@@ -388,28 +388,30 @@ export default function KnowledgeGraph({
           onDelete={handleDelete}
         />
       )}
-      <div className="flex justify-between w-full mb-4 gap-4">
-        <input
-          id="question-input"
-          className="p-2 bg-white rounded-lg  border border-black/25 w-full"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-        />
+      <div className="hidden">
+        <div className="flex justify-between w-full mb-4 gap-4">
+          <input
+            id="question-input"
+            className="p-2 bg-white rounded-lg  border border-black/25 w-full"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+          />
+          <button
+            className="p-2 bg-white rounded-lg  border border-black/25 hover:shadow"
+            onClick={handleAsk}
+          >
+            Ask
+          </button>
+        </div>
+        <KeyValueTable data={answer} />
         <button
+          id="integrate-answer-button"
           className="p-2 bg-white rounded-lg  border border-black/25 hover:shadow"
-          onClick={handleAsk}
+          onClick={integrateAnswer}
         >
-          Ask
+          Integrate Answer
         </button>
       </div>
-      <KeyValueTable data={answer} />
-      <button
-        id="integrate-answer-button"
-        className="p-2 bg-white rounded-lg  border border-black/25 hover:shadow"
-        onClick={integrateAnswer}
-      >
-        Integrate Answer
-      </button>
       <div className="flex flex-wrap gap-2 mt-4">
         <button
           className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
