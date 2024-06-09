@@ -388,82 +388,86 @@ export default function KnowledgeGraph({
           onDelete={handleDelete}
         />
       )}
-      <div className="hidden">
-        <div className="flex justify-between w-full mb-4 gap-4">
-          <input
-            id="question-input"
-            className="p-2 bg-white rounded-lg  border border-black/25 w-full"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-          />
-          <button
-            className="p-2 bg-white rounded-lg  border border-black/25 hover:shadow"
-            onClick={handleAsk}
-          >
-            Ask
-          </button>
-        </div>
-        <KeyValueTable data={answer} />
+      <div className="flex flex-wrap gap-2 mt-4 w-full">
         <button
-          id="integrate-answer-button"
-          className="p-2 bg-white rounded-lg  border border-black/25 hover:shadow"
-          onClick={integrateAnswer}
-        >
-          Integrate Answer
-        </button>
-      </div>
-      <div className="flex flex-wrap gap-2 mt-4">
-        <button
-          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
-          onClick={() => askQuestion("What are the consequences of centralised timber production?")}
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
+          onClick={() =>
+            askQuestion("What are the consequences of centralised timber production?")
+          }
         >
           What are the consequences of centralised timber production?
         </button>
         <button
-          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
-          onClick={() => askQuestion("What infrastructure is required for the forestation project to supply the world's timber?")}
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
+          onClick={() =>
+            askQuestion(
+              "What infrastructure is required for the forestation project to supply the world's timber?"
+            )
+          }
         >
-          { `What infrastructure is required for the forestation project to supply the world's timber?` }
+          What infrastructure is required for the forestation project to supply the world's timber?
         </button>
         <button
-          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
-          onClick={() => askQuestion("What specific standards would be changed to accommodate this forestry project, and what would they be specific to?")}
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
+          onClick={() =>
+            askQuestion(
+              "What specific standards would be changed to accommodate this forestry project, and what would they be specific to?"
+            )
+          }
         >
           What specific standards would be changed to accommodate this forestry project, and what would they be specific to?
         </button>
         <button
-          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
-          onClick={() => askQuestion("What are the implications of centralizing the world's timber supply?")}
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
+          onClick={() =>
+            askQuestion(
+              "What are the implications of centralizing the world's timber supply?"
+            )
+          }
         >
-          { `What are the implications of centralizing the world's timber supply? `}
+          What are the implications of centralizing the world's timber supply?
         </button>
         <button
-          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
           onClick={() => askQuestion("Would other countries see this project as a target?")}
         >
           Would other countries see this project as a target?
         </button>
         <button
-          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
-          onClick={() => askQuestion("What parties or agents would be against the forestry project?")}
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
+          onClick={() =>
+            askQuestion("What parties or agents would be against the forestry project?")
+          }
         >
           What parties or agents would be against the forestry project?
         </button>
         <button
-          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
-          onClick={() => askQuestion("How would these parties who are against the project effect how the project developes, does this also effect the economy?")}
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
+          onClick={() =>
+            askQuestion(
+              "How would these parties who are against the project effect how the project developes, does this also effect the economy?"
+            )
+          }
         >
           How would these parties who are against the project effect how the project developes, does this also effect the economy?
         </button>
         <button
-          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
-          onClick={() => askQuestion("What unexpected consequences would arise if the forestry project leaders refuse to listen to those against the forestry project?")}
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
+          onClick={() =>
+            askQuestion(
+              "What unexpected consequences would arise if the forestry project leaders refuse to listen to those against the forestry project?"
+            )
+          }
         >
           What unexpected consequences would arise if the forestry project leaders refuse to listen to those against the forestry project?
         </button>
         <button
-          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
-          onClick={() => askQuestion("Could this projects success be made into a template for other countries to develope thier own timber sustainably?")}
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
+          onClick={() =>
+            askQuestion(
+              "Could this projects success be made into a template for other countries to develope thier own timber sustainably?"
+            )
+          }
         >
           Could this projects success be made into a template for other countries to develope thier own timber sustainably?
         </button>

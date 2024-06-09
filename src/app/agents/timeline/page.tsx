@@ -10,18 +10,14 @@ import { jsonText } from "@/ai/prompts";
 import { unstable_noStore as noStore } from "next/cache";
 import { generateImageFal } from "@/ai/fal";
 import Panorama from "@/components/Panorama";
+import Link from "next/link";
 
-//This is new - just provide a high level goal and groq will figure out how to make agents
 const agentGoal =
   "Build and expand a forestation project in Canadas northern short grasslands, with the goal of supplying the worlds construction timber by 2060, whilst resolving unexpected conflicts and events between agents";
-//set your agents here. If you leave this empty then Groq creates some for you based on your graph and the goal above.
 const initAgents: any = [];
-//if this is true, agents add nodes to the graph as well as update implementation data. Its slower.
 const addNodes = true;
-//start year
 const startYear = 2024;
 
-//Demo of running multiple agents that all compete for resources
 export default function AgentsPage() {
   noStore();
   const [graph, setGraph] = useState<Graph>({ nodes: [], edges: [] });
@@ -35,11 +31,9 @@ export default function AgentsPage() {
 
   const handleResponse = async (newAgents: any[]) => {
     setGenerating(true);
-    //now we have the new agents, we can implement our logic for how to update the graph.
     try {
       const requestString = `${JSON.stringify({ graph, newAgents })}`;
       console.log(requestString);
-      //just refine implementation
       const newStates = await getGroqCompletion(
         requestString,
         1024,
@@ -54,7 +48,6 @@ export default function AgentsPage() {
       );
       const graphJSON = JSON.parse(newStates);
       console.log(graphJSON);
-      //iterate over state updates
       const updatedNodes = [...graph.nodes];
       for (const [id, state] of Object.entries(graphJSON.newStates)) {
         const node: any = updatedNodes.find((n) => n.id === id);
@@ -69,7 +62,6 @@ export default function AgentsPage() {
 
       setGraph(newGraph);
       setCurrentYear((c) => c + 5);
-      //add to timeline
       timelineEvents.push({
         time: currentYear,
         title: currentYear.toString(),
@@ -98,11 +90,9 @@ export default function AgentsPage() {
 
   const handleNodeSelect = async (node: GNode) => {
     setFetching(true);
-    //improve prompt
     const newPrompt =
       "An equirectangular panorama of" + node.name + node.properties.image ??
       "" + ". Canon EOS 5D Mark IV, 24mm, f/8, 1/250s, ISO 100";
-    //if immersive, use blockade, otherwise just use fal
     const pano = await generateImageFal(newPrompt);
     if (pano) setImg(pano);
     setFetching(false);
@@ -123,16 +113,22 @@ export default function AgentsPage() {
           imagePrompt={`You are an expert photographer describing images to the blind. You pick a some words relating to a forestry project in canada and the issues that arise from a large scale forestry project, such as issues of resolving issues between different parties affected by the project including environmentalists, local communities, indigenous communities, land owners, the government, stakeholders, rival timber suppliers, or showing the progress of a large scale timber forestation project in Canada. The scenes should show a point of view, and be from a lower perspective such as from the view from someones eyes in the scene. Other image ideas can include forestation project related scenes for example if the interview script talks about resolving an issue of environmentalists blocking a road to stop logging trucks, you should show that. Dont describe an interview or an image of a person talking. You describe a scene provided by the user in vivid detail. Describe the scene as if you were painting a picture with words. Start your description with: "A photograph of" then use keywords and simple phrases separated by commas. End your description with: Canon EOS 5D Mark IV, 24mm, f/8, 1/250s, ISO 100, 2019`}
         />
         <div id="Agent UI" className="flex flex-col p-8 z-50">
-          <button
-            className="p-2 border rounded-lg bg-white/25 mb-2"
-            onClick={() => setShowUI(!showUI)}
-          >
-            {showUI ? "Hide UI" : "Show UI"}
-          </button>
+          <div className="flex justify-between w-full items-center mb-4">
+            <Link href="/" legacyBehavior>
+              <a className="text-black text-lg">Back</a>
+            </Link>
+            <button
+              className="p-2 border rounded-lg bg-white/25"
+              onClick={() => setShowUI(!showUI)}
+            >
+              {showUI ? "Hide UI" : "Show UI"}
+            </button>
+          </div>
           <div
             className={`${
               showUI ? "flex" : "hidden"
-            }  flex-col w-full bg-white p-4 rounded-lg gap-4`}
+            } flex-col w-full bg-orange-200 bg-opacity-75 p-4 rounded-lg gap-4`}
+            style={{ maxWidth: "700px", margin: "auto" }}
           >
             <button
               className="p-2 rounded-lg border bg-white shadow"
