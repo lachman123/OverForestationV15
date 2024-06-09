@@ -65,8 +65,8 @@ export default function Home() {
           <div className="w-full md:w-3/5 text-left px-10">
             <h2 className="text-2xl font-semibold mb-4">The Issue of Timber Shortage</h2>
             <p className="text-black text-lg">
-              A world timber shortage is an imminent and pressing issue which is slowly impacting the global construction industry. It is very important as the world relies heavily on timber as a key construction material in houses and buildings, and now more than ever becoming essential in reducing the carbon dioxide in the earth's atmosphere as the global temperature increases. With the increase in timber harvesting and shortage comes the decrease in natural forest size due to logging.
-            </p>
+             { `A world timber shortage is an imminent and pressing issue which is slowly impacting the global construction industry. It is very important as the world relies heavily on timber as a key construction material in houses and buildings, and now more than ever becoming essential in reducing the carbon dioxide in the earth's atmosphere as the global temperature increases. With the increase in timber harvesting and shortage comes the decrease in natural forest size due to logging.` 
+          } </p>
           </div>
           <div className="w-full md:w-2/5" style={{ opacity: 0.8 }}>
             <img src="https://i.imgur.com/wFgE97f.jpeg" alt="Slim Image" className="w-full h-auto object-cover" />

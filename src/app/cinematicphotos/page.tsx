@@ -29,8 +29,8 @@ export default function CinematicPhotos() {
           <div className="mb-8">
             <img src="https://i.imgur.com/R79NWt2.jpeg" alt="Image 2" className="w-full h-auto" />
             <p className="text-center text-black mt-4 px-4">
-              An outcome of centralizing the world's timber supply is navigating and negotiating the transport methods facilitating the export of timber from Canada. A potential route would begin with the increased interest being featured in timber transport routes at the proposed dock on barges transferring the timber along Canada’s East. The eastern system passing through the Great Lakes and past Quebec, would then see an intermodal transport network using cargo ships as pictured pass through the Atlantic to new shipping routes in the North Atlantic Ocean. Freight expenses will vary depending on the climate but the increased cost during winter months for the use of ice breaking barges.
-            </p>
+              { `An outcome of centralizing the world's timber supply is navigating and negotiating the transport methods facilitating the export of timber from Canada. A potential route would begin with the increased interest being featured in timber transport routes at the proposed dock on barges transferring the timber along Canada’s East. The eastern system passing through the Great Lakes and past Quebec, would then see an intermodal transport network using cargo ships as pictured pass through the Atlantic to new shipping routes in the North Atlantic Ocean. Freight expenses will vary depending on the climate but the increased cost during winter months for the use of ice breaking barges.`
+          } </p>
           </div>
 
           <div className="mb-8" style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>

@@ -44,8 +44,8 @@ export default function DevelopmentBlog() {
           <div className="mb-8 w-full md:w-3/4 bg-gray-200 p-6 rounded">
             <h2 className="text-2xl font-semibold mb-4">Successes and Challenges</h2>
             <p className="text-black text-lg mb-4">
-              We have successfully generated a realistic situation where political and economic issues play a part in the formation and direction of the forestry project's outcome. The project developed in a nonlinear function, with external parties around the world impacting the timber market. This allowed for Canada's economy to be affected negatively, demonstrating the interconnectedness of things. However, as the project developed, it became harder to retain or direct it in areas we wanted. Often, the most concerning issue took priority, with our agents working towards and around that.
-            </p>
+              { `We have successfully generated a realistic situation where political and economic issues play a part in the formation and direction of the forestry project's outcome. The project developed in a nonlinear function, with external parties around the world impacting the timber market. This allowed for Canada's economy to be affected negatively, demonstrating the interconnectedness of things. However, as the project developed, it became harder to retain or direct it in areas we wanted. Often, the most concerning issue took priority, with our agents working towards and around that.`
+            } </p>
           </div>
 
           <div className="mb-8 w-full md:w-3/4">
