@@ -423,7 +423,7 @@ export default function KnowledgeGraph({
           className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
           onClick={() => askQuestion("What infrastructure is required for the forestation project to supply the world's timber?")}
         >
-          What infrastructure is required for the forestation project to supply the world's timber?
+          { `What infrastructure is required for the forestation project to supply the world's timber?` }
         </button>
         <button
           className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
@@ -435,7 +435,7 @@ export default function KnowledgeGraph({
           className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
           onClick={() => askQuestion("What are the implications of centralizing the world's timber supply?")}
         >
-          What are the implications of centralizing the world's timber supply?
+          { `What are the implications of centralizing the world's timber supply? `}
         </button>
         <button
           className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
