@@ -24,7 +24,28 @@ export default function DrawingsPage() {
             <p className="text-lg mb-4">
               Welcome to the drawings page. Here we will share sketches, drafts, and blueprints related to our projects. Stay tuned for more!
             </p>
-            <div className="text-gray-600">More content coming soon...</div>
+          </div>
+
+          {/* Full-width images stacked on top of each other */}
+          <div className="mb-8">
+            <img src="https://i.imgur.com/7MjoOiC.jpeg" alt="Drawing 1" className="w-full h-auto" />
+          </div>
+          <div className="mb-8">
+            <img src="https://i.imgur.com/mDwZxzJ.jpeg" alt="Drawing 2" className="w-full h-auto" />
+          </div>
+          <div className="mb-8">
+            <img src="https://i.imgur.com/pVA3cXq.jpeg" alt="Drawing 3" className="w-full h-auto" />
+          </div>
+          
+          {/* Smaller 4th image and two stacked images on the right */}
+          <div className="mb-8" style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+            <div style={{ flex: '1 1 0' }}>
+              <img src="https://i.imgur.com/X7LTCa4.jpeg" alt="Drawing 4" className="w-full h-auto" />
+            </div>
+            <div style={{ flex: '1 1 0', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <img src="https://i.imgur.com/newImage1.jpeg" alt="New Image 1" className="w-full h-auto" />
+              <img src="https://i.imgur.com/newImage2.jpeg" alt="New Image 2" className="w-full h-auto" />
+            </div>
           </div>
         </div>
       </section>

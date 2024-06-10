@@ -102,7 +102,7 @@ export default function CinematicPhotos() {
             </div>
             <div style={{ flex: '1 1 0' }}>
               <img src="https://i.imgur.com/BFp9K3g.jpeg" alt="Small Image 2" className="w-full h-auto" />
-              <p className="text-center text-black mt-4 px-4">These protests occurring closer to town are more from local residents who are within water rationing zones and feel a sense of inequality. Some individuals are facing the direct consequences of the project, whilst others are unaffected, forcing people to speak up to make change. Local cousins may be on board with the intentions of the project that they see these minority people as necessary collateral damage, but the people don't see it that way. </p>
+              <p className="text-center text-black mt-4 px-4">{ `These protests occurring closer to town are more from local residents who are within water rationing zones and feel a sense of inequality. Some individuals are facing the direct consequences of the project, whilst others are unaffected, forcing people to speak up to make change. Local cousins may be on board with the intentions of the project that they see these minority people as necessary collateral damage, but the people don't see it that way.`} </p>
             </div>
           </div>
         </div>
