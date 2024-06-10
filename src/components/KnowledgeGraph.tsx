@@ -319,51 +319,19 @@ export default function KnowledgeGraph({
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full h-full gap-4 bg-white rounded-lg p-4 border border-black/25">
+    <div className="flex flex-col justify-center items-center w-full h-full gap-4 bg-[#FFF7F0] bg-opacity-80 rounded-lg p-4 border border-black/25">
       <div className="flex justify-between w-full gap-4 flex-wrap">
-        <input
-          id="concept-input"
-          className="p-2 bg-white rounded-lg border border-black/25 w-full"
-          value={concept}
-          onChange={(e) => setConcept(e.target.value)}
-        />
         <button
-          className="p-2 bg-white rounded-lg  border border-black/25 hover:shadow"
+          className="p-2 bg-gray-200 rounded-lg  border border-black/25 hover:shadow"
           onClick={() => handleCreate(concept)}
         >
           {generating ? "Generating..." : "Create New Graph"}
         </button>
         <button
-          className="p-2 bg-white rounded-lg  border border-black/25 hover:shadow"
-          onClick={() => handleMerge()}
-        >
-          {generating ? "Generating..." : "Merge Concept"}
-        </button>
-        <button
-          className="p-2 bg-white rounded-lg  border border-black/25 hover:shadow"
-          onClick={() => handleRefine()}
-        >
-          {generating ? "Generating..." : "Add Nodes"}
-        </button>
-        <button
-          className="p-2 bg-white rounded-lg border border-black/25 hover:shadow"
+          className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow"
           onClick={() => handleCreateProject()}
         >
           {generating ? "Generating..." : "Create Project"}
-        </button>
-      </div>
-      <div className="flex justify-between w-full gap-4 flex-wrap">
-        <button
-          className="p-2 bg-white rounded-lg hover:shadow"
-          onClick={() => saveGraph()}
-        >
-          Save Graph
-        </button>
-        <button
-          className="p-2 bg-white rounded-lg hover:shadow"
-          onClick={() => loadGraph()}
-        >
-          Load Graph
         </button>
       </div>
       {selectedNode && (
@@ -388,44 +356,30 @@ export default function KnowledgeGraph({
           onDelete={handleDelete}
         />
       )}
-      <div className="flex flex-wrap gap-2 mt-4 w-full">
+      <div className="flex flex-wrap gap-2 mt-4">
         <button
           className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
-          onClick={() =>
-            askQuestion("What are the consequences of centralised timber production?")
-          }
+          onClick={() => askQuestion("What are the consequences of centralised timber production?")}
         >
           What are the consequences of centralised timber production?
         </button>
         <button
           className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
-          onClick={() =>
-            askQuestion(
-              "What infrastructure is required for the forestation project to supply the world's timber?"
-            )
-          }
+          onClick={() => askQuestion("What infrastructure is required for the forestation project to supply the world's timber?")}
         >
-          What infrastructure is required for the forestation project to supply the world's timber?
+          { `What infrastructure is required for the forestation project to supply the world's timber?` }
         </button>
         <button
           className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
-          onClick={() =>
-            askQuestion(
-              "What specific standards would be changed to accommodate this forestry project, and what would they be specific to?"
-            )
-          }
+          onClick={() => askQuestion("What specific standards would be changed to accommodate this forestry project, and what would they be specific to?")}
         >
           What specific standards would be changed to accommodate this forestry project, and what would they be specific to?
         </button>
         <button
           className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
-          onClick={() =>
-            askQuestion(
-              "What are the implications of centralizing the world's timber supply?"
-            )
-          }
+          onClick={() => askQuestion("What are the implications of centralizing the world's timber supply?")}
         >
-          What are the implications of centralizing the world's timber supply?
+          { `What are the implications of centralizing the world's timber supply?` }
         </button>
         <button
           className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
@@ -435,39 +389,25 @@ export default function KnowledgeGraph({
         </button>
         <button
           className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
-          onClick={() =>
-            askQuestion("What parties or agents would be against the forestry project?")
-          }
+          onClick={() => askQuestion("What parties or agents would be against the forestry project?")}
         >
           What parties or agents would be against the forestry project?
         </button>
         <button
           className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
-          onClick={() =>
-            askQuestion(
-              "How would these parties who are against the project effect how the project developes, does this also effect the economy?"
-            )
-          }
+          onClick={() => askQuestion("How would these parties who are against the project effect how the project developes, does this also effect the economy?")}
         >
           How would these parties who are against the project effect how the project developes, does this also effect the economy?
         </button>
         <button
           className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
-          onClick={() =>
-            askQuestion(
-              "What unexpected consequences would arise if the forestry project leaders refuse to listen to those against the forestry project?"
-            )
-          }
+          onClick={() => askQuestion("What unexpected consequences would arise if the forestry project leaders refuse to listen to those against the forestry project?")}
         >
           What unexpected consequences would arise if the forestry project leaders refuse to listen to those against the forestry project?
         </button>
         <button
           className="p-2 bg-gray-200 rounded-lg border border-black/25 hover:shadow w-full text-center"
-          onClick={() =>
-            askQuestion(
-              "Could this projects success be made into a template for other countries to develope thier own timber sustainably?"
-            )
-          }
+          onClick={() => askQuestion("Could this projects success be made into a template for other countries to develope thier own timber sustainably?")}
         >
           Could this projects success be made into a template for other countries to develope thier own timber sustainably?
         </button>

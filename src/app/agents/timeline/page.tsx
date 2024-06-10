@@ -131,7 +131,7 @@ export default function AgentsPage() {
             style={{ maxWidth: "700px", margin: "auto" }}
           >
             <button
-              className="p-2 rounded-lg border bg-white shadow"
+              className="p-2 rounded-lg border bg-[#d1d5db] shadow"
               onClick={() => setPlayNarration(!playNarration)}
             >
               {playNarration ? "Stop Narrating" : "Start Narrating"}
