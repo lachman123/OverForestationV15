@@ -75,11 +75,8 @@ export default function Home() {
       </section>
 
       <footer className="py-12">
-        <div className="container mx-auto text-center">
-          <p className="text-lg mb-6">
-            
-          </p>
-          <p className="text-sm text-gray-600 mt-4">Julian Pinneri | Level 7 | S3840517</p>
+        <div className="container mx-auto flex justify-center">
+          <p className="text-sm text-gray-600 mt-4 mr-8">Julian Pinneri | Level 7 | S3840517</p>
           <p className="text-sm text-gray-600 mt-4">Lachlan May | Level 7 | S3783906</p>
         </div>
       </footer>

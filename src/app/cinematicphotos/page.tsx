@@ -63,15 +63,54 @@ export default function CinematicPhotos() {
           <p className="text-center text-black mt-4 px-4 mb-8">
             An unforeseen issue within the project would be addressing the initial concerns and skepticism towards the project from parties such as environmentalists, indigenous communities, communities, and workers, and any other parties opposing to the forestry project. In order for the forestry project to progress and be successful, meetings must take place to resolve gaps and work together to ensure all parties are happy. Meaningful results and a better relationship between affected by the project and the project leaders, as well as community bonding activities for the local communities to have a positive view of the project.
           </p>
+
+          {/* New images with captions */}
+          <div className="mb-8" style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+            <div style={{ flex: '1 1 0' }}>
+              <img src="https://i.imgur.com/uW4UKEA.jpeg" alt="New Image 1" className="w-full h-auto" style={{ height: '595px', objectFit: 'cover' }} />
+              <p className="text-center text-black mt-4 px-4">Local residents within water rationing zones are forced to change their lifestyle, as they are forced to resort to irrigation systems in their own home to abide by regulations and afford to live as water bills skyrocket due to water scarcity. This may cause an increase in health concerns and forth health insurance to increase. Residents who may have been unprepared for these increased fees may be left uncovered and at risk, leaving a sour taste towards the project. They may believe the project leaders are putting its local residents as a low priority.</p>
+            </div>
+            <div style={{ flex: '1 1 0' }}>
+              <img src="https://i.imgur.com/zqvqisB.jpeg" alt="New Image 2" className="w-full h-auto" style={{ height: '595px', objectFit: 'cover' }} />
+              <p className="text-center text-black mt-4 px-4">The transfer facility at the Port of Thunder Bay efficiently moves timber from rail to barge, leveraging its location and advanced infrastructure. It features specialized rail unloading systems, ample storage and staging areas, and sustainable barge loading docks. The facility incorporates energy-efficient technologies and environmental controls, ensuring minimal impact. Real-time monitoring and automated systems enhance operational efficiency and safety. Overall, this facility is crucial for seamless, cost-effective, and environmentally responsible timber transport to global markets.</p>
+            </div>
+          </div>
+
+          <div className="mb-8" style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+            <div style={{ flex: '1 1 0' }}>
+              <img src="https://i.imgur.com/OkdVWAo.jpeg" alt="New Image 3" className="w-full h-auto" style={{ height: '595px', objectFit: 'cover' }} />
+              <p className="text-center text-black mt-4 px-4">Advanced cranes with X and Y axis movement, equipped with AI systems, unload timber from barges and place it precisely on the dock. The timber is then organized into containers and loaded onto cargo ships, with the AI ensuring perfect balance and avoiding overloading. This advanced technology enhances efficiency and safety. Robust security measures, including surveillance and controlled access, ensure the timber and infrastructure are well-protected.</p>
+            </div>
+            <div style={{ flex: '1 1 0' }}>
+              <img src="https://i.imgur.com/9Hih2aC.jpeg" alt="New Image 4" className="w-full h-auto" style={{ height: '595px', objectFit: 'cover' }} />
+              <p className="text-center text-black mt-4 px-4">Caption for new image 4</p>
+            </div>
+          </div>
+
+          <div className="mb-8" style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+            <div style={{ flex: '1 1 0' }}>
+              <img src="https://i.imgur.com/lEragGq.jpeg" alt="New Image 5" className="w-full h-auto" style={{ height: '800px', objectFit: 'cover' }} />
+              <p className="text-center text-black mt-4 px-4">Caption for new image 5</p>
+            </div>
+          </div>
+          
+          {/* Smaller images with captions */}
+          <div className="mb-8" style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+            <div style={{ flex: '1 1 0' }}>
+              <img src="https://i.imgur.com/8e9ZTtf.jpeg" alt="Small Image 1" className="w-full h-auto" />
+              <p className="text-center text-black mt-4 px-4">Environmentalists are protesting against the project, causing disruptions for consumers, disruptions to freight companies, and disruptions for local authorities to ensure community safety. </p>
+            </div>
+            <div style={{ flex: '1 1 0' }}>
+              <img src="https://i.imgur.com/BFp9K3g.jpeg" alt="Small Image 2" className="w-full h-auto" />
+              <p className="text-center text-black mt-4 px-4">These protests occurring closer to town are more from local residents who are within water rationing zones and feel a sense of inequality. Some individuals are facing the direct consequences of the project, whilst others are unaffected, forcing people to speak up to make change. Local cousins may be on board with the intentions of the project that they see these minority people as necessary collateral damage, but the people don't see it that way. </p>
+            </div>
+          </div>
         </div>
       </section>
 
       <footer className="py-12">
-        <div className="container mx-auto text-center">
-          <p className="text-lg mb-6">
-            
-          </p>
-          <p className="text-sm text-gray-600 mt-4">Julian Pinneri | Level 7 | S3840517</p>
+        <div className="container mx-auto flex justify-center">
+          <p className="text-sm text-gray-600 mt-4 mr-8">Julian Pinneri | Level 7 | S3840517</p>
           <p className="text-sm text-gray-600 mt-4">Lachlan May | Level 7 | S3783906</p>
         </div>
       </footer>
