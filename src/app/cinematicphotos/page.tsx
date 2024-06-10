@@ -66,12 +66,13 @@ export default function CinematicPhotos() {
         </div>
       </section>
 
-      <footer className="bg-white py-12 shadow-inner">
+      <footer className="py-12">
         <div className="container mx-auto text-center">
           <p className="text-lg mb-6">
-            I enjoy working in both physical and digital spaces, collaborating with multiple design disciplines to create unique interactions and experiences. I work to synthesize and develop designs through research and prototyping.
+            
           </p>
-          <p className="text-sm text-gray-600">LinkedIn | Resume | Email</p>
+          <p className="text-sm text-gray-600 mt-4">Julian Pinneri | Level 7 | S3840517</p>
+          <p className="text-sm text-gray-600 mt-4">Lachlan May | Level 7 | S3783906</p>
         </div>
       </footer>
     </main>

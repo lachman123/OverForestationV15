@@ -124,5 +124,6 @@ export default function RecordedVideoPage() {
         </div>
       </div>
     </main>
+    
   );
 }
