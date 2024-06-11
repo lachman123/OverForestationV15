@@ -76,23 +76,31 @@ export default function CinematicPhotos() {
             </div>
           </div>
 
-          <div className="mb-8" style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-            <div style={{ flex: '1 1 0' }}>
-              <img src="https://i.imgur.com/OkdVWAo.jpeg" alt="New Image 3" className="w-full h-auto" style={{ height: '595px', objectFit: 'cover' }} />
-              <p className="text-center text-black mt-4 px-4">Advanced cranes with X and Y axis movement, equipped with AI systems, unload timber from barges and place it precisely on the dock. The timber is then organized into containers and loaded onto cargo ships, with the AI ensuring perfect balance and avoiding overloading. This advanced technology enhances efficiency and safety. Robust security measures, including surveillance and controlled access, ensure the timber and infrastructure are well-protected.</p>
-            </div>
-            <div style={{ flex: '1 1 0' }}>
-              <img src="https://i.imgur.com/9Hih2aC.jpeg" alt="New Image 4" className="w-full h-auto" style={{ height: '595px', objectFit: 'cover' }} />
-              <p className="text-center text-black mt-4 px-4">Caption for new image 4</p>
-            </div>
-          </div>
+          <div className="mb-8">
+  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+    <div style={{ flex: '1 1 0' }}>
+      <img src="https://i.imgur.com/OkdVWAo.jpeg" alt="New Image 3" className="w-full h-auto" style={{ height: '595px', objectFit: 'cover' }} />
+    </div>
+    <div style={{ flex: '1 1 0' }}>
+      <img src="https://i.imgur.com/9Hih2aC.jpeg" alt="New Image 4" className="w-full h-auto" style={{ height: '595px', objectFit: 'cover' }} />
+    </div>
+  </div>
+  <p className="text-center text-black mt-4 px-4 mb-8">
+    Advanced cranes with X and Y axis movement, equipped with AI systems, unload timber from barges and place it precisely on the dock. The timber is then organized into containers and loaded onto cargo ships, with the AI ensuring perfect balance and avoiding overloading. This advanced technology enhances efficiency and safety. Robust security measures, including surveillance and controlled access, ensure the timber and infrastructure are well-protected.
+  </p>
+</div>
 
-          <div className="mb-8" style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-            <div style={{ flex: '1 1 0' }}>
-              <img src="https://i.imgur.com/lEragGq.jpeg" alt="New Image 5" className="w-full h-auto" style={{ height: '800px', objectFit: 'cover' }} />
-              <p className="text-center text-black mt-4 px-4">Caption for new image 5</p>
-            </div>
-          </div>
+
+<div className="mb-8">
+  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+    <div style={{ flex: '1 1 0' }}>
+      <img src="https://i.imgur.com/lEragGq.jpeg" alt="New Image 5" className="w-full h-auto" style={{ height: '800px', objectFit: 'cover' }} />
+    </div>
+  </div>
+  <p className="text-center text-black mt-4 px-4 mb-8">
+    Due to the reliability of this project with stakeholders, the timely distribution of timber is essential. These railway lines that connect directly to the transfer ports and docking facilities are exposed to protest disruptions and potential external sabotages due to competing interests. This is a weakness of the process that would need to be addressed with time and further development.
+  </p>
+</div>
           
           {/* Smaller images with captions */}
           <div className="mb-8" style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
