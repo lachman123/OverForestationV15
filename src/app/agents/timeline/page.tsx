@@ -124,6 +124,11 @@ export default function AgentsPage() {
               {showUI ? "Hide UI" : "Show UI"}
             </button>
           </div>
+          <div>
+            <p><strong><u>NOTE:</u></strong></p>
+            <p>Please allow the graph some time to generate, <strong>IT WILL WORK</strong>.</p>
+            <p>If the graph has not generated within a minute or two, you may need to click <strong><u>Create New Graph</u></strong> again due to the complexity of the engine.</p>
+          </div>
           <div
             className={`${
               showUI ? "flex" : "hidden"
