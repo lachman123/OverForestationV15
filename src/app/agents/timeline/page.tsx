@@ -11,13 +11,11 @@ import { unstable_noStore as noStore } from "next/cache";
 import { generateImageFal } from "@/ai/fal";
 import Panorama from "@/components/Panorama";
 import Link from "next/link";
-
 const agentGoal =
   "Build and expand a forestation project in Canadas northern short grasslands, with the goal of supplying the worlds construction timber by 2060, whilst resolving unexpected conflicts and events between agents";
 const initAgents: any = [];
 const addNodes = true;
 const startYear = 2024;
-
 export default function AgentsPage() {
   noStore();
   const [graph, setGraph] = useState<Graph>({ nodes: [], edges: [] });
@@ -28,7 +26,6 @@ export default function AgentsPage() {
   const [currentYear, setCurrentYear] = useState<number>(startYear);
   const [fetching, setFetching] = useState<boolean>(false);
   const [img, setImg] = useState<string>("");
-
   const handleResponse = async (newAgents: any[]) => {
     setGenerating(true);
     try {
@@ -59,7 +56,6 @@ export default function AgentsPage() {
         edges
       );
       const newGraph = { nodes: relaxed, edges: edges };
-
       setGraph(newGraph);
       setCurrentYear((c) => c + 5);
       timelineEvents.push({
@@ -73,7 +69,6 @@ export default function AgentsPage() {
     }
     setGenerating(false);
   };
-
   const getGraph = (graph: Graph) => {
     setGraph(graph);
     setCurrentYear((c) => c + 2);
@@ -83,11 +78,9 @@ export default function AgentsPage() {
       data: graph,
     });
   };
-
   const handleTimelineSelect = (event: TimelineEvent) => {
     setGraph(event.data);
   };
-
   const handleNodeSelect = async (node: GNode) => {
     setFetching(true);
     const newPrompt =
@@ -97,7 +90,6 @@ export default function AgentsPage() {
     if (pano) setImg(pano);
     setFetching(false);
   };
-
   return (
     <main className="">
       <div className="z-10 max-w-lg w-full items-center justify-between font-mono text-sm lg:flex">
@@ -131,9 +123,9 @@ export default function AgentsPage() {
             <br></br>
             <p>2. Once the graph has been generated, choose from the questions below allowing the project complexity and reasoning to expand.</p>
             <br></br>
-            <p>3. After the graph has been updated, click Create Project. Note: This may take a minute to process.</p>
+            <p>3. After the graph has been updated, click Create Project. Note: This may take a minute to process.</p>
             <br></br>
-            <p>4. At various stages of the project, click Generate Agents. This will force parties within the forestry project to further reason about issues and unintended consequences.</p>
+            <p>4. At various stages of the project, click Generate Agents. This will force parties within the forestry project to further reason about issues and unintended consequences.</p>
             <br></br>
             <p>5. Now <u>Start Narration</u>.</p>
           </div>
