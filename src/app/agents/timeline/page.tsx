@@ -124,7 +124,20 @@ export default function AgentsPage() {
               {showUI ? "Hide UI" : "Show UI"}
             </button>
           </div>
-          <div>
+          
+          <div
+            className={`${
+              showUI ? "flex" : "hidden"
+            } flex-col w-full bg-orange-200 bg-opacity-75 p-4 rounded-lg gap-4`}
+            style={{ maxWidth: "700px", margin: "auto" }}
+          >
+            <button
+              className="p-2 rounded-lg border bg-[#d1d5db] shadow"
+              onClick={() => setPlayNarration(!playNarration)}
+            >
+              {playNarration ? "Stop Narrating" : "Start Narrating"}
+            </button>
+            <div>
             <p><u><strong>Instructions</strong></u></p>
             <br></br>
             <p>{ `1. Start by creating a new graph. This will generate a LIVE project about a potential forestation project in Canada's grasslands.` }</p>
@@ -145,18 +158,6 @@ export default function AgentsPage() {
             <p>If the graph has not generated within a minute or two, you may need to click <strong><u>Create New Graph</u></strong> again due to the complexity of the engine.</p>
             <br></br>
           </div>
-          <div
-            className={`${
-              showUI ? "flex" : "hidden"
-            } flex-col w-full bg-orange-200 bg-opacity-75 p-4 rounded-lg gap-4`}
-            style={{ maxWidth: "700px", margin: "auto" }}
-          >
-            <button
-              className="p-2 rounded-lg border bg-[#d1d5db] shadow"
-              onClick={() => setPlayNarration(!playNarration)}
-            >
-              {playNarration ? "Stop Narrating" : "Start Narrating"}
-            </button>
             {generating && <span>Updating Graph...</span>}
             <Timeline events={timelineEvents} onSelect={handleTimelineSelect} />
             <KnowledgeGraph
