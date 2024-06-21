@@ -124,7 +124,6 @@ export default function AgentsPage() {
               {showUI ? "Hide UI" : "Show UI"}
             </button>
           </div>
-          
           <div
             className={`${
               showUI ? "flex" : "hidden"
@@ -137,9 +136,9 @@ export default function AgentsPage() {
             >
               {playNarration ? "Stop Narrating" : "Start Narrating"}
             </button>
-            <div>
+            
             <p><u><strong>Instructions</strong></u></p>
-            <br></br>
+        
             <p>{ `1. Start by creating a new graph. This will generate a LIVE project about a potential forestation project in Canada's grasslands.` }</p>
             <br></br>
             <p>2. Once the graph has been generated, choose from the questions below allowing the project complexity and reasoning to expand.</p>
@@ -149,7 +148,7 @@ export default function AgentsPage() {
             <p>4. At various stages of the project, click Generate Agents. This will force parties within the forestry project to further reason about issues and unintended consequences.</p>
             <br></br>
             <p>5. Now <u>Start Narration</u>.</p>
-          </div>
+          
           <div>
             <br></br>
             <br></br>
