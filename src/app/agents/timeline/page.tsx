@@ -124,27 +124,7 @@ export default function AgentsPage() {
               {showUI ? "Hide UI" : "Show UI"}
             </button>
           </div>
-          <div>
-            <p><u><strong>Instructions</strong></u></p>
-            <br></br>
-            <p>{ `1. Start by creating a new graph. This will generate a LIVE project about a potential forestation project in Canada's grasslands.` }</p>
-            <br></br>
-            <p>2. Once the graph has been generated, choose from the questions below allowing the project complexity and reasoning to expand.</p>
-            <br></br>
-            <p>3. After the graph has been updated, click Create Project. Note: This may take a minute to process.</p>
-            <br></br>
-            <p>4. At various stages of the project, click Generate Agents. This will force parties within the forestry project to further reason about issues and unintended consequences.</p>
-            <br></br>
-            <p>5. Now <u>Start Narration</u>.</p>
-          </div>
-          <div>
-            <br></br>
-            <br></br>
-            <p><strong><u>NOTE:</u></strong></p>
-            <p>Please allow the graph some time to generate, <strong>IT WILL WORK</strong>.</p>
-            <p>If the graph has not generated within a minute or two, you may need to click <strong><u>Create New Graph</u></strong> again due to the complexity of the engine.</p>
-            <br></br>
-          </div>
+
           <div
             className={`${
               showUI ? "flex" : "hidden"
